@@ -32,6 +32,7 @@ typedef struct s_repere
 void find_type(char **argv, t_token *token);
 t_token *create_list(char **argv);
 int find_number_of_token(char **argv);
-
+int assign_type(char *c, t_token *token, t_repere *repere);
+t_repere init_repere(void);
 
 #endif
