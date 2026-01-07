@@ -1,10 +1,10 @@
 NAME = minishell
 CC = gcc
-CFLAGS = -g -Wall -Wextra -Werror
+CFLAGS = -g
 AR = ar rcs
 RM = rm -f
 
-SRC = main.c init_struct.c
+SRC = main.c init_struct.c lexer/find_and_assign_type.c lexer/find_token_nbr.c lexer/find_token_nbr_utils.c lexer/extract.c
 OBJ = $(SRC:.c=.o)
 HEADER = minishell.h
 
