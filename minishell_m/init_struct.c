@@ -18,6 +18,7 @@ void init_data_to_null(t_token *node)
 	node->line = NULL;
 	node->index = 0;
 	node->next = NULL;
+	node->s_quotes_prio = 0;
 }
 t_token *create_list(char *argv)
 {

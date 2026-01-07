@@ -23,7 +23,11 @@ int main(void)
 		// if (lst->type == 5)
 		// 	printf("HERE_DOC\n");
 
-		printf("%s/", lst->line);
+		printf("%s ", lst->line);
+		// if (lst->s_quotes_prio)
+		// 	printf("- SHOULDN'T EXPAND\n");
+		// else
+		// 	printf("- YES SHOULD EXPAND\n");
 		lst = lst->next;
 	}
 	return 0;

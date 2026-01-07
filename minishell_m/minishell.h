@@ -15,8 +15,9 @@ typedef enum s_type
 
 typedef struct s_token
 {
-	char *line;
-	int index;
+	char	*line;
+	int		s_quotes_prio;
+	int		index;
 	t_type type;
 	struct s_token *next;
 }	t_token;

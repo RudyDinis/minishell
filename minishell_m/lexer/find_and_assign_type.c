@@ -48,6 +48,7 @@ int assign_type_special_edition(char *c, t_token *token, t_repere *repere)
 {
 	if (c[0] == '|' && !repere->in_pipe && !repere->in_d_quote && !repere->in_s_quote)
 	{
+		token->line = "|";
 		increment_repere(repere, "IN_PIPE");
 		token->type = PIPE;
 		return 1;
@@ -56,18 +57,18 @@ int assign_type_special_edition(char *c, t_token *token, t_repere *repere)
 	{
 		increment_repere(repere, "IN_REDIR_OUT");
 		if (c[1] == '>')
-			token->type = APPEND;
+			token->type = APPEND, token->line = ">>";
 		else
-			token->type = REDIR_OUT;
+			token->type = REDIR_OUT, token->line = ">";
 		return 1;
 	}
 	if (c[0] == '<' && !repere->in_redir_in && !repere->in_d_quote && !repere->in_s_quote)
 	{
 		increment_repere(repere, "IN_REDIR_IN");
 		if (c[1] == '<')
-			token->type = HERE_DOC;
+			token->type = HERE_DOC, token->line = "<<";
 		else
-			token->type = REDIR_IN;
+			token->type = REDIR_IN, token->line = "<";
 		return 1;
 	}
 	return 0;
@@ -79,7 +80,11 @@ int assign_type(char *c, t_token *token, t_repere *repere)
 		if (repere->in_s_quote)
 			repere->in_s_quote = 0;
 		else
+		{
 			repere->in_s_quote = 1;
+			if (!repere->in_d_quote)
+				token->s_quotes_prio = 1;
+		}
 	}
 	if (c[0] == '\"')
 	{
@@ -93,7 +98,6 @@ int assign_type(char *c, t_token *token, t_repere *repere)
 		increment_repere(repere, "IN_WORD");
 		token->type = STR;
 		token->line = extract_word(&c[0]);
-		//printf("a %s", token->line);
 		return 1;
 	}
 	if (c[0] == ' ' && !repere->in_d_quote && !repere->in_s_quote)
