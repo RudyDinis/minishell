@@ -63,7 +63,7 @@ int find_number_of_token(char *buf)
 	int (i) = 0;
 	int token;
 	t_repere repere;
-
+	//TODO Avoir un counter d'opérateur à la suite
 	token = 0;
 	repere = init_repere();
 	while (buf[i])

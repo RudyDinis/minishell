@@ -32,12 +32,20 @@ typedef struct s_repere
 	int in_redir_out;
 } t_repere;
 
+typedef struct s_opcounter
+{
+	int pipe;
+	int redir_out;
+	int redir_in;
+}	t_opcounter;
+
 void find_type(char *buf, t_token *token);
 char *extract_word(char *buf);
 t_token *create_list(char *buf);
 int find_number_of_token(char *buf);
 int assign_type(char *c, t_token *token, t_repere *repere);
 t_repere init_repere(void);
+t_opcounter init_counter(void);
 int check_quotes_error(int token, t_repere repere);
 
 #endif

@@ -85,10 +85,10 @@ char *extract_word(char *buf)
 	i = 0;
 	if (!buf)
 		return (NULL);
-	if (*buf == '\"')
-		return extract_word_dquotes(buf);
-	if (*buf == '\'')
-		return extract_word_squotes(buf);
+	// if (*buf == '\"')
+	// 	return extract_word_dquotes(buf);
+	// if (*buf == '\'')
+	// 	return extract_word_squotes(buf);
 	while (buf[i] && buf[i] != ' ')
 		i++;
 	line = malloc(i + 1);

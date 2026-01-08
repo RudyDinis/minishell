@@ -1,5 +1,15 @@
 #include "minishell.h"
 
+t_opcounter init_counter(void)
+{
+	t_opcounter opcounter;
+
+	opcounter.pipe = 0;
+	opcounter.redir_in = 0;
+	opcounter.redir_out = 0;
+	return (opcounter);
+}
+
 t_repere init_repere(void)
 {
 	t_repere repere;

@@ -73,7 +73,7 @@ int assign_type_special_edition(char *c, t_token *token, t_repere *repere)
 	}
 	return 0;
 }
-int assign_type(char *c, t_token *token, t_repere *repere)
+int assign_type(char *c, t_token *token, t_repere *repere, t_opcounter *counter)
 {
 	if (c[0] == '\'')
 	{
@@ -110,12 +110,14 @@ void find_type(char *buf, t_token *token)
 	int i;
 	int j;
 	t_repere repere;
+	t_opcounter opcounter;
 
 	repere = init_repere();
+	opcounter = init_counter();
 	i = 0;
 	while (buf[i])
 	{
-		if (assign_type(&buf[i], token, &repere))
+		if (assign_type(&buf[i], token, &repere, &counter))
 			token = token->next;
 		i++;
 	}
