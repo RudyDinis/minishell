@@ -3,25 +3,26 @@
 /* echo test | wc -l > /std/out */
 int main(void)
 {
-	// int i;
+	// int i
 	int fd = open("commandes", O_RDWR);
 	char buf[256];
 	read(fd, buf, 255);
+	char *tst = "< wc -l > /std/out >> text >> >";
 	t_token *lst = create_list(buf);
 	while (lst)
 	{
 		// if (lst->type == 0)
-		// 	printf("STR\n");
+		// 	printf("STR ");
 		// if (lst->type == 1)
-		// 	printf("PIPE\n");
+		// 	printf("| ");
 		// if (lst->type == 2)
-		// 	printf("REDIR_IN\n");
+		// 	printf("< ");
 		// if (lst->type == 3)
-		// 	printf("REDIR_OUT\n");
+		// 	printf("> ");
 		// if (lst->type == 4)
-		// 	printf("APPEND\n");
+		// 	printf(">> ");
 		// if (lst->type == 5)
-		// 	printf("HERE_DOC\n");
+		// 	printf("<< ");
 
 		printf("%s ", lst->line);
 		// if (lst->s_quotes_prio)

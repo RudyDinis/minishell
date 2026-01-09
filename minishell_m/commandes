@@ -1,1 +1,1 @@
-<< lim echo "$ABC" 'C' || wc -l > /std/out >> text
+<< lim echo "'" "$ABC" 'C'| "'wc -l>'/std/out">>text

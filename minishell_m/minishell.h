@@ -39,6 +39,26 @@ typedef struct s_opcounter
 	int redir_in;
 }	t_opcounter;
 
+typedef struct s_redir
+{
+	t_type	**redir_type;
+	char	**target;
+}	t_redir;
+
+typedef struct s_cmd
+{
+	char **args;
+	char *cmd;
+	t_redir			redir;
+	struct s_cmd	*next;
+}	t_cmd;
+
+void if_space(t_repere *repere);
+void if_s_quotes(t_repere *repere);
+void if_d_quotes(t_repere *repere);
+int check_quotes_error(int token, t_repere repere);
+
+int is_blank(char c);
 void find_type(char *buf, t_token *token);
 char *extract_word(char *buf);
 t_token *create_list(char *buf);
@@ -46,6 +66,5 @@ int find_number_of_token(char *buf);
 int assign_type(char *c, t_token *token, t_repere *repere);
 t_repere init_repere(void);
 t_opcounter init_counter(void);
-int check_quotes_error(int token, t_repere repere);
 
 #endif

@@ -47,12 +47,8 @@ void increment_repere(t_repere *repere, char *str)
 int assign_type_special_edition(char *c, t_token *token, t_repere *repere)
 {
 	if (c[0] == '|' && !repere->in_pipe && !repere->in_d_quote && !repere->in_s_quote)
-	{
-		token->line = "|";
-		increment_repere(repere, "IN_PIPE");
-		token->type = PIPE;
-		return 1;
-	}
+		return token->line = "|", increment_repere(repere, "IN_PIPE"),
+					token->type = PIPE, 1;
 	if (c[0] == '>' && !repere->in_redir_out && !repere->in_d_quote && !repere->in_s_quote)
 	{
 		increment_repere(repere, "IN_REDIR_OUT");
@@ -73,9 +69,10 @@ int assign_type_special_edition(char *c, t_token *token, t_repere *repere)
 	}
 	return 0;
 }
-int assign_type(char *c, t_token *token, t_repere *repere, t_opcounter *counter)
+
+int assign_type(char *c, t_token *token, t_repere *repere)
 {
-	if (c[0] == '\'')
+	if (c[0] == '\'' && !repere->in_d_quote)
 	{
 		if (repere->in_s_quote)
 			repere->in_s_quote = 0;
@@ -86,21 +83,17 @@ int assign_type(char *c, t_token *token, t_repere *repere, t_opcounter *counter)
 				token->s_quotes_prio = 1;
 		}
 	}
-	if (c[0] == '\"')
+	if (c[0] == '\"' && !repere->in_s_quote)
 	{
 		if (repere->in_d_quote)
 			repere->in_d_quote = 0;
 		else
 			repere->in_d_quote = 1;
 	}
-	if (c[0] != '|' && c[0] != '>' && c[0] != '<' && c[0] != ' ' && !repere->in_word)
-	{
-		increment_repere(repere, "IN_WORD");
-		token->type = STR;
-		token->line = extract_word(&c[0]);
-		return 1;
-	}
-	if (c[0] == ' ' && !repere->in_d_quote && !repere->in_s_quote)
+	if (c[0] != '|' && c[0] != '>' && c[0] != '<' && !is_blank(c[0]) && !repere->in_word)
+		return (increment_repere(repere, "IN_WORD"), token->type = STR,
+			token->line = extract_word(&c[0]), 1);
+	if (is_blank(c[0]) && !repere->in_d_quote && !repere->in_s_quote)
 		increment_repere(repere, "RESET");
 	return (assign_type_special_edition(c, token, repere));
 }
@@ -110,14 +103,12 @@ void find_type(char *buf, t_token *token)
 	int i;
 	int j;
 	t_repere repere;
-	t_opcounter opcounter;
 
 	repere = init_repere();
-	opcounter = init_counter();
 	i = 0;
 	while (buf[i])
 	{
-		if (assign_type(&buf[i], token, &repere, &counter))
+		if (assign_type(&buf[i], token, &repere))
 			token = token->next;
 		i++;
 	}
