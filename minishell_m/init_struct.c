@@ -43,6 +43,7 @@ t_token *create_list(char *argv)
 	if (!head)
 		return (NULL);
 	tete = head;
+	init_data_to_null(head);
 	head->index = i++;
 	while (i < token_nb)
 	{
@@ -54,4 +55,32 @@ t_token *create_list(char *argv)
 	}
 	find_type(argv, tete);
 	return (tete);
+}
+
+t_cmd *init_cmd(t_token *token)
+{
+	t_cmd *cmds;
+	t_cmd *head;
+	int i;
+
+	cmds = malloc(sizeof(t_cmd));
+	head = cmds;
+	i = 0;
+
+	while (i < number_of_cmds(token))
+	{
+		cmds->args = NULL;
+		cmds->cmd = NULL;
+		cmds->redir = malloc(sizeof(t_redir));
+		cmds->redir->redir_number = 0;
+		cmds->redir->redir_type = 0;
+		cmds->redir->target = NULL;
+		if (i + 1 == number_of_cmds(token))
+			cmds->next = NULL;
+		else
+			cmds->next = malloc(sizeof(t_cmd));
+		cmds = cmds->next;
+		i++;
+	}
+	return (head);
 }

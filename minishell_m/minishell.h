@@ -41,15 +41,16 @@ typedef struct s_opcounter
 
 typedef struct s_redir
 {
-	t_type	**redir_type;
+	t_type	*redir_type;
 	char	**target;
+	int		redir_number;
 }	t_redir;
 
 typedef struct s_cmd
 {
 	char **args;
 	char *cmd;
-	t_redir			redir;
+	t_redir			*redir;
 	struct s_cmd	*next;
 }	t_cmd;
 
@@ -66,5 +67,8 @@ int find_number_of_token(char *buf);
 int assign_type(char *c, t_token *token, t_repere *repere);
 t_repere init_repere(void);
 t_opcounter init_counter(void);
+t_cmd *init_cmd(t_token *token);
+
+void check_formatting(t_token *token);
 
 #endif

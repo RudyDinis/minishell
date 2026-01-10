@@ -1,53 +1,109 @@
 #include "../minishell.h"
 
-void check_formatting(t_token *token)
+int number_of_cmds(t_token *token)
 {
-	t_token *head;
+	int i;
 
-	head = token;
+	i = 0;
 	while (token)
 	{
-		if ((token->index == 0 || !token->next) && token->type == PIPE)
-			return ("ERROR");
-		if ((token->type == REDIR_IN || token->type == REDIR_OUT
-			|| token->type == APPEND || token->type == HERE_DOC)
-			&& token->next != STR)
-			return ("ERROR");
-		if (token->type == PIPE && token->next == PIPE)
-			return ("ERROR");
+		if (token->type == PIPE)
+			i++;
+		token = token->next;
+	}
+	return (i + 1);
+}
+
+
+void get_redir_number(t_token *token, t_cmd *cmd)
+{
+	int redir_number;
+
+	redir_number = 0;
+	while (token)
+	{
+		if (token->type != STR && token->type != PIPE)
+			redir_number++;
+		if (token->type == PIPE || !token->next)
+		{
+			cmd->redir->redir_number = redir_number;
+			redir_number = 0;
+			cmd = cmd->next;
+		}
 		token = token->next;
 	}
 }
 
-int get_redir_number(t_token *token, t_cmd *cmd)
+void get_redir_type(t_token *token, t_cmd *cmd, int redir_number)
 {
-	int number;
-	int redir_number;
+	int i;
 
-	number = 0;
-	redir_number = 0;
-	while (token)
+	i = 0;
+	if (!redir_number)
+		return ;
+	cmd->redir->redir_type = malloc(sizeof(t_type) * redir_number);
+	if (!cmd->redir->redir_type)
+		return; // TODO GERER L'EXIT;
+	cmd->redir->target = malloc(sizeof(char *) * (redir_number + 1));
+	if (!cmd->redir->target)
+		return; // TODO GERER L'EXIT;
+	printf("%d\n", cmd->redir->redir_number);
+	while (token->next && token->type != PIPE)
 	{
-		if (token->type == PIPE)
-		{
-			cmd = cmd->next;
-			number++;
-		}
 		if (token->type != STR && token->type != PIPE)
-			redir_number++;
+		{
+			cmd->redir->redir_type[i] = token->type;
+			cmd->redir->target[i++] = ft_strdup(token->next->line);
+		}
 		token = token->next;
 	}
+	cmd->redir->target[i] = NULL;
 }
 
 void attributes_redir(t_token *token, t_cmd *cmd)
 {
-	int redir_number;
+	t_token *start_of_cmd;
+	int i;
 
-	redir_number = get_redir_number(token, cmd);
+	start_of_cmd = token;
+	i = 0;
+	while (token && cmd)
+	{
+		if (token->type == PIPE || !token->next)
+		{
+			get_redir_type(start_of_cmd, cmd, cmd->redir->redir_number);
+			start_of_cmd = token->next;
+			cmd = cmd->next;
+		}
+		token = token->next;
+	}
+}
+
+void check_formatting(t_token *token)
+{
+	t_token *head;
+	t_cmd	*cmds;
+	int i;
+	head = token;
 	while (token)
 	{
-		if (token->type == PIPE)
-			cmd = cmd->next;
+		if ((token->index == 0 || !token->next) && token->type == PIPE)
+			return ((void)printf("test"));
+		if ((token->type == REDIR_IN || token->type == REDIR_OUT
+			|| token->type == APPEND || token->type == HERE_DOC) && token->next->type != STR)
+			return ((void)printf("test"));
+		if (token->type == PIPE && token->next->type == PIPE)
+			return ((void)printf("test"));
+		token = token->next;
 	}
-
+	cmds = init_cmd(head);
+	get_redir_number(head, cmds);
+	attributes_redir(head, cmds);
+	while (cmds)
+	{
+		i = 0;
+		while (cmds->redir->target[i])
+			printf("%d\n", cmds->redir->redir_type[i++]);
+		cmds = cmds->next;
+	}
 }
