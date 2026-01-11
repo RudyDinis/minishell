@@ -47,7 +47,6 @@ void get_redir_type(t_token *token, t_cmd *cmd, int redir_number)
 	cmd->redir->target = malloc(sizeof(char *) * (redir_number + 1));
 	if (!cmd->redir->target)
 		return; // TODO GERER L'EXIT;
-	printf("%d\n", cmd->redir->redir_number);
 	while (token->next && token->type != PIPE)
 	{
 		if (token->type != STR && token->type != PIPE)
@@ -99,11 +98,13 @@ void check_formatting(t_token *token)
 	cmds = init_cmd(head);
 	get_redir_number(head, cmds);
 	attributes_redir(head, cmds);
+	append_args(cmds, head);
 	while (cmds)
 	{
 		i = 0;
-		while (cmds->redir->target[i])
-			printf("%d\n", cmds->redir->redir_type[i++]);
+		while (cmds->args[i])
+			printf("%s\n", cmds->args[i++]);
+		printf("--------------\n");
 		cmds = cmds->next;
 	}
 }

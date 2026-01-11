@@ -10,11 +10,13 @@ int main(void)
 	read(fd, buf, 255);
 	char *tst = "< wc -l > /std/out >> text >> >";
 	t_token *lst = create_list(buf);
+	//TODO TRANSFORMER TOUS LES INTS EN LONG POUR EVITER LES OVERFLOW
 	// while (lst)
 	// {
 	// 	printf("%s ", lst->line);
 	// 	lst = lst->next;
 	// }
 	check_formatting(lst);
+
 	return 0;
 }

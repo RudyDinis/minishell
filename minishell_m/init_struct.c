@@ -28,7 +28,8 @@ void init_data_to_null(t_token *node)
 	node->line = NULL;
 	node->index = 0;
 	node->next = NULL;
-	node->s_quotes_prio = 0;
+	node->in_quotes = 0;
+	node->previous = NULL;
 }
 t_token *create_list(char *argv)
 {
@@ -48,8 +49,9 @@ t_token *create_list(char *argv)
 	while (i < token_nb)
 	{
 		head->next = malloc(sizeof(t_token));
+		init_data_to_null(head->next);
+		head->next->previous = head;
 		head = head->next;
-		init_data_to_null(head);
 		head->index = i;
 		i++;
 	}

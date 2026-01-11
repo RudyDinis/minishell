@@ -4,9 +4,9 @@ CFLAGS = -g
 AR = ar rcs
 RM = rm -f
 
-SRC = main.c init_struct.c lexer/find_and_assign_type.c \
-		lexer/find_token_nbr.c lexer/find_token_nbr_utils.c lexer/extract.c \
-		parser/check_formatting.c
+SRC = main.c init_struct.c \
+		lexer/find_and_assign_type.c lexer/find_token_nbr.c lexer/find_token_nbr_utils.c lexer/extract.c \
+		parser/formatting_and_redir.c parser/add_commands.c
 OBJ = $(SRC:.c=.o)
 HEADER = minishell.h
 

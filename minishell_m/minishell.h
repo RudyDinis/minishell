@@ -16,10 +16,11 @@ typedef enum s_type
 typedef struct s_token
 {
 	char	*line;
-	int		s_quotes_prio;
+	int		in_quotes;
 	int		index;
-	t_type type;
+	t_type	type;
 	struct s_token *next;
+	struct s_token *previous;
 }	t_token;
 
 typedef struct s_repere
@@ -58,7 +59,7 @@ void if_space(t_repere *repere);
 void if_s_quotes(t_repere *repere);
 void if_d_quotes(t_repere *repere);
 int check_quotes_error(int token, t_repere repere);
-
+void append_args(t_cmd *cmd, t_token *token);
 int is_blank(char c);
 void find_type(char *buf, t_token *token);
 char *extract_word(char *buf);
@@ -68,7 +69,7 @@ int assign_type(char *c, t_token *token, t_repere *repere);
 t_repere init_repere(void);
 t_opcounter init_counter(void);
 t_cmd *init_cmd(t_token *token);
-
+int number_of_cmds(t_token *token);
 void check_formatting(t_token *token);
 
 #endif
