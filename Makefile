@@ -1,8 +1,10 @@
 NAME = minishell
 
 SRCS = src/main.c src/signal.c
-OBJS = $(SRCS:.c=.o)
+COMMANDSSRCS = src/commands/echo.c src/commands/export.c
 
+OBJS = $(SRCS:.c=.o)
+COMMANDSOBJS = $(COMMANDSSRCS:.c=.o)
 LIBFT = utils/libft
 
 CC = cc
@@ -11,16 +13,18 @@ LDFLAGS = -lreadline
 
 all: $(NAME)
 
-$(NAME): $(OBJS)
+$(NAME): $(OBJS) ${COMMANDSOBJS} $(LIBFT)/libft.a
+	$(CC) $(OBJS) ${COMMANDSOBJS} $(LIBFT)/libft.a $(LDFLAGS) -o $(NAME)
+
+$(LIBFT)/libft.a:
 	make -C $(LIBFT)
-	$(CC) $(OBJS) $(LIBFT)/libft.a $(LDFLAGS) -o $(NAME)
 
 %.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
 	make clean -C $(LIBFT)
-	rm -f $(OBJS)
+	rm -f $(OBJS) ${COMMANDSOBJS}
 
 fclean: clean
 	make fclean -C $(LIBFT)

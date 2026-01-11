@@ -25,12 +25,26 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 
-void init_signals(void);
-void sigint_handler(int sig);
+#include "utils/libft/libft.h"
+
+
+typedef struct s_env
+{
+    char            *key;
+    char            *value;
+    struct s_env    *next;
+} t_env;
 
 typedef struct s_minishell
 {
     char *pwd;
+    t_env *env;
 }   t_minishell;
+
+
+void init_signals(void);
+void sigint_handler(int sig);
+void add_env(t_env **env, char *line);
+void export(char **str, t_env *env);
 
 #endif
