@@ -79,8 +79,6 @@ int assign_type(char *c, t_token *token, t_repere *repere)
 		else
 		{
 			repere->in_s_quote = 1;
-			if (!repere->in_d_quote)
-				token->s_quotes_prio = 1;
 		}
 	}
 	if (c[0] == '\"' && !repere->in_s_quote)

@@ -6,7 +6,8 @@ RM = rm -f
 
 SRC = main.c init_struct.c \
 		lexer/find_and_assign_type.c lexer/find_token_nbr.c lexer/find_token_nbr_utils.c lexer/extract.c \
-		parser/formatting_and_redir.c parser/add_commands.c
+		parser/formatting_and_redir.c parser/add_commands.c \
+		exec/exec.c
 OBJ = $(SRC:.c=.o)
 HEADER = minishell.h
 

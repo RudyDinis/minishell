@@ -99,12 +99,5 @@ void check_formatting(t_token *token)
 	get_redir_number(head, cmds);
 	attributes_redir(head, cmds);
 	append_args(cmds, head);
-	while (cmds)
-	{
-		i = 0;
-		while (cmds->args[i])
-			printf("%s\n", cmds->args[i++]);
-		printf("--------------\n");
-		cmds = cmds->next;
-	}
+	execute_cmd(cmds, head);
 }

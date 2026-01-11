@@ -6,7 +6,6 @@ void malloc_args(t_cmd *cmd, int i)
 	if (!cmd->args)
 		return; // TODO EXIT PROPRE ICI;
 	cmd->args[i] = NULL;
-	printf("i == %d\n", i);
 	// cmd->cmd = cmd->args[0];
 }
 

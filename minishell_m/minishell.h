@@ -2,6 +2,7 @@
 # define MINISHELL_H
 
 #include "libft/libft.h"
+#include <sys/wait.h>
 
 typedef enum s_type
 {
@@ -44,6 +45,7 @@ typedef struct s_redir
 {
 	t_type	*redir_type;
 	char	**target;
+	int 	*fd;
 	int		redir_number;
 }	t_redir;
 
@@ -53,13 +55,16 @@ typedef struct s_cmd
 	char *cmd;
 	t_redir			*redir;
 	struct s_cmd	*next;
+	int pid;
 }	t_cmd;
 
+void	tree_of_closing(int **fds, int current_process, int total_args);
 void if_space(t_repere *repere);
 void if_s_quotes(t_repere *repere);
 void if_d_quotes(t_repere *repere);
 int check_quotes_error(int token, t_repere repere);
 void append_args(t_cmd *cmd, t_token *token);
+void launcher(t_cmd *cmd, t_token *token);
 int is_blank(char c);
 void find_type(char *buf, t_token *token);
 char *extract_word(char *buf);
@@ -71,5 +76,6 @@ t_opcounter init_counter(void);
 t_cmd *init_cmd(t_token *token);
 int number_of_cmds(t_token *token);
 void check_formatting(t_token *token);
+void malloc_redir(t_cmd *cmd);
 
 #endif
