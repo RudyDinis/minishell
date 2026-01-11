@@ -71,8 +71,8 @@ void	tree_of_closing(int **fds, int current_process, int total_args)
 {
 	if (current_process == 0)
 		close_first_process(fds, total_args - 1);
-	else if (current_process != 0 && current_process < (total_args))
+	else if (current_process != 0 && current_process < (total_args - 1))
 		close_middle_process(fds, current_process, total_args - 1);
-	else if (current_process != 0 && current_process == (total_args))
+	else if (current_process != 0 && current_process == (total_args - 1))
 		close_last_process(fds, current_process, total_args - 1);
 }

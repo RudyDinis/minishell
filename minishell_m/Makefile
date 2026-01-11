@@ -7,7 +7,7 @@ RM = rm -f
 SRC = main.c init_struct.c \
 		lexer/find_and_assign_type.c lexer/find_token_nbr.c lexer/find_token_nbr_utils.c lexer/extract.c \
 		parser/formatting_and_redir.c parser/add_commands.c \
-		exec/exec.c
+		exec/exec.c exec/closing_processes.c exec/exec_redir.c exec/exec_utils.c
 OBJ = $(SRC:.c=.o)
 HEADER = minishell.h
 
@@ -15,7 +15,7 @@ all: $(NAME)
 
 $(NAME): $(OBJ) $(HEADER)
 	make -C ./libft
-	$(CC) $(CFLAGS) $(OBJ)  -L./libft -lft -o $@
+	$(CC) $(CFLAGS) $(OBJ)  -lreadline -L./libft -lft -o $@
 
 %.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@

@@ -59,12 +59,7 @@ void close_all_pipes(int **fds, int total_args)
 
 int get_total_cmds(t_cmd *cmd)
 {
-	int i;
-
-	while (cmd)
-	{
-		i++;
+	while (cmd->next)
 		cmd = cmd->next;
-	}
-	return i;
+	return cmd->i;
 }

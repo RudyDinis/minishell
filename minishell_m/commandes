@@ -1,1 +1,1 @@
-<< lim echo "'" "$ABC" 'C'>>text | wc -l
+c

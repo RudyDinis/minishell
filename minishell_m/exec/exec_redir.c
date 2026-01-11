@@ -71,20 +71,21 @@ void pipe_redirection(t_cmd *cmd, int **fds, int in, int out)
 	current_proccess = cmd->i;
 	if (current_proccess == 0 && out == 0)
 	{
+		if (cmd->next)
 			dup2(fds[0][1], 1);
-			close(fds[0][1]);
+		close(fds[0][1]);
 	}
-	else if (current_proccess != 0)
+	if (current_proccess != 0)
 	{
 		if (in == 0)
 		{
 			dup2(fds[current_proccess - 1][0], 0);
 			close(fds[current_proccess - 1][0]);
 		}
-		if (out == 0)
+		if (out == 0 && current_proccess < (get_total_cmds(cmd)))
 		{
-			dup2(fds[current_proccess - 1][1], 1);
-			close(fds[current_proccess - 1][1]);
+			dup2(fds[current_proccess][1], 1);
+			close(fds[current_proccess][1]);
 		}
 	}
 }
@@ -98,18 +99,24 @@ void open_redir(t_cmd *cmd, int **fds)
 	i = 0;
 	in = 0;
 	out = 0;
-	malloc_redir(cmd);
-	while (cmd->redir->target[i])
+	if (cmd->redir->target)
 	{
-		if (cmd->redir->redir_type[i] == HERE_DOC)
-			here_doc(cmd, cmd->redir->target[i], i, &in);
-		else if (cmd->redir->redir_type[i] == REDIR_OUT)
-			redir_out(cmd, cmd->redir->target[i], i, &out);
-		else if (cmd->redir->redir_type[i] == APPEND)
-			append(cmd, cmd->redir->target[i], i, &out);
-		else if (cmd->redir->redir_type[i] == REDIR_IN)
-			redir_in(cmd, cmd->redir->target[i], i, &in);
-		i++;
+		while (cmd->redir->target[i])
+		{
+			if (cmd->redir->redir_type[i] == HERE_DOC)
+			{
+				dup2(cmd->redir->fd[i], 0);
+				in++;
+			}
+			if (cmd->redir->redir_type[i] == REDIR_OUT)
+				redir_out(cmd, cmd->redir->target[i], i, &out);
+			if (cmd->redir->redir_type[i] == APPEND)
+				append(cmd, cmd->redir->target[i], i, &out);
+			if (cmd->redir->redir_type[i] == REDIR_IN)
+				redir_in(cmd, cmd->redir->target[i], i, &in);
+			i++;
+		}
 	}
+	// printf("PROCESS : %d - IN = %d OUT = %d\n", cmd->i, in, out);
 	pipe_redirection(cmd, fds, in, out);
 }

@@ -87,17 +87,18 @@ void check_formatting(t_token *token)
 	while (token)
 	{
 		if ((token->index == 0 || !token->next) && token->type == PIPE)
-			return ((void)printf("test"));
+			return ((void)printf("formatting error"));
 		if ((token->type == REDIR_IN || token->type == REDIR_OUT
 			|| token->type == APPEND || token->type == HERE_DOC) && token->next->type != STR)
-			return ((void)printf("test"));
+			return ((void)printf("formatting error"));
 		if (token->type == PIPE && token->next->type == PIPE)
-			return ((void)printf("test"));
+			return ((void)printf("formatting error"));
 		token = token->next;
 	}
 	cmds = init_cmd(head);
 	get_redir_number(head, cmds);
 	attributes_redir(head, cmds);
 	append_args(cmds, head);
-	execute_cmd(cmds, head);
+	i = 0;
+	launcher(cmds, head);
 }
