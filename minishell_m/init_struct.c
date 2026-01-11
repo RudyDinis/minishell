@@ -77,6 +77,7 @@ t_cmd *init_cmd(t_token *token)
 		cmds->redir->redir_number = 0;
 		cmds->redir->redir_type = 0;
 		cmds->redir->target = NULL;
+		cmds->i = i;
 		if (i + 1 == number_of_cmds(token))
 			cmds->next = NULL;
 		else

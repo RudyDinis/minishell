@@ -55,6 +55,7 @@ typedef struct s_cmd
 	char *cmd;
 	t_redir			*redir;
 	struct s_cmd	*next;
+	int i;
 	int pid;
 }	t_cmd;
 
@@ -77,5 +78,9 @@ t_cmd *init_cmd(t_token *token);
 int number_of_cmds(t_token *token);
 void check_formatting(t_token *token);
 void malloc_redir(t_cmd *cmd);
-
+int **malloc_fds(int total_args);
+void open_pipes(int **fds, int total_args);
+void close_all_pipes(int **fds, int total_args);
+int get_total_cmds(t_cmd *cmd);
+void open_redir(t_cmd *cmd, int **fds);
 #endif
