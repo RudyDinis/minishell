@@ -1,13 +1,24 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   pwd.c                                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rdinis <rdinis@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/01/12 13:32:57 by rdinis            #+#    #+#             */
+/*   Updated: 2026/01/12 13:37:41 by rdinis           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../minishell.h"
 
-void pwd(void)
+void	pwd(void)
 {
-    char *cwd;
+	char	*cwd;
 
-    cwd = getcwd(NULL, 0);
-    if (!cwd)
-        return;
-
-    printf("%s\n", cwd);
-    free(cwd);
+	cwd = getcwd(NULL, 0);
+	if (!cwd)
+		return ;
+	printf("%s\n", cwd);
+	free(cwd);
 }

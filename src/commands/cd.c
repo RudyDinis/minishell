@@ -1,29 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   echo.c                                             :+:      :+:    :+:   */
+/*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rdinis <rdinis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/01/12 13:28:34 by rdinis            #+#    #+#             */
-/*   Updated: 2026/01/12 13:28:49 by rdinis           ###   ########.fr       */
+/*   Created: 2026/01/12 14:22:46 by rdinis            #+#    #+#             */
+/*   Updated: 2026/01/12 14:39:02 by rdinis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void	echo(char **args, int no_newline)
+void	cd(char *path, t_minishell *data)
 {
-	int	i;
+	int	res;
 
-	i = 1;
-	while (args[i])
-	{
-		printf("%s", args[i]);
-		if (args[i + 1])
-			printf(" ");
-		i++;
-	}
-	if (!no_newline)
-		printf("\n");
+	res = chdir(path);
+	if (res == 0)
+		data->pwd = getcwd(NULL, 0);
+	else
+		printf("Cannot open this directory\n");
 }
