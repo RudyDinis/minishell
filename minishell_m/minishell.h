@@ -24,6 +24,7 @@ typedef struct s_token
 	t_type	type;
 	struct s_token *next;
 	struct s_token *previous;
+	struct s_cmd	*cmd;
 }	t_token;
 
 typedef struct s_repere
@@ -53,12 +54,16 @@ typedef struct s_redir
 
 typedef struct s_cmd
 {
-	char **args;
-	char *cmd;
+	char			**args;
+	char 			*cmd;
+	char 			*path;
 	t_redir			*redir;
 	struct s_cmd	*next;
-	int i;
-	int pid;
+	int				i;
+	int				is_absolute;
+	pid_t				pid;
+	int				return_value;
+	t_token			*token;
 }	t_cmd;
 
 void	tree_of_closing(int **fds, int current_process, int total_args);
@@ -79,10 +84,15 @@ t_opcounter init_counter(void);
 t_cmd *init_cmd(t_token *token);
 int number_of_cmds(t_token *token);
 void check_formatting(t_token *token);
-void malloc_redir(t_cmd *cmd);
-int **malloc_fds(int total_args);
+void malloc_redir(t_cmd *cmd, int **fds);
+int **malloc_fds(int total_args, t_cmd *cmd);
 void open_pipes(int **fds, int total_args);
 void close_all_pipes(int **fds, int total_args);
 int get_total_cmds(t_cmd *cmd);
 void open_redir(t_cmd *cmd, int **fds);
+void apply_path(t_cmd *cmd);
+
+void free_ms(t_token *token, t_cmd *cmd, int n, int **fds);
+void free_cmd(t_cmd *cmd, int n);
+void free_token(t_token *token, int n);
 #endif

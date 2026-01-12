@@ -12,7 +12,7 @@ void if_word(t_repere *repere, int *token)
 void if_pipe(char *buf, t_repere *repere, int *token)
 {
 	if (buf[1] && buf[1] == '|')
-		return (printf("erreur ta soeur"), exit(1)); //TODO Faire un exit clean ici;
+		return (ft_printf_error("|| operator not supported\n"), exit(1));
 	(*token)++;
 	repere->in_word = 0;
 	repere->in_pipe = 1;
@@ -29,7 +29,8 @@ void if_redir_in(char *buf, t_repere *repere, int *token)
 	if (buf[1] && buf[1] == '<')
 	{
 		if (buf[2] && buf[2] == '<')
-			return (printf("erreur ta soeur"), exit(1)); //TODO Faire un exit clean ici;
+			return (ft_printf_error("syntax error near unexpected token \'<\'\n"),
+ 				exit(1));
 		(*token)++;
 	}
 	else
@@ -45,7 +46,8 @@ void if_redir_out(char *buf, t_repere *repere, int *token)
 	if (buf[1] && buf[1] == '>')
 	{
 		if (buf[2] && buf[2] == '>')
-			return (printf("erreur ta soeur"), exit(1)); //TODO Faire un exit clean ici;
+			return (ft_printf_error("syntax error near unexpected token \'>\'\n"),
+ 				exit(1));
 		(*token)++;
 	}
 	else

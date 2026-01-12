@@ -4,7 +4,7 @@ void malloc_args(t_cmd *cmd, int i)
 {
 	cmd->args = malloc(sizeof(char *) * (i + 1));
 	if (!cmd->args)
-		return; // TODO EXIT PROPRE ICI;
+		free_ms(NULL, cmd, 1, NULL);
 	cmd->args[i] = NULL;
 	// cmd->cmd = cmd->args[0];
 }

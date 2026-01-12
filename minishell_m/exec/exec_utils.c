@@ -1,27 +1,38 @@
 #include "../minishell.h"
 
-void malloc_redir(t_cmd *cmd)
+void malloc_redir(t_cmd *cmd, int **fds)
 {
 	int i;
+	int j;
 
 	i = 0;
+	j = 0;
 	while (cmd->redir->target[i])
 		i++;
 	cmd->redir->fd = malloc(sizeof(int) * (i));
 	if (!cmd->redir->fd)
-		return; // TODO EXIT PROPRE A FAIRE
+		free_ms(NULL, cmd, 1, fds);
+	while (j < i)
+		cmd->redir->fd[j++] = -125;
 }
 
-int **malloc_fds(int total_args)
+int **malloc_fds(int total_args, t_cmd *cmd)
 {
 	int **fds;
 	int i;
 
 	i = 0;
 	fds = malloc((total_args) * sizeof(int *));
+	if (!fds)
+		free_ms(NULL, cmd, 1, NULL);
 	while (i < (total_args))
 	{
 		fds[i] = malloc(2 * sizeof(int));
+		if (!fds[i])
+		{
+			free_everything_int(fds, i);
+			free_ms(NULL, cmd, 1, NULL);
+		}
 		i++;
 	}
 	return (fds);

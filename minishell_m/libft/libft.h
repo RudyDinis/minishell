@@ -43,6 +43,7 @@ char	*ft_strnstr(const char *haystack, const char *needle, size_t len);
 char	*ft_strdup(const char *s1);
 char	*ft_substr(const char *s, unsigned int start, size_t len);
 char	*ft_strjoin(const char *s1, const char *s2);
+char	*ft_strtriplejoin(char const *s1, char const *s2, char const *s3);
 char	*ft_strtrim(const char *s1, const char *set);
 char	**ft_split(const char *s, char *c);
 char	*ft_itoa(int n);
@@ -66,7 +67,7 @@ void	ft_lstadd_back(t_list **lst, t_list *new);
 void	ft_lstdelone(t_list *lst, void (*del)(void *));
 void	ft_lstclear(t_list **lst, void (*del)(void *));
 void	ft_lstiter(t_list *lst, void (*f)(void *));
-void	free_everything_int(int **vector);
+void	free_everything_int(int **vector, int limit);
 void	free_everything(void **vector);
 
 int		ft_isalpha(int c);

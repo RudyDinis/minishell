@@ -43,10 +43,10 @@ void get_redir_type(t_token *token, t_cmd *cmd, int redir_number)
 		return ;
 	cmd->redir->redir_type = malloc(sizeof(t_type) * redir_number);
 	if (!cmd->redir->redir_type)
-		return; // TODO GERER L'EXIT;
+		free_ms(NULL, cmd, 1, NULL);
 	cmd->redir->target = malloc(sizeof(char *) * (redir_number + 1));
 	if (!cmd->redir->target)
-		return; // TODO GERER L'EXIT;
+		free_ms(NULL, cmd, 1, NULL);
 	while (token->next && token->type != PIPE)
 	{
 		if (token->type != STR && token->type != PIPE)
