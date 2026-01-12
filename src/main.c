@@ -59,8 +59,10 @@ int	main(int ac, char **av, char **envp)
 	if (!data)
 		return (1);
 	print_title();
-	printf("\n%s\n", check_and_replace("\"test $a '$a' $\"", data));
+	add_var(&data->var, "a", "10");
 	data->env = copy_env(envp);
+	print_env(data->env);
+	printf("\n%s\n", expand_vars("'test0 $mangemesmorts \"$a\" $'", data));
 	cwd = getcwd(NULL, 0);
 	data->pwd = cwd;
 	init_signals();

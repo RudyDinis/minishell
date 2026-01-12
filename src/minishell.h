@@ -63,11 +63,13 @@ void	init_signals(void);
 void	sigint_handler(int sig);
 
 void	add_env(t_env **env, char *line);
+void	add_var(t_var **var, char *key, char *value);
 void	print_env(t_env *env);
+char	*expand_vars(char *s, t_minishell *data);
 void	export(char **str, t_env *env);
-char	*edit_env_value(char *name, char *value, t_minishell *data);
-char	*edit_var_value(char *name, char *value, t_minishell *data);
-char	*check_and_replace(char *value, t_minishell *data);
+char	*get_env_value(char *name, char *value, t_minishell *data);
+char	*get_var_value(char *name, char *value, t_minishell *data);
+
 void	cd(char *path, t_minishell *data);
 
 void	print_title(void);

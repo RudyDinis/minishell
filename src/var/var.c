@@ -12,89 +12,85 @@
 
 #include "../minishell.h"
 
-char	*get_env_value(char *name, char *value, t_minishell *data)
+char *char_join(char *s, char c)
 {
-	t_env	*tmp_env;
-
-	tmp_env = data->env;
-	while (tmp_env)
-	{
-		if (ft_strcmp(tmp_env->key, name) == 0)
-			return (tmp_env->value);
-		tmp_env = tmp_env->next;
-	}
+	char tmp[2] = {c, 0};
+	return (ft_strjoin_free(s, tmp));
 }
 
-char	*get_var_value(char *name, char *value, t_minishell *data)
+char *expand_one_var(char *s, int *i, char *res, t_minishell *data)
 {
-	t_var	*tmp_var;
+	char *name;
+	char *val;
+	char *env;
+	int start;
 
-	tmp_var = data->var;
-	while (tmp_var)
-	{
-		if (ft_strcmp(tmp_var->key, name) == 0)
-			return (tmp_var->value);
-		tmp_var = tmp_var->next;
-	}
-}
+	(*i)++;
+	start = *i;
+	while (ft_isalnum(s[*i]) || s[*i] == '_')
+		(*i)++;
 
-int	get_force(char *value)
-{
-	if (value[0] == '\'')
-		return (1);
-	else if (value[0] == '\"')
-		return (2);
-	else
-		return (0);
-}
+	name = ft_substr(s, start, *i - start);
+	val = get_var_value(name, NULL, data);
+	env = get_env_value(name, NULL, data);
 
-char	*get_var_name(char *value, int i)
-{
-	char	*res;
-	int		y;
-	int		j;
+	if (val)
+		res = ft_strjoin_free(res, val);
+	else if (env)
+		res = ft_strjoin_free(res, env);
 
-	j = 0;
-	y = i;
-	while (ft_isalnum(value[y]))
-		y++;
-	res = malloc(sizeof(char) * y);
-	while (i < y)
-	{
-		res[j++] = value[i];
-		i++;
-	}
+	free(name);
 	return (res);
 }
 
-int	get_size_2(char *value)
+char	*handle_squote(char *s, int *i, char *res)
 {
-	int	end;
 	int	start;
-	int	i;
 
-	start = 1;
-	end = ft_strlen(value) - 1;
-
-	i = start;
-	while (i < end)
-	{
-		if (value[i] == '$')
-			get_var_name(value, i + 1);
-		else
-			printf(" ");
-		i++;
-	}
+	(*i)++;
+	start = *i;
+	while (s[*i] && s[*i] != '\'')
+		(*i)++;
+	res = ft_strjoin_free(res, ft_substr(s, start, *i - start));
+	if (s[*i] == '\'')
+		(*i)++;
+	return (res);
 }
 
-char	*check_and_replace(char *value, t_minishell *data)
-{
-	char	*res;
-	int		force;
 
-	res = NULL;
-	//printf("%s\n", value);
-	force = get_force(value);
-	get_size_2(value);
+char	*handle_dquote(char *s, int *i, char *res, t_minishell *data)
+{
+	(*i)++;
+	while (s[*i] && s[*i] != '"')
+	{
+		if (s[*i] == '$')
+			res = expand_one_var(s, i, res, data);
+		else
+			res = char_join(res, s[(*i)++]);
+	}
+	if (s[*i] == '"')
+		(*i)++;
+	return (res);
+}
+
+
+char	*expand_vars(char *s, t_minishell *data)
+{
+	int		i;
+	char	*res;
+
+	i = 0;
+	res = ft_strdup("");
+	while (s[i])
+	{
+		if (s[i] == '\'')
+			res = handle_squote(s, &i, res);
+		else if (s[i] == '"')
+			res = handle_dquote(s, &i, res, data);
+		else if (s[i] == '$')
+			res = expand_one_var(s, &i, res, data);
+		else
+			res = char_join(res, s[i++]);
+	}
 	return (res);
 }
