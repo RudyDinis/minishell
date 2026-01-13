@@ -38,7 +38,11 @@ char **expand_args(t_cmd *cmd)
 	{
 		j = 0;
 		while (tmp_expanded[j])
-			expanded_args[k++] = ft_strdup(tmp_expanded[j++]);
+		{
+			expanded_args[k] = ft_strdup(tmp_expanded[j]);
+			k++;
+			j++;
+		}
 		if (!expanded_args[k - 1])
 			free_ms(NULL, cmd, 1, NULL);
 		i++;

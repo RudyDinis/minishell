@@ -86,6 +86,7 @@ typedef struct s_minishell
 	char	*pwd;
 	t_env	*env;
 	t_var	*var;
+	int last_cmd_return_value;
 }	t_minishell;
 
 void	tree_of_closing(int **fds, int current_process, int total_args);
@@ -118,4 +119,6 @@ void free_ms(t_token *token, t_cmd *cmd, int n, int **fds);
 void free_cmd(t_cmd *cmd, int n);
 void free_token(t_token *token, int n);
 void expander(t_cmd *cmd);
+char	*get_env_value(char *name, char *value, t_minishell *data);
+char	*get_var_value(char *name, char *value, t_minishell *data);
 #endif
