@@ -61,10 +61,32 @@ typedef struct s_cmd
 	struct s_cmd	*next;
 	int				i;
 	int				is_absolute;
-	pid_t				pid;
+	pid_t			pid;
 	int				return_value;
 	t_token			*token;
+	struct s_minishell	*minishell;
 }	t_cmd;
+
+typedef struct s_env
+{
+	char			*key;
+	char			*value;
+	struct s_env	*next;
+}	t_env;
+
+typedef struct s_var
+{
+	char			*key;
+	char			*value;
+	struct s_var	*next;
+}	t_var;
+
+typedef struct s_minishell
+{
+	char	*pwd;
+	t_env	*env;
+	t_var	*var;
+}	t_minishell;
 
 void	tree_of_closing(int **fds, int current_process, int total_args);
 void if_space(t_repere *repere);
@@ -91,8 +113,9 @@ void close_all_pipes(int **fds, int total_args);
 int get_total_cmds(t_cmd *cmd);
 void open_redir(t_cmd *cmd, int **fds);
 void apply_path(t_cmd *cmd);
-
+char	**expand_vars(char *s, t_minishell *data);
 void free_ms(t_token *token, t_cmd *cmd, int n, int **fds);
 void free_cmd(t_cmd *cmd, int n);
 void free_token(t_token *token, int n);
+void expander(t_cmd *cmd);
 #endif

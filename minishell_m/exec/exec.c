@@ -1,13 +1,12 @@
 #include "../minishell.h"
 
-
 void check_access_and_rights(t_cmd *cmd, int **fds)
 {
 	if (cmd->is_absolute == 0)
 	{
 		if (access(cmd->path, F_OK) < 0)
 			return (ft_printf_error("%s: command not found\n", cmd->path),
-				free_ms(NULL, cmd, 127, fds));
+					free_ms(NULL, cmd, 127, fds));
 		if (access(cmd->path, X_OK) < 0)
 		{
 			ft_printf_error("%s: Permission denied\n", cmd->path);
@@ -64,7 +63,7 @@ void here_docw(t_cmd *cmd, char *lim, int i, int **fds)
 	char *file;
 
 	char *nbr = ft_itoa(cmd->i);
-	file =  ft_strjoin("/var/tmp/temp", nbr);
+	file = ft_strjoin("/var/tmp/temp", nbr);
 	gnl = get_next_line(0, 0);
 	cmd->redir->fd[i] = open(file, O_RDWR | O_TRUNC | O_CREAT, 0644);
 	while (ft_findstr(lim, gnl))
@@ -107,8 +106,8 @@ void launcher(t_cmd *cmd, t_token *token)
 	int **fds;
 	int total_args;
 	int pipe_last;
-	t_cmd *head = cmd;
 
+	expander(cmd);
 	total_args = get_total_cmds(cmd) + 1;
 	pipe_last = total_args - 1;
 	fds = malloc_fds(total_args, cmd);
