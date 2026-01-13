@@ -62,9 +62,9 @@ void	add_env(t_env **env, char *line)
 	tmp->next = node;
 }
 
-void	export(char **str, t_env *env)
+void	export(char **argv, t_env *env)
 {
-	if (!str[1])
+	if (!argv[1])
 	{
 		print_env(env);
 		return ;

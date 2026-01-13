@@ -12,18 +12,26 @@
 
 #include "../minishell.h"
 
-void	echo(char **args, int no_newline)
+void	echo(char **argv)
 {
 	int	i;
+	int	nl;
 
 	i = 1;
-	while (args[i])
+	nl = 0;
+	while (argv[i])
 	{
-		printf("%s", args[i]);
-		if (args[i + 1])
-			printf(" ");
-		i++;
+		if (argv[i] == "-n")
+		{
+			nl = 1;
+			i++;
+		}
+		else 
+		{
+			printf("%s", argv[i]);
+			if (argv[i + 1])
+				printf(" ");
+			i++;
+		}
 	}
-	if (!no_newline)
-		printf("\n");
 }

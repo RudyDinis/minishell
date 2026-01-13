@@ -70,7 +70,9 @@ void	export(char **str, t_env *env);
 char	*get_env_value(char *name, char *value, t_minishell *data);
 char	*get_var_value(char *name, char *value, t_minishell *data);
 
-void	cd(char *path, t_minishell *data);
+void	cd(char **argv, t_minishell *data);
+void	echo(char **argv);
+void	export(char **argv, t_env *env);
 
 void	print_title(void);
 char	*write_line(t_minishell *data);
