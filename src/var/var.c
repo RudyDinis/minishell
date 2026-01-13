@@ -27,6 +27,9 @@ char *expand_one_var(char *s, int *i, char *res, t_minishell *data)
 
 	(*i)++;
 	start = *i;
+	if (s[*i] == '?')
+		return (res = ft_strjoin_free(res, ft_itoa(*data->last_cmd_return_value)),
+			(*i)++, res);
 	while (ft_isalnum(s[*i]) || s[*i] == '_')
 		(*i)++;
 
@@ -74,7 +77,7 @@ char	*handle_dquote(char *s, int *i, char *res, t_minishell *data)
 }
 
 
-char	*expand_vars(char *s, t_minishell *data)
+char	**expand_vars(char *s, t_minishell *data)
 {
 	int		i;
 	char	*res;
@@ -92,5 +95,5 @@ char	*expand_vars(char *s, t_minishell *data)
 		else
 			res = char_join(res, s[i++]);
 	}
-	return (res);
+	return (ft_split(res, " \t"));
 }

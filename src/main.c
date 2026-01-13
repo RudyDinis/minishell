@@ -26,7 +26,6 @@ void	while_read(t_minishell *data)
 			break ;
 		if (*line)
 		{
-			cd("./utils", data);
 			add_history(line);
 		}
 		free(line);
@@ -60,6 +59,14 @@ int	main(int ac, char **av, char **envp)
 		return (1);
 	print_title();
 	data->env = copy_env(envp);
+	data->last_cmd_return_value = malloc(sizeof(int));
+	if (!data->last_cmd_return_value)
+		return (1);
+	*data->last_cmd_return_value = 0;
+	char **test = expand_vars("test $?", data);
+	int i = 0;
+	while (test[i])
+		printf("%s\n", test[i++]);
 	cwd = getcwd(NULL, 0);
 	data->pwd = cwd;
 	init_signals();
