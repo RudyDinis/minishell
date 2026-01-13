@@ -63,10 +63,13 @@ int	main(int ac, char **av, char **envp)
 	if (!data->last_cmd_return_value)
 		return (1);
 	*data->last_cmd_return_value = 0;
-	char **test = expand_vars("test $?", data);
+	printf("%s\n", "\"$test\"");
+	add_var(&data->var, "test", "salut     ça     va");
+	char **test = expand_vars("\"$test\"", data);
 	int i = 0;
 	while (test[i])
-		printf("%s\n", test[i++]);
+		printf("%s", test[i++]);
+	printf("\n");
 	cwd = getcwd(NULL, 0);
 	data->pwd = cwd;
 	init_signals();
