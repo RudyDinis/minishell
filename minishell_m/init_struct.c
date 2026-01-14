@@ -77,9 +77,9 @@ t_minishell *init_ms(t_cmd *cmd)
 	minishell->env->key = NULL;
 	minishell->env->next = NULL;
 	minishell->env->value = NULL;
-	minishell->var->key = NULL;
+	minishell->var->key = "abc";
 	minishell->var->next = NULL;
-	minishell->var->value = NULL;
+	minishell->var->value = "salut       ça             va";
 	return (minishell);
 }
 
@@ -124,5 +124,6 @@ t_cmd *init_cmd(t_token *token)
 		cmds = cmds->next;
 		i++;
 	}
+	
 	return (head);
 }

@@ -1,6 +1,6 @@
 #include "../minishell.h"
 
-void	close_first_process(int **fds, int total_args)
+static void	close_first_process(int **fds, int total_args)
 {
 	int	i;
 	int	j;
@@ -16,7 +16,7 @@ void	close_first_process(int **fds, int total_args)
 	}
 }
 
-void	close_middle_process(int **fds, int current_process, int total_args)
+static void	close_middle_process(int **fds, int current_process, int total_args)
 {
 	int	i;
 	int	j;
@@ -44,7 +44,7 @@ void	close_middle_process(int **fds, int current_process, int total_args)
 	}
 }
 
-void	close_last_process(int **fds, int current_process, int total_args)
+static void	close_last_process(int **fds, int current_process, int total_args)
 {
 	int	i;
 	int	j;

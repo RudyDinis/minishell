@@ -12,7 +12,7 @@ int expand_args_size(t_cmd *cmd)
 	while (cmd->args[i])
 	{
 		k = 0;
-		expanded_args = expand_vars(cmd->args[i], cmd->minishell);
+		expanded_args = expand_vars(cmd->args[i], cmd->minishell, "EMSE");
 		while (expanded_args[k])
 		{
 			k++;
@@ -41,7 +41,7 @@ char **expand_args(t_cmd *cmd)
 	while (cmd->args[i])
 	{
 		j = 0;
-		tmp_expanded = expand_vars(cmd->args[i], cmd->minishell);
+		tmp_expanded = expand_vars(cmd->args[i], cmd->minishell, "EMSE");
 		while (tmp_expanded[j])
 		{
 			expanded_args[k] = ft_strdup(tmp_expanded[j]);

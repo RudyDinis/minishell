@@ -56,33 +56,12 @@ void executor(t_cmd *cmd, int **fds, int total_args)
 	}
 }
 
-void here_docw(t_cmd *cmd, char *lim, int i, int **fds)
-{
-	char *gnl;
-	int fd;
-	char *file;
-
-	char *nbr = ft_itoa(cmd->i);
-	file = ft_strjoin("/var/tmp/temp", nbr);
-	gnl = get_next_line(0, 0);
-	cmd->redir->fd[i] = open(file, O_RDWR | O_TRUNC | O_CREAT, 0644);
-	while (ft_findstr(lim, gnl))
-	{
-		write(cmd->redir->fd[i], gnl, ft_strlen(gnl));
-		free(gnl);
-		gnl = get_next_line(0, 0);
-	}
-	close(cmd->redir->fd[i]);
-	cmd->redir->fd[i] = open(file, O_RDWR, 0644);
-	unlink(file);
-	free(file);
-	free(nbr);
-}
-
 void open_here_doc(t_cmd *cmd, int **fds)
 {
 	int i;
+	int j;
 
+	j = 0;
 	while (cmd)
 	{
 		i = 0;
@@ -92,7 +71,12 @@ void open_here_doc(t_cmd *cmd, int **fds)
 			while (cmd->redir->target[i])
 			{
 				if (cmd->redir->redir_type[i] == HERE_DOC)
-					here_docw(cmd, cmd->redir->target[i], i, fds);
+				{
+					if (cmd->redir->here_doc_expand[j++] == 0)
+						here_doc(cmd, cmd->redir->target[i], i);
+					else
+						here_doc_expand(cmd, cmd->redir->target[i], i);
+				}
 				i++;
 			}
 		}
@@ -107,7 +91,6 @@ void launcher(t_cmd *cmd, t_token *token)
 	int total_args;
 	int pipe_last;
 
-	expander(cmd);
 	total_args = get_total_cmds(cmd) + 1;
 	pipe_last = total_args - 1;
 	fds = malloc_fds(total_args, cmd);

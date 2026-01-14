@@ -1,59 +1,75 @@
 #include "../minishell.h"
 
-t_var	*new_var_node(char *key, char *value)
+char	*char_join(char *s, char c)
 {
-	t_var	*node;
+	char	tmp[2];
 
-	node = malloc(sizeof(t_var));
-	if (!node)
-		return (NULL);
-	node->key = key;
-	node->value = value;
-	node->next = NULL;
-	return (node);
+	tmp[0] = c;
+	tmp[1] = 0;
+	return (ft_strjoin(s, tmp));
 }
 
-void	add_var(t_var **var, char *key, char *value)
+char	*handle_squote(char *s, int *i, char *res)
 {
-	char	*eq ;
-	t_var	*node;
-	t_var	*tmp;
+	int	start;
 
-	node = new_var_node(key, value);
-	if (!*var)
-	{
-		*var = node;
-		return ;
-	}
-	tmp = *var;
-	while (tmp->next)
-		tmp = tmp->next;
-	tmp->next = node;
+	(*i)++;
+	start = *i;
+	while (s[*i] && s[*i] != '\'')
+		(*i)++;
+	res = ft_strjoin(res, ft_substr(s, start, *i - start));
+	if (s[*i] == '\'')
+		(*i)++;
+	return (res);
 }
 
-char	*get_env_value(char *name, char *value, t_minishell *data)
+char	*handle_dquote(char *s, int *i, char *res, t_minishell *data)
 {
-	t_env	*tmp_env;
-
-	tmp_env = data->env;
-	while (tmp_env)
+	(*i)++;
+	while (s[*i] && s[*i] != '"')
 	{
-		if (ft_strcmp(tmp_env->key, name) == 0)
-			return (tmp_env->value);
-		tmp_env = tmp_env->next;
+		if (s[*i] == '$' && (s[*i + 1] && isalnum(s[*i + 1])))
+			res = expand_one_var(s, i, res, data);
+		else
+			res = char_join(res, s[(*i)++]);
 	}
+	if (s[*i] == '"')
+		(*i)++;
+	return (res);
 }
 
-char	*get_var_value(char *name, char *value, t_minishell *data)
+void	expand_vars2(t_minishell *data, t_expand_vars_vars *vars)
 {
-	t_var	*tmp_var;
-
-	tmp_var = data->var;
-	while (tmp_var)
+	if (vars->s[vars->i] == '\'')
+		vars->res = handle_squote(vars->s, &vars->i, vars->res);
+	else if (vars->s[vars->i] == '"')
 	{
-		if (ft_strcmp(tmp_var->key, name) == 0)
-			return (tmp_var->value);
-		tmp_var = tmp_var->next;
+		vars->in_quotes = 1;
+		vars->res = handle_dquote(vars->s, &vars->i, vars->res, data);
 	}
-	return (tmp_var);
+	else if (vars->s[vars->i] == '$'
+		&& (vars->s[vars->i + 1] && isalnum(vars->s[vars->i + 1])))
+		vars->res = expand_one_var(vars->s, &vars->i, vars->res, data);
+	else
+		vars->res = char_join(vars->res, vars->s[vars->i++]);
+}
+
+char	**expand_vars(char *s, t_minishell *data, char *param)
+{
+	t_expand_vars_vars	*vars;
+	char				**res_array;
+
+	vars = malloc(sizeof(t_expand_vars_vars));
+	vars->i = 0;
+	vars->in_quotes = 0;
+	vars->res = ft_strdup("");
+	vars->s = s;
+	while (s[vars->i])
+		expand_vars2(data, vars);
+	if (vars->in_quotes && ft_strcmp(param, "FILE") != 0)
+		return (res_array = malloc(sizeof(char *) * 2),
+			res_array[0] = ft_strdup(vars->res),
+			res_array[1] = NULL, res_array);
+	else
+		return (ft_split(vars->res, " \t"));
 }

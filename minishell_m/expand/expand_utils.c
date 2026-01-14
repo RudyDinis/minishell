@@ -1,23 +1,74 @@
 #include "../minishell.h"
 
-char *char_join(char *s, char c)
+t_var	*new_var_node(char *key, char *value)
 {
-	char tmp[2] = {c, 0};
-	return (ft_strjoin(s, tmp));
+	t_var	*node;
+
+	node = malloc(sizeof(t_var));
+	if (!node)
+		return (NULL);
+	node->key = key;
+	node->value = value;
+	node->next = NULL;
+	return (node);
 }
 
-char *expand_one_var(char *s, int *i, char *res, t_minishell *data)
+void	add_var(t_var **var, char *key, char *value)
 {
-	char *name;
-	char *val;
-	char *env;
-	int start;
+	char	*eq ;
+	t_var	*node;
+	t_var	*tmp;
+
+	node = new_var_node(key, value);
+	if (!*var)
+	{
+		*var = node;
+		return ;
+	}
+	tmp = *var;
+	while (tmp->next)
+		tmp = tmp->next;
+	tmp->next = node;
+}
+
+char	*get_env_value(char *name, char *value, t_minishell *data)
+{
+	t_env	*tmp_env;
+
+	tmp_env = data->env;
+	while (tmp_env)
+	{
+		if (ft_strcmp(tmp_env->key, name) == 0)
+			return (tmp_env->value);
+		tmp_env = tmp_env->next;
+	}
+}
+
+char	*get_var_value(char *name, char *value, t_minishell *data)
+{
+	t_var	*tmp_var;
+
+	tmp_var = data->var;
+	while (tmp_var)
+	{
+		if (ft_strcmp(tmp_var->key, name) == 0)
+			return (tmp_var->value);
+		tmp_var = tmp_var->next;
+	}
+}
+
+char	*expand_one_var(char *s, int *i, char *res, t_minishell *data)
+{
+	char	*name;
+	char	*val;
+	char	*env;
+	int		start;
 
 	(*i)++;
 	start = *i;
 	if (s[*i] == '?')
-		return (res = ft_strjoin(res, ft_itoa(data->last_cmd_return_value)),
-				(*i)++, res);
+		return (res = ft_strjoin(res,
+				ft_itoa(data->last_cmd_return_value)), (*i)++, res);
 	while (ft_isalnum(s[*i]) || s[*i] == '_')
 		(*i)++;
 
@@ -32,63 +83,4 @@ char *expand_one_var(char *s, int *i, char *res, t_minishell *data)
 
 	free(name);
 	return (res);
-}
-
-char *handle_squote(char *s, int *i, char *res)
-{
-	int start;
-
-	(*i)++;
-	start = *i;
-	while (s[*i] && s[*i] != '\'')
-		(*i)++;
-	res = ft_strjoin(res, ft_substr(s, start, *i - start));
-	if (s[*i] == '\'')
-		(*i)++;
-	return (res);
-}
-
-char *handle_dquote(char *s, int *i, char *res, t_minishell *data)
-{
-	(*i)++;
-	while (s[*i] && s[*i] != '"')
-	{
-		if (s[*i] == '$')
-			res = expand_one_var(s, i, res, data);
-		else
-			res = char_join(res, s[(*i)++]);
-	}
-	if (s[*i] == '"')
-		(*i)++;
-	return (res);
-}
-
-char **expand_vars(char *s, t_minishell *data)
-{
-	int 	i;
-	char 	*res;
-	char 	**res_array;
-	int		in_quotes;
-
-	i = 0;
-	in_quotes = 0;
-	res = ft_strdup("");
-	while (s[i])
-	{
-		if (s[i] == '\'')
-			res = handle_squote(s, &i, res);
-		else if (s[i] == '"')
-		{
-			in_quotes = 1;
-			res = handle_dquote(s, &i, res, data);
-		}
-		else if (s[i] == '$')
-			res = expand_one_var(s, &i, res, data);
-		else
-			res = char_join(res, s[i++]);
-	}
-	if (in_quotes)
-		return (res_array = malloc(sizeof(char *) * 2), res_array[0] = ft_strdup(res), res_array[1] = NULL, res_array);
-	else
-		return ft_split(res, " \t");
 }

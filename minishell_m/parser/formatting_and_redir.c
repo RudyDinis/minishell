@@ -52,7 +52,10 @@ void get_redir_type(t_token *token, t_cmd *cmd, int redir_number)
 		if (token->type != STR && token->type != PIPE)
 		{
 			cmd->redir->redir_type[i] = token->type;
-			cmd->redir->target[i++] = ft_strdup(token->next->line);
+			if (token->type == HERE_DOC)
+				cmd->redir->target[i++] == ignore_quotes(token->next->line);
+			else
+				cmd->redir->target[i++] = expand_vars(token->next->line, cmd->minishell, "FILE")[0];
 		}
 		token = token->next;
 	}
@@ -71,6 +74,7 @@ void attributes_redir(t_token *token, t_cmd *cmd)
 		if (token->type == PIPE || !token->next)
 		{
 			get_redir_type(start_of_cmd, cmd, cmd->redir->redir_number);
+			get_here_doc_expand(start_of_cmd, cmd);
 			start_of_cmd = token->next;
 			cmd = cmd->next;
 		}
@@ -82,7 +86,7 @@ void check_formatting(t_token *token)
 {
 	t_token *head;
 	t_cmd	*cmds;
-	int i;
+
 	head = token;
 	while (token)
 	{
@@ -99,6 +103,6 @@ void check_formatting(t_token *token)
 	get_redir_number(head, cmds);
 	attributes_redir(head, cmds);
 	append_args(cmds, head);
-	i = 0;
+	expander(cmds);
 	launcher(cmds, head);
 }

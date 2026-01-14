@@ -18,6 +18,7 @@ int main(void)
 	minishell->var->next = NULL;
 	minishell->var->value = "salut      ça      va";
 	minishell->last_cmd_return_value = 0;
+
 	while (1)
 	{
 		buf = readline("$>");

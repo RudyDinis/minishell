@@ -1,29 +1,29 @@
 #include "../minishell.h"
 
-void here_doc(t_cmd *cmd, char *lim, int i, int *in)
-{
-	char *gnl;
+// void here_doc(t_cmd *cmd, char *lim, int i, int *in)
+// {
+// 	char *gnl;
 
-	(*in)++;
-	gnl = get_next_line(0, 0);
-	cmd->redir->fd[i] = open("/var/tmp/temp", O_RDWR | O_TRUNC | O_CREAT, 0644);
-	if (cmd->redir->fd[i] < 0)
-		return ((*in) = -1000, (void)1);
-	while (ft_findstr(lim, gnl))
-	{
-		write(cmd->redir->fd[i], gnl, ft_strlen(gnl));
-		free(gnl);
-		gnl = get_next_line(0, 0);
-	}
-	cmd->redir->fd[i] = open("/var/tmp/temp", O_RDWR, 0644);
-	if (cmd->redir->fd[i] < 0)
-		return ((*in) = -1000, (void)1);
+// 	(*in)++;
+// 	gnl = get_next_line(0, 0);
+// 	cmd->redir->fd[i] = open("/var/tmp/temp", O_RDWR | O_TRUNC | O_CREAT, 0644);
+// 	if (cmd->redir->fd[i] < 0)
+// 		return ((*in) = -1000, (void)1);
+// 	while (ft_findstr(lim, gnl))
+// 	{
+// 		write(cmd->redir->fd[i], gnl, ft_strlen(gnl));
+// 		free(gnl);
+// 		gnl = get_next_line(0, 0);
+// 	}
+// 	cmd->redir->fd[i] = open("/var/tmp/temp", O_RDWR, 0644);
+// 	if (cmd->redir->fd[i] < 0)
+// 		return ((*in) = -1000, (void)1);
 
-	if (dup2(cmd->redir->fd[i], 0) < 0)
-		return ((*in) = -1000, (void)1);
-	close(cmd->redir->fd[i]);
-	unlink("/var/tmp/temp");
-}
+// 	if (dup2(cmd->redir->fd[i], 0) < 0)
+// 		return ((*in) = -1000, (void)1);
+// 	close(cmd->redir->fd[i]);
+// 	unlink("/var/tmp/temp");
+// }
 
 void redir_out(t_cmd *cmd, char *file, int i, int *out)
 {
