@@ -6,49 +6,24 @@
 /*   By: rdinis <rdinis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/12 13:46:06 by rdinis            #+#    #+#             */
-/*   Updated: 2026/01/12 16:44:59 by rdinis           ###   ########.fr       */
+/*   Updated: 2026/01/14 13:58:13 by rdinis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-char *char_join(char *s, char c)
+char	*char_join(char *s, char c)
 {
-	char tmp[2] = {c, 0};
+	char	tmp[2];
+
+	tmp[0] = c;
+	tmp[1] = 0;
 	return (ft_strjoin_free(s, tmp));
 }
 
-char *expand_one_var(char *s, int *i, char *res, t_minishell *data)
+char	*handle_squote(char *s, int *i, char *res)
 {
-	char *name;
-	char *val;
-	char *env;
-	int start;
-
-	(*i)++;
-	start = *i;
-	if (s[*i] == '?')
-		return (res = ft_strjoin_free(res, ft_itoa(*data->last_cmd_return_value)),
-				(*i)++, res);
-	while (ft_isalnum(s[*i]) || s[*i] == '_')
-		(*i)++;
-
-	name = ft_substr(s, start, *i - start);
-	val = get_var_value(name, NULL, data);
-	env = get_env_value(name, NULL, data);
-
-	if (val)
-		res = ft_strjoin_free(res, val);
-	else if (env)
-		res = ft_strjoin_free(res, env);
-
-	free(name);
-	return (res);
-}
-
-char *handle_squote(char *s, int *i, char *res)
-{
-	int start;
+	int	start;
 
 	(*i)++;
 	start = *i;
@@ -60,12 +35,12 @@ char *handle_squote(char *s, int *i, char *res)
 	return (res);
 }
 
-char *handle_dquote(char *s, int *i, char *res, t_minishell *data)
+char	*handle_dquote(char *s, int *i, char *res, t_minishell *data)
 {
 	(*i)++;
 	while (s[*i] && s[*i] != '"')
 	{
-		if (s[*i] == '$')
+		if (s[*i] == '$' && (s[*i + 1] && isalnum(s[*i + 1])))
 			res = expand_one_var(s, i, res, data);
 		else
 			res = char_join(res, s[(*i)++]);
@@ -75,32 +50,38 @@ char *handle_dquote(char *s, int *i, char *res, t_minishell *data)
 	return (res);
 }
 
-char **expand_vars(char *s, t_minishell *data)
+void	expand_vars2(t_minishell *data, t_expand_vars_vars *vars)
 {
-	int 	i;
-	char 	*res;
-	char 	**res_array;
-	int		in_quotes;
-
-	i = 0;
-	in_quotes = 0;
-	res = ft_strdup("");
-	while (s[i])
+	if (vars->s[vars->i] == '\'')
+		vars->res = handle_squote(vars->s, &vars->i, vars->res);
+	else if (vars->s[vars->i] == '"')
 	{
-		if (s[i] == '\'')
-			res = handle_squote(s, &i, res);
-		else if (s[i] == '"')
-		{
-			in_quotes = 1;
-			res = handle_dquote(s, &i, res, data);
-		}
-		else if (s[i] == '$')
-			res = expand_one_var(s, &i, res, data);
-		else
-			res = char_join(res, s[i++]);
+		vars->in_quotes = 1;
+		vars->res = handle_dquote(vars->s, &vars->i, vars->res, data);
 	}
-	if (in_quotes)
-		return (res_array = malloc(sizeof(char *) * 2), res_array[0] = ft_strdup(res), res_array[1] = NULL, res_array);
+	else if (vars->s[vars->i] == '$'
+		&& (vars->s[vars->i + 1] && isalnum(vars->s[vars->i + 1])))
+		vars->res = expand_one_var(vars->s, &vars->i, vars->res, data);
 	else
-		return ft_split(res, " \t");
+		vars->res = char_join(vars->res, vars->s[vars->i++]);
+}
+
+char	**expand_vars(char *s, t_minishell *data, char *param)
+{
+	t_expand_vars_vars	*vars;
+	char				**res_array;
+
+	vars = malloc(sizeof(t_expand_vars_vars));
+	vars->i = 0;
+	vars->in_quotes = 0;
+	vars->res = ft_strdup("");
+	vars->s = s;
+	while (s[vars->i])
+		expand_vars2(data, vars);
+	if (vars->in_quotes && ft_strcmp(param, "FILE") != 0)
+		return (res_array = malloc(sizeof(char *) * 2),
+			res_array[0] = ft_strdup(vars->res),
+			res_array[1] = NULL, res_array);
+	else
+		return (ft_split(vars->res, " \t"));
 }

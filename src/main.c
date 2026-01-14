@@ -6,7 +6,7 @@
 /*   By: rdinis <rdinis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/12 13:36:22 by rdinis            #+#    #+#             */
-/*   Updated: 2026/01/12 16:36:30 by rdinis           ###   ########.fr       */
+/*   Updated: 2026/01/14 14:00:37 by rdinis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,9 +63,9 @@ int	main(int ac, char **av, char **envp)
 	if (!data->last_cmd_return_value)
 		return (1);
 	*data->last_cmd_return_value = 0;
-	printf("%s\n", "\"$test\"");
+	printf("%s\n", "$test");
 	add_var(&data->var, "test", "salut     ça     va");
-	char **test = expand_vars("\"$test\"", data);
+	char **test = expand_vars("$test $ test $", data, "");
 	int i = 0;
 	while (test[i])
 		printf("%s", test[i++]);
