@@ -17,7 +17,7 @@ char *expand_one_var(char *s, int *i, char *res, t_minishell *data)
 	start = *i;
 	if (s[*i] == '?')
 		return (res = ft_strjoin(res, ft_itoa(data->last_cmd_return_value)),
-			(*i)++, res);
+				(*i)++, res);
 	while (ft_isalnum(s[*i]) || s[*i] == '_')
 		(*i)++;
 
@@ -34,9 +34,9 @@ char *expand_one_var(char *s, int *i, char *res, t_minishell *data)
 	return (res);
 }
 
-char	*handle_squote(char *s, int *i, char *res)
+char *handle_squote(char *s, int *i, char *res)
 {
-	int	start;
+	int start;
 
 	(*i)++;
 	start = *i;
@@ -48,8 +48,7 @@ char	*handle_squote(char *s, int *i, char *res)
 	return (res);
 }
 
-
-char	*handle_dquote(char *s, int *i, char *res, t_minishell *data)
+char *handle_dquote(char *s, int *i, char *res, t_minishell *data)
 {
 	(*i)++;
 	while (s[*i] && s[*i] != '"')
@@ -64,24 +63,32 @@ char	*handle_dquote(char *s, int *i, char *res, t_minishell *data)
 	return (res);
 }
 
-
-char	**expand_vars(char *s, t_minishell *data)
+char **expand_vars(char *s, t_minishell *data)
 {
-	int		i;
-	char	*res;
+	int 	i;
+	char 	*res;
+	char 	**res_array;
+	int		in_quotes;
 
 	i = 0;
+	in_quotes = 0;
 	res = ft_strdup("");
 	while (s[i])
 	{
 		if (s[i] == '\'')
 			res = handle_squote(s, &i, res);
 		else if (s[i] == '"')
+		{
+			in_quotes = 1;
 			res = handle_dquote(s, &i, res, data);
+		}
 		else if (s[i] == '$')
 			res = expand_one_var(s, &i, res, data);
 		else
 			res = char_join(res, s[i++]);
 	}
-	return (ft_split(res, " \t"));
+	if (in_quotes)
+		return (res_array = malloc(sizeof(char *) * 2), res_array[0] = ft_strdup(res), res_array[1] = NULL, res_array);
+	else
+		return ft_split(res, " \t");
 }
