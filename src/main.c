@@ -61,7 +61,7 @@ int	main(int ac, char **av, char **envp)
 	data->env = copy_env(envp);
 	data->last_cmd_return_value = 0;
 	add_var(&data->var, "test", "salut     ça     va");
-	char ** test = expand_vars("'$test \"test\"'", data, "FILE");
+	char ** test = expand_vars("\"'test $test'\"", data, "HERE_DOC");
 	int i = 0;
 	while (test[i])
 		printf("%s", test[i++]);

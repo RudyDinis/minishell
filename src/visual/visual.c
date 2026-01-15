@@ -28,9 +28,9 @@ char	*write_line(t_minishell *data)
 	prompt = malloc(prompt_len);
 	if (!prompt)
 		return (prompt);
-	ft_strcpy(prompt, top);
-	strcat(prompt, data->pwd);
-	strcat(prompt, bottom);
+	strcpy(prompt, top);//EDIT TO LIBFT
+	strcat(prompt, data->pwd);//EDIT TO LIBFT
+	strcat(prompt, bottom);//EDIT TO LIBFT
 	return (prompt);
 }
 
