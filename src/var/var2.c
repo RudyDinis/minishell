@@ -6,7 +6,7 @@
 /*   By: rdinis <rdinis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/14 13:36:24 by rdinis            #+#    #+#             */
-/*   Updated: 2026/01/14 13:36:24 by rdinis           ###   ########.fr       */
+/*   Updated: 2026/01/14 17:57:33 by rdinis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ char	*expand_one_var(char *s, int *i, char *res, t_minishell *data)
 	start = *i;
 	if (s[*i] == '?')
 		return (res = ft_strjoin_free(res,
-				ft_itoa(*data->last_cmd_return_value)), (*i)++, res);
+				ft_itoa(data->last_cmd_return_value)), (*i)++, res);
 	while (ft_isalnum(s[*i]) || s[*i] == '_')
 		(*i)++;
 

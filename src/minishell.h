@@ -6,7 +6,7 @@
 /*   By: rdinis <rdinis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/12 12:49:11 by rdinis            #+#    #+#             */
-/*   Updated: 2026/01/14 13:58:45 by rdinis           ###   ########.fr       */
+/*   Updated: 2026/01/14 17:34:32 by rdinis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ typedef struct s_minishell
 	char	*pwd;
 	t_env	*env;
 	t_var	*var;
-	int		*last_cmd_return_value;
+	int		last_cmd_return_value;
 }	t_minishell;
 
 void	init_signals(void);
@@ -74,15 +74,16 @@ void	sigint_handler(int sig);
 void	add_env(t_env **env, char *line);
 void	add_var(t_var **var, char *key, char *value);
 void	print_env(t_env *env);
+
 char	**expand_vars(char *s, t_minishell *data, char *param);
-void	export(char **str, t_env *env);
 char	*get_env_value(char *name, char *value, t_minishell *data);
 char	*get_var_value(char *name, char *value, t_minishell *data);
 char	*expand_one_var(char *s, int *i, char *res, t_minishell *data);
 
 void	cd(char **argv, t_minishell *data);
 void	echo(char **argv);
-void	export(char **argv, t_env *env);
+int		export(char **argv, t_env *env);
+void	exit_shell(t_minishell *data);
 
 void	print_title(void);
 char	*write_line(t_minishell *data);

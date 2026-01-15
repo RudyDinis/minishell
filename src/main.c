@@ -6,7 +6,7 @@
 /*   By: rdinis <rdinis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/12 13:36:22 by rdinis            #+#    #+#             */
-/*   Updated: 2026/01/14 14:00:37 by rdinis           ###   ########.fr       */
+/*   Updated: 2026/01/15 13:49:59 by rdinis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,17 +59,12 @@ int	main(int ac, char **av, char **envp)
 		return (1);
 	print_title();
 	data->env = copy_env(envp);
-	data->last_cmd_return_value = malloc(sizeof(int));
-	if (!data->last_cmd_return_value)
-		return (1);
-	*data->last_cmd_return_value = 0;
-	printf("%s\n", "$test");
+	data->last_cmd_return_value = 0;
 	add_var(&data->var, "test", "salut     ça     va");
-	char **test = expand_vars("$test $ test $", data, "");
+	char ** test = expand_vars("'$test \"test\"'", data, "FILE");
 	int i = 0;
 	while (test[i])
 		printf("%s", test[i++]);
-	printf("\n");
 	cwd = getcwd(NULL, 0);
 	data->pwd = cwd;
 	init_signals();

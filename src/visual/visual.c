@@ -6,7 +6,7 @@
 /*   By: rdinis <rdinis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/12 13:34:41 by rdinis            #+#    #+#             */
-/*   Updated: 2026/01/12 13:38:33 by rdinis           ###   ########.fr       */
+/*   Updated: 2026/01/14 16:13:21 by rdinis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,10 @@ char	*write_line(t_minishell *data)
 {
 	char		*prompt;
 	size_t		prompt_len;
-	const char	*top;
-	const char	*bottom;
+	char		*top;
+	char		*bottom;
 
-	top = GREEN "┌──(" BOLD_BLUE "Minishell" RESET GREEN ")-[" BOLD_WHITE;
+	top = GREEN "\n┌──(" BOLD_BLUE "Minishell" RESET GREEN ")-[" BOLD_WHITE;
 	bottom = RESET GREEN "]\n" GREEN "└─" BOLD_BLUE "$ " RESET;
 	prompt_len = strlen(top)
 		+ strlen(data->pwd)
@@ -28,7 +28,7 @@ char	*write_line(t_minishell *data)
 	prompt = malloc(prompt_len);
 	if (!prompt)
 		return (prompt);
-	strcpy(prompt, top);
+	ft_strcpy(prompt, top);
 	strcat(prompt, data->pwd);
 	strcat(prompt, bottom);
 	return (prompt);

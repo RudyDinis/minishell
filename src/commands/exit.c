@@ -1,36 +1,40 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   echo.c                                             :+:      :+:    :+:   */
+/*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rdinis <rdinis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/01/12 13:28:34 by rdinis            #+#    #+#             */
-/*   Updated: 2026/01/14 14:49:42 by rdinis           ###   ########.fr       */
+/*   Created: 2026/01/14 17:27:10 by rdinis            #+#    #+#             */
+/*   Updated: 2026/01/14 18:07:53 by rdinis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void	echo(char **argv)
+void	exit_shell(t_minishell *data)
 {
-	int	i;
-	int	nl;
+	t_env	*tmp;
+	t_var	*tmp_var;
 
-	i = 1;
-	nl = 0;
-	if (ft_strcmp(argv[i], "-n") == 0)
+	while (data->env)
 	{
-		nl = 1;
-		i++;
+		tmp = data->env->next;
+		free(data->env->key);
+		free(data->env->value);
+		free(data->env);
+		data->env = tmp;
 	}
-	while (argv[i])
+	while (data->env)
 	{
-		printf("%s", argv[i]);
-		if (argv[i + 1])
-			printf(" ");
-		i++;
+		tmp_var = data->var->next;
+		free(data->var->key);
+		free(data->var->value);
+		free(data->var);
+		data->var = tmp_var;
 	}
-	if (nl == 1)
-		printf("\n");
+	if (data->pwd)
+		free(data->pwd);
+	free(data);
+	exit(1);
 }

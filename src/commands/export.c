@@ -6,7 +6,7 @@
 /*   By: rdinis <rdinis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/12 13:28:59 by rdinis            #+#    #+#             */
-/*   Updated: 2026/01/12 13:37:31 by rdinis           ###   ########.fr       */
+/*   Updated: 2026/01/14 16:22:52 by rdinis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,11 @@ void	print_env(t_env *env)
 	tmp = env;
 	while (tmp)
 	{
-		printf("%s=%s\n", tmp->key, tmp->value);
+		printf("export %s", tmp->key);
+		if (ft_strlen(tmp->value))
+			printf("=\"%s\"\n", tmp->value);
+		else
+			printf("\n");
 		tmp = tmp->next;
 	}
 }
@@ -62,11 +66,24 @@ void	add_env(t_env **env, char *line)
 	tmp->next = node;
 }
 
-void	export(char **argv, t_env *env)
+int	export(char **argv, t_env *env)
 {
+	int		i;
+	char	*res;
+
+	i = 1;
 	if (!argv[1])
+		return (print_env(env), 0);
+	while (argv[i])
 	{
-		print_env(env);
-		return ;
+		if (ft_strchr(argv[i], '='))
+			add_env(&env, argv[i]);
+		else
+		{
+			res = ft_strjoin(argv[i], "=");
+			add_env(&env, res);
+			free(res);
+		}
+		i++;
 	}
 }
