@@ -85,6 +85,8 @@ void	cd(char **argv, t_minishell *data);
 void	echo(char **argv);
 int		export(char **argv, t_env *env);
 void	exit_shell(t_minishell *data);
+void	env(t_minishell *data);
+void	unset(t_minishell *data, char *key);
 
 void	print_title(void);
 char	*write_line(t_minishell *data);

@@ -4,7 +4,7 @@ CFLAGS = -g
 AR = ar rcs
 RM = rm -f
 SRC = src/main.c src/visual/visual.c src/signal/signal.c src/var/var.c src/var/var2.c
-COMMANDSSRC = src/commands/echo.c src/commands/export.c src/commands/cd.c src/commands/pwd.c src/commands/exit.c
+COMMANDSSRC = src/commands/echo.c src/commands/export.c src/commands/cd.c src/commands/pwd.c src/commands/exit.c src/commands/env.c src/commands/unset.c
 
 OBJ = $(SRC:.c=.o)
 COMMANDSOBJ = $(COMMANDSSRC:.c=.o)

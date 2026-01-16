@@ -67,9 +67,6 @@ int	main(int ac, char **av, char **envp)
 	data->var = NULL;
 	data->last_cmd_return_value = 0;
 	data->exit_status = 0;
-	add_var(&data->var, "test", "salut     ça     va");
-	char **test = expand_vars("echo -nnnnq $test", data, "");
-	echo(test);
 	cwd = getcwd(NULL, 0);
 	data->pwd = cwd;
 	init_signals(data);
