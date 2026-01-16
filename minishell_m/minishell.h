@@ -21,7 +21,7 @@ void		apply_path(t_cmd *cmd);
 void		launcher(t_cmd *cmd, t_token *token);
 
 /*FREE UTILS*/
-void		free_ms(t_token *token, t_cmd *cmd, int n, int **fds);
+void		free_ms(t_token *token, t_cmd *cmd, int n);
 void		free_cmd(t_cmd *cmd, int n);
 void		free_token(t_token *token, int n);
 

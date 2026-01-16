@@ -5,6 +5,7 @@
 #include <sys/wait.h>
 #include <stdio.h>
 #include <readline/readline.h>
+#include <errno.h>
 
 typedef enum	s_type
 {
@@ -16,9 +17,24 @@ typedef enum	s_type
 	HERE_DOC
 }	t_type;
 
+typedef struct s_env
+{
+	char			*key;
+	char			*value;
+	struct s_env	*next;
+}	t_env;
+
+typedef struct s_var
+{
+	char			*key;
+	char			*value;
+	struct s_var	*next;
+}	t_var;
+
 typedef struct	s_minishell
 {
-	int		last_return_value;
+	int		last_cmd_return_value;
+	int		in_here_doc;
 	char	*pwd;
 	t_env	*env;
 	t_var	*var;
@@ -66,6 +82,7 @@ typedef struct s_cmd
 	int				i;
 	int				is_absolute;
 	int				return_value;
+	int				**fds;
 	pid_t			pid;
 	char 			*cmd;
 	char 			*path;
@@ -76,20 +93,6 @@ typedef struct s_cmd
 	struct s_cmd	*next;
 }	t_cmd;
 
-typedef struct s_env
-{
-	char			*key;
-	char			*value;
-	struct s_env	*next;
-}	t_env;
-
-typedef struct s_var
-{
-	char			*key;
-	char			*value;
-	struct s_var	*next;
-}	t_var;
-
 typedef struct s_expand_vars_vars
 {
 	int		i;
@@ -97,7 +100,5 @@ typedef struct s_expand_vars_vars
 	char	*s;
 	char	*res;
 }	t_expand_vars_vars;
-
-
 
 #endif

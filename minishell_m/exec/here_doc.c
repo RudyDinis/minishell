@@ -10,20 +10,21 @@ char *ignore_quotes(char *str)
 	j = 0;
 	while (str[i])
 	{
-		if (str[i] == '\'' || str[i] == "\"")
+		if (str[i] == '\'' || str[i] == '\"')
 			j++;
 		i++;
 	}
-	copy = malloc(i - j + 1);
+	copy = malloc((i - j) + 1);
 	i = 0;
 	j = 0;
 	while (str[i])
 	{
-		while (str[i] == '\'' || str[i] == "\"")
+		while (str[i] == '\'' || str[i] == '\"')
 			i++;
-		copy[j++] = str[i++];
+		if (str[i])
+			copy[j++] = str[i++];
 	}
-	return (copy[j] == 0, copy);
+	return (copy[j] = 0, copy);
 }
 
 int should_expand_here_doc(char *file)
@@ -45,7 +46,7 @@ int get_here_doc_nbr(t_token *token)
 	int i;
 
 	i = 0;
-	while (token || token->type != PIPE)
+	while (token && token->type != PIPE)
 	{
 		if (token->type == HERE_DOC)
 			i++;
@@ -64,9 +65,9 @@ void get_here_doc_expand(t_token *token, t_cmd *cmd)
 	if (!here_doc_nbr)
 		cmd->redir->here_doc_expand = NULL;
 	cmd->redir->here_doc_expand = malloc(here_doc_nbr * sizeof(int));
-	if (cmd->redir->here_doc_expand)
+	if (!cmd->redir->here_doc_expand)
 		return ; //TODO Free correctement
-	while (token || token->type != PIPE)
+	while (token && token->type != PIPE)
 	{
 		if (token->type == HERE_DOC)
 			cmd->redir->here_doc_expand[i++] = should_expand_here_doc(token->next->line);
@@ -79,16 +80,21 @@ void here_doc_expand(t_cmd *cmd, char *lim, int i)
 	char *gnl;
 	int fd;
 	char *file;
+	char *nbr;
+	char *expanded_line;
 
-	char *nbr = ft_itoa(cmd->i);
+	nbr = ft_itoa(cmd->i);
 	file = ft_strjoin("/var/tmp/temp", nbr);
 	gnl = get_next_line(0, 0);
+	expanded_line = expand_vars(gnl, cmd->minishell, "HERE_DOC")[0];
 	cmd->redir->fd[i] = open(file, O_RDWR | O_TRUNC | O_CREAT, 0644);
-	while (ft_findstr(lim, gnl))
+	while (ft_findstr(lim, expanded_line))
 	{
-		write(cmd->redir->fd[i], gnl, ft_strlen(gnl));
+		write(cmd->redir->fd[i], expanded_line, ft_strlen(expanded_line));
 		free(gnl);
+		free(expanded_line);
 		gnl = get_next_line(0, 0);
+		expanded_line = expand_vars(gnl, cmd->minishell, "HERE_DOC")[0];
 	}
 	close(cmd->redir->fd[i]);
 	cmd->redir->fd[i] = open(file, O_RDWR, 0644);
@@ -102,8 +108,10 @@ void here_doc(t_cmd *cmd, char *lim, int i)
 	char *gnl;
 	int fd;
 	char *file;
+	char *nbr;
 
-	char *nbr = ft_itoa(cmd->i);
+	cmd->minishell->in_here_doc = 1;
+	nbr = ft_itoa(cmd->i);
 	file = ft_strjoin("/var/tmp/temp", nbr);
 	gnl = get_next_line(0, 0);
 	cmd->redir->fd[i] = open(file, O_RDWR | O_TRUNC | O_CREAT, 0644);
@@ -118,4 +126,5 @@ void here_doc(t_cmd *cmd, char *lim, int i)
 	unlink(file);
 	free(file);
 	free(nbr);
+	cmd->minishell->in_here_doc = 0;
 }

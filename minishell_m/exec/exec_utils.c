@@ -11,7 +11,7 @@ void malloc_redir(t_cmd *cmd, int **fds)
 		i++;
 	cmd->redir->fd = malloc(sizeof(int) * (i));
 	if (!cmd->redir->fd)
-		free_ms(NULL, cmd, 1, fds);
+		free_ms(NULL, cmd, 1);
 	while (j < i)
 		cmd->redir->fd[j++] = -125;
 }
@@ -24,16 +24,21 @@ int **malloc_fds(int total_args, t_cmd *cmd)
 	i = 0;
 	fds = malloc((total_args) * sizeof(int *));
 	if (!fds)
-		free_ms(NULL, cmd, 1, NULL);
+		free_ms(NULL, cmd, 1);
 	while (i < (total_args))
 	{
 		fds[i] = malloc(2 * sizeof(int));
 		if (!fds[i])
 		{
 			free_everything_int(fds, i);
-			free_ms(NULL, cmd, 1, NULL);
+			free_ms(NULL, cmd, 1);
 		}
 		i++;
+	}
+	while (cmd)
+	{
+		cmd->fds = fds;
+		cmd = cmd->next;
 	}
 	return (fds);
 }

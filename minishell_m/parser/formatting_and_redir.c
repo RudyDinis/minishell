@@ -43,19 +43,20 @@ void get_redir_type(t_token *token, t_cmd *cmd, int redir_number)
 		return ;
 	cmd->redir->redir_type = malloc(sizeof(t_type) * redir_number);
 	if (!cmd->redir->redir_type)
-		free_ms(NULL, cmd, 1, NULL);
+		free_ms(NULL, cmd, 1);
 	cmd->redir->target = malloc(sizeof(char *) * (redir_number + 1));
 	if (!cmd->redir->target)
-		free_ms(NULL, cmd, 1, NULL);
+		free_ms(NULL, cmd, 1);
 	while (token->next && token->type != PIPE)
 	{
 		if (token->type != STR && token->type != PIPE)
 		{
 			cmd->redir->redir_type[i] = token->type;
 			if (token->type == HERE_DOC)
-				cmd->redir->target[i++] == ignore_quotes(token->next->line);
+				cmd->redir->target[i++] = ignore_quotes(token->next->line);
 			else
-				cmd->redir->target[i++] = expand_vars(token->next->line, cmd->minishell, "FILE")[0];
+				cmd->redir->target[i++] = expand_vars(token->next->line,
+						cmd->minishell, "FILE")[0];
 		}
 		token = token->next;
 	}

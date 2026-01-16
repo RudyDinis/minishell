@@ -66,23 +66,50 @@ void free_cmd(t_cmd *cmd, int n)
 	}
 }
 
-void free_ms(t_token *token, t_cmd *cmd, int n, int **fds)
+void free_minishell(t_minishell *data)
 {
-	if (fds)
+    t_env    *tmp;
+    t_var    *tmp_var;
+
+    while (data->env)
+    {
+        tmp = data->env->next;
+        free(data->env->key);
+        free(data->env->value);
+        free(data->env);
+        data->env = tmp;
+    }
+    while (data->env)
+    {
+        tmp_var = data->var->next;
+        free(data->var->key);
+        free(data->var->value);
+        free(data->var);
+        data->var = tmp_var;
+    }
+    if (data->pwd)
+        free(data->pwd);
+    free(data);
+}
+
+void free_ms(t_token *token, t_cmd *cmd, int n)
+{
+
+	if (cmd && cmd->fds)
 	{
-		if (cmd)
-		{
-			close_all_pipes(fds, get_total_cmds(cmd) + 1);
-			free_everything_int(fds, get_total_cmds(cmd) + 1);
-		}
-		if (token)
-		{
-			close_all_pipes(fds, number_of_cmds(token));
-			free_everything_int(fds, number_of_cmds(token));
-		}
+		close_all_pipes(cmd->fds, get_total_cmds(cmd) + 1);
+		free_everything_int(cmd->fds, get_total_cmds(cmd) + 1);
+	}
+	if (token && token->cmd && token->cmd->fds)
+	{
+		close_all_pipes(token->cmd->fds, get_total_cmds(token->cmd) + 1);
+		free_everything_int(token->cmd->fds, get_total_cmds(token->cmd) + 1);
 	}
 	if (!token)
+	{
+		free_minishell(cmd->minishell);
 		free_cmd(cmd, 0);
+	}
 	if (!cmd)
 		free_token(token, 1);
 	if (n != -5)

@@ -36,7 +36,7 @@ char **expand_args(t_cmd *cmd)
 	k = 0;
 	expanded_args = malloc((expand_args_size(cmd) + 1) * sizeof(char *));
 	if (!expanded_args)
-		free_ms(NULL, cmd, 1, NULL);
+		free_ms(NULL, cmd, 1);
 	expanded_args[expand_args_size(cmd)] = NULL;
 	while (cmd->args[i])
 	{
@@ -60,8 +60,6 @@ void expander(t_cmd *cmd)
 	{
 		//free_everything((void **)cmd->args);
 		cmd->args = expand_args(cmd);
-		printf("la commande = %s\n", cmd->args[0]);
-		printf("le param est = %s\n", cmd->args[1]);
 		cmd->cmd = cmd->args[0];
 		cmd = cmd->next;
 	}

@@ -5,25 +5,25 @@ void check_access_and_rights(t_cmd *cmd, int **fds)
 	if (cmd->is_absolute == 0)
 	{
 		if (access(cmd->path, F_OK) < 0)
-			return (ft_printf_error("%s: command not found\n", cmd->path),
-					free_ms(NULL, cmd, 127, fds));
+			return (perror(cmd->path),
+					free_ms(NULL, cmd, 127));
 		if (access(cmd->path, X_OK) < 0)
 		{
-			ft_printf_error("%s: Permission denied\n", cmd->path);
-			free_ms(NULL, cmd, 126, fds);
+			perror(cmd->path);
+			free_ms(NULL, cmd, 126);
 		}
 	}
 	if (cmd->is_absolute == 1)
 	{
 		if (access(cmd->path, F_OK) < 0)
 		{
-			ft_printf_error("%s: No such file or directory\n", cmd->path);
-			free_ms(NULL, cmd, 127, fds);
+			perror(cmd->path);
+			free_ms(NULL, cmd, 127);
 		}
 		if (access(cmd->path, X_OK) < 0)
 		{
-			ft_printf_error("%s: Permission denied\n", cmd->path);
-			free_ms(NULL, cmd, 126, fds);
+			perror(cmd->path);
+			free_ms(NULL, cmd, 126);
 		}
 	}
 }
@@ -42,8 +42,8 @@ void executor(t_cmd *cmd, int **fds, int total_args)
 			open_redir(cmd, fds);
 			apply_path(cmd);
 			check_access_and_rights(cmd, fds);
-			execve(cmd->path, cmd->args, NULL);
-			exit(1);
+			if (execve(cmd->path, cmd->args, NULL) < 0)
+				return (perror("execve"), free_ms(cmd->token, NULL, 1));
 		}
 		cmd = cmd->next;
 	}
@@ -51,7 +51,7 @@ void executor(t_cmd *cmd, int **fds, int total_args)
 	while (head)
 	{
 		waitpid(head->pid, &head->return_value, 0);
-		head->return_value = WEXITSTATUS(head->return_value);
+		head->return_value = WEXITSTATUS(head->minishell->last_cmd_return_value);
 		head = head->next;
 	}
 }
@@ -84,6 +84,15 @@ void open_here_doc(t_cmd *cmd, int **fds)
 	}
 }
 
+void attribute_fds(t_cmd *cmd, int **fds)
+{
+	while (cmd)
+	{
+		cmd->fds = fds;
+		cmd = cmd->next;
+	}
+}
+
 void launcher(t_cmd *cmd, t_token *token)
 {
 	int id;
@@ -94,8 +103,8 @@ void launcher(t_cmd *cmd, t_token *token)
 	total_args = get_total_cmds(cmd) + 1;
 	pipe_last = total_args - 1;
 	fds = malloc_fds(total_args, cmd);
+	attribute_fds(cmd, fds);
 	open_pipes(fds, total_args);
 	open_here_doc(cmd, fds);
 	executor(cmd, fds, total_args);
-	free_ms(token, NULL, -5, fds);
 }

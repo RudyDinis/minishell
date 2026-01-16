@@ -23,39 +23,29 @@ t_repere init_repere(void)
 	return (repere);
 }
 
-void init_data_to_null(t_token *node)
-{
-	node->line = NULL;
-	node->index = 0;
-	node->next = NULL;
-	node->in_quotes = 0;
-	node->previous = NULL;
-}
 t_token *create_list(char *argv)
 {
 	int i;
+	int token_nb;
 	t_token *head;
 	t_token *tete;
-	int token_nb = find_number_of_token(argv);
+
+	token_nb = find_number_of_token(argv);
 	i = 0;
-	head = NULL;
 	if (token_nb)
-		head = malloc(sizeof(t_token));
+		head = ft_calloc(1, sizeof(t_token));;
 	if (!head)
 		return (exit(1), NULL);
 	tete = head;
-	init_data_to_null(head);
 	head->index = i++;
 	while (i < token_nb)
 	{
-		head->next = malloc(sizeof(t_token));
+		head->next =  ft_calloc(1, sizeof(t_token));;
 		if (!head->next)
-			return (free_ms(tete, NULL, 1, NULL), NULL);
-		init_data_to_null(head->next);
+			return (free_ms(tete, NULL, 1), NULL);
 		head->next->previous = head;
 		head = head->next;
-		head->index = i;
-		i++;
+		head->index = i++;
 	}
 	find_type(argv, tete);
 	return (tete);
@@ -65,21 +55,15 @@ t_minishell *init_ms(t_cmd *cmd)
 {
 	t_minishell *minishell;
 
-	minishell = malloc(sizeof(t_minishell));
+	minishell = ft_calloc(1, sizeof(t_minishell));
 	if (!minishell)
-		free_ms(NULL, cmd, 1, NULL);
-	minishell->env = malloc(sizeof(t_env));
+		free_ms(NULL, cmd, 1);
+	minishell->env =  ft_calloc(1, sizeof(t_env));
 	if (!minishell->env)
-		free_ms(NULL, cmd, 1, NULL);
-	minishell->var = malloc(sizeof(t_var));
+		free_ms(NULL, cmd, 1);
+	minishell->var =  ft_calloc(1, sizeof(t_var));
 	if (!minishell->var)
-		free_ms(NULL, cmd, 1, NULL);
-	minishell->env->key = NULL;
-	minishell->env->next = NULL;
-	minishell->env->value = NULL;
-	minishell->var->key = "abc";
-	minishell->var->next = NULL;
-	minishell->var->value = "salut       ça             va";
+		free_ms(NULL, cmd, 1);
 	return (minishell);
 }
 
@@ -90,40 +74,32 @@ t_cmd *init_cmd(t_token *token)
 	t_minishell *minishell;
 	int i;
 
-	cmds = malloc(sizeof(t_cmd));
+	cmds =  ft_calloc(1, sizeof(t_cmd));;
 	if (!cmds)
-	free_ms(token, NULL, 1, NULL);
+		free_ms(token, NULL, 1);
 	token->cmd = cmds;
 	minishell = init_ms(cmds);
 	head = cmds;
 	i = 0;
 	while (i < number_of_cmds(token))
 	{
-		cmds->args = NULL;
-		cmds->cmd = NULL;
-		cmds->path = NULL;
-		cmds->return_value = 0;
 		cmds->token = token;
 		cmds->minishell = minishell;
-		cmds->redir = malloc(sizeof(t_redir));
+		cmds->redir =  ft_calloc(1, sizeof(t_redir));;
 		if (!cmds->redir)
-			free_ms(token, NULL, 1, NULL);
-		cmds->redir->redir_number = 0;
-		cmds->redir->redir_type = 0;
-		cmds->redir->fd = NULL;
-		cmds->redir->target = NULL;
+			free_ms(token, NULL, 1);
 		cmds->i = i;
 		if (i + 1 == number_of_cmds(token))
 			cmds->next = NULL;
 		else
 		{
-			cmds->next = malloc(sizeof(t_cmd));
+			cmds->next =  ft_calloc(1, sizeof(t_cmd));;
 			if (!cmds->next)
-				free_ms(token, NULL, 1, NULL);
+				free_ms(token, NULL, 1);
 		}
 		cmds = cmds->next;
 		i++;
 	}
-	
+
 	return (head);
 }
