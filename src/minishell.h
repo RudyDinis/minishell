@@ -66,9 +66,10 @@ typedef struct s_minishell
 	t_env	*env;
 	t_var	*var;
 	int		last_cmd_return_value;
+	int		exit_status;
 }	t_minishell;
 
-void	init_signals(void);
+void	init_signals(t_minishell *data);
 void	sigint_handler(int sig);
 
 void	add_env(t_env **env, char *line);

@@ -21,7 +21,7 @@ void	sigint_handler(int sig)
 	rl_redisplay();
 }
 
-void	init_signals(void)
+void	init_signals(t_minishell *data)
 {
 	struct sigaction	sa;
 

@@ -19,11 +19,16 @@ void	while_read(t_minishell *data)
 
 	while (1)
 	{
+		if (data->exit_status == 1)
+			exit_shell(data);
 		prompt = write_line(data);
 		line = readline(prompt);
 		free(prompt);
 		if (!line)
-			break ;
+		{
+			write(1, "exit\n", 5);
+			exit_shell(data);
+		}
 		if (*line)
 		{
 			add_history(line);
@@ -59,15 +64,15 @@ int	main(int ac, char **av, char **envp)
 		return (1);
 	print_title();
 	data->env = copy_env(envp);
+	data->var = NULL;
 	data->last_cmd_return_value = 0;
+	data->exit_status = 0;
 	add_var(&data->var, "test", "salut     ça     va");
-	char ** test = expand_vars("$test", data, "");
-	int i = 0;
-	while (test[i])
-		printf("%s", test[i++]);
+	char **test = expand_vars("echo -nnnnq $test", data, "");
+	echo(test);
 	cwd = getcwd(NULL, 0);
 	data->pwd = cwd;
-	init_signals();
+	init_signals(data);
 	while_read(data);
 	rl_clear_history();
 	free(data);

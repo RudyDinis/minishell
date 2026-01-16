@@ -93,8 +93,10 @@ void expand_vars2(t_minishell *data, t_expand_vars_vars *vars, char *param)
 
 char **expand_vars(char *s, t_minishell *data, char *param)
 {
-	t_expand_vars_vars *vars;
-	char **res_array;
+	t_expand_vars_vars	*vars;
+	char 				**res_array;
+	char 				*final;
+	int 				in_quotes;
 
 	vars = malloc(sizeof(t_expand_vars_vars));
 	vars->i = 0;
@@ -103,22 +105,13 @@ char **expand_vars(char *s, t_minishell *data, char *param)
 	vars->s = s;
 	while (s[vars->i])
 		expand_vars2(data, vars, param);
-	if (ft_strcmp(param, "FILE") == 0)
-		return (res_array = malloc(sizeof(char *) * 2),
-				res_array[0] = ft_strdup(vars->res),
-				res_array[1] = NULL, res_array);
-	if (ft_strcmp(param, "HERE_DOC") == 0)
-		return (res_array = malloc(sizeof(char *) * 2),
-				res_array[0] = ft_strdup(vars->res),
-				res_array[1] = NULL, res_array);
-	if (vars->in_quotes)
-	{
-		return (res_array = malloc(sizeof(char *) * 2),
-				res_array[0] = ft_strdup(vars->res),
-				res_array[1] = NULL, res_array);
-	}
-	else
-	{
-		return (ft_split(vars->res, " \t"));
-	}
+	in_quotes = vars->in_quotes;
+	final = ft_strdup(vars->res);
+	free(vars->res);
+	free(vars);
+	if (ft_strcmp(param, "FILE") == 0
+		|| ft_strcmp(param, "HERE_DOC") == 0
+		|| in_quotes)
+		return (res_array = malloc(sizeof(char *) * 2), res_array[0] = final, res_array[1] = NULL, res_array);
+	return ft_split(final, " \t");
 }

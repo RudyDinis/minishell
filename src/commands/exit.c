@@ -25,7 +25,7 @@ void	exit_shell(t_minishell *data)
 		free(data->env);
 		data->env = tmp;
 	}
-	while (data->env)
+	while (data->var)
 	{
 		tmp_var = data->var->next;
 		free(data->var->key);

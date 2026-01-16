@@ -14,14 +14,20 @@
 
 void	echo(char **argv)
 {
-	int	i;
-	int	nl;
+	int i;
+	int j;
+	int newline;
 
 	i = 1;
-	nl = 0;
-	if (ft_strcmp(argv[i], "-n") == 0)
+	newline = 1;
+	while (argv[i] && argv[i][0] == '-')
 	{
-		nl = 1;
+		j = 1;
+		while (argv[i][j] == 'n')
+			j++;
+		if (argv[i][j] != '\0')
+			break;
+		newline = 0;
 		i++;
 	}
 	while (argv[i])
@@ -31,6 +37,7 @@ void	echo(char **argv)
 			printf(" ");
 		i++;
 	}
-	if (nl == 1)
+	if (newline)
 		printf("\n");
 }
+

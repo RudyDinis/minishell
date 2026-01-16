@@ -14,16 +14,16 @@
 
 t_var	*new_var_node(char *key, char *value)
 {
-	t_var	*node;
-
-	node = malloc(sizeof(t_var));
+	t_var *node = malloc(sizeof(t_var));
 	if (!node)
-		return (NULL);
-	node->key = key;
-	node->value = value;
+		return NULL;
+
+	node->key = ft_strdup(key);
+	node->value = ft_strdup(value);
 	node->next = NULL;
-	return (node);
+	return node;
 }
+
 
 void	add_var(t_var **var, char *key, char *value)
 {
