@@ -81,12 +81,13 @@ char	*get_env_value(char *name, char *value, t_minishell *data);
 char	*get_var_value(char *name, char *value, t_minishell *data);
 char	*expand_one_var(char *s, int *i, char *res, t_minishell *data);
 
-void	cd(char **argv, t_minishell *data);
 void	echo(char **argv);
+void	pwd(void);
+void	cd(char **argv, t_minishell *data);
 int		export(char **argv, t_env *env);
-void	exit_shell(t_minishell *data);
-void	env(t_minishell *data);
 void	unset(t_minishell *data, char *key);
+void	env(t_minishell *data);
+void	exit_shell(t_minishell *data);
 
 void	print_title(void);
 char	*write_line(t_minishell *data);
