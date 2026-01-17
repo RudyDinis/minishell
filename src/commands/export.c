@@ -41,6 +41,21 @@ void	print_env(t_env *env)
 	}
 }
 
+int		env_exist(t_env *tmp, char *key, char *value)
+{
+	while (tmp)
+	{
+		if (ft_strcmp(tmp->key, key) == 0)
+		{
+			free(tmp->value);
+			tmp->value = ft_strdup(value);
+			return (1);
+		}
+		tmp = tmp->next;
+	}
+	return (0);
+}
+
 void	add_env(t_env **env, char *line)
 {
 	char	*eq ;
@@ -49,11 +64,15 @@ void	add_env(t_env **env, char *line)
 	t_env	*node;
 	t_env	*tmp;
 
+
 	eq = ft_strchr(line, '=');
 	if (!eq)
 		return ;
 	key = ft_substr(line, 0, eq - line);
 	value = ft_strdup(eq + 1);
+	tmp = *env;
+	if (env_exist(tmp, key, value))
+		return (free(key), free(value));
 	node = new_node(key, value);
 	if (!*env)
 	{
@@ -87,3 +106,4 @@ int	export(char **argv, t_env *env)
 		i++;
 	}
 }
+

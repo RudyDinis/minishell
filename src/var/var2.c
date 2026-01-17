@@ -27,10 +27,20 @@ t_var	*new_var_node(char *key, char *value)
 
 void	add_var(t_var **var, char *key, char *value)
 {
-	char	*eq ;
 	t_var	*node;
 	t_var	*tmp;
 
+	tmp = *var;
+	while (tmp)
+	{
+		if (ft_strcmp(tmp->key, key) == 0)
+		{
+			free(tmp->value);
+			tmp->value = ft_strdup(value);
+			return;
+		}
+		tmp = tmp->next;
+	}
 	node = new_var_node(key, value);
 	if (!*var)
 	{
@@ -43,7 +53,7 @@ void	add_var(t_var **var, char *key, char *value)
 	tmp->next = node;
 }
 
-char	*get_env_value(char *name, char *value, t_minishell *data)
+char	*get_env_value(char *name, t_minishell *data)
 {
 	t_env	*tmp_env;
 
@@ -56,7 +66,7 @@ char	*get_env_value(char *name, char *value, t_minishell *data)
 	}
 }
 
-char	*get_var_value(char *name, char *value, t_minishell *data)
+char	*get_var_value(char *name, t_minishell *data)
 {
 	t_var	*tmp_var;
 
@@ -69,30 +79,54 @@ char	*get_var_value(char *name, char *value, t_minishell *data)
 	}
 }
 
-char	*expand_one_var(char *s, int *i, char *res, t_minishell *data)
+void expand_one_var2(char *val, char *env, char **res, int quoted)
 {
-	char	*name;
-	char	*val;
-	char	*env;
-	int		start;
+	char **split;
+	int j;
+	char *v;
+
+	if (val != NULL)
+		v = val;
+	else
+		v = env;
+	if (!quoted)
+	{
+		split = ft_split(v, " \t");
+		if (!split)
+			return;
+		j = 0;
+		while (split[j] != NULL)
+		{
+			*res = ft_strjoin_free(*res, split[j]);
+			if (split[j + 1] != NULL)
+				*res = ft_strjoin_free(*res, " ");
+			j++;
+		}
+		free_tab(split);
+	}
+	else
+		*res = ft_strjoin_free(*res, v);
+}
+
+
+char *expand_one_var(char *s, int *i, char *res, t_minishell *data, int quoted)
+{
+	char *name;
+	char *val;
+	char *env;
+	int start;
 
 	(*i)++;
 	start = *i;
 	if (s[*i] == '?')
-		return (res = ft_strjoin_free(res,
-				ft_itoa(data->last_cmd_return_value)), (*i)++, res);
+		return (res = ft_strjoin_free(res, ft_itoa(data->last_cmd_return_value)), (*i)++, res);
 	while (ft_isalnum(s[*i]) || s[*i] == '_')
 		(*i)++;
-
 	name = ft_substr(s, start, *i - start);
-	val = get_var_value(name, NULL, data);
-	env = get_env_value(name, NULL, data);
-
-	if (val)
-		res = ft_strjoin_free(res, val);
-	else if (env)
-		res = ft_strjoin_free(res, env);
-
+	val = get_var_value(name, data);
+	env = get_env_value(name, data);
+	if (val || env)
+		expand_one_var2(val, env, &res, quoted);
 	free(name);
 	return (res);
 }

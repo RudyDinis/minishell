@@ -71,15 +71,17 @@ typedef struct s_minishell
 
 void	init_signals(t_minishell *data);
 void	sigint_handler(int sig);
-
 void	add_env(t_env **env, char *line);
 void	add_var(t_var **var, char *key, char *value);
 void	print_env(t_env *env);
 
 char	**expand_vars(char *s, t_minishell *data, char *param);
-char	*get_env_value(char *name, char *value, t_minishell *data);
-char	*get_var_value(char *name, char *value, t_minishell *data);
-char	*expand_one_var(char *s, int *i, char *res, t_minishell *data);
+char	*get_env_value(char *name, t_minishell *data);
+char	*get_var_value(char *name, t_minishell *data);
+char	*expand_one_var(char *s, int *i, char *res, t_minishell *data, int quoted);
+char	*make_pair(char *key, char *value);
+int		tab_len(char **tab);
+void	free_tab(char **tab);
 
 void	echo(char **argv);
 void	pwd(void);

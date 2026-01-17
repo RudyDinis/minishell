@@ -66,6 +66,9 @@ int	main(int ac, char **av, char **envp)
 	data->env = copy_env(envp);
 	data->var = NULL;
 	data->last_cmd_return_value = 0;
+	add_env(&data->env, "test=1");
+	add_env(&data->env, "test=2");
+	print_env(data->env);
 	data->exit_status = 0;
 	cwd = getcwd(NULL, 0);
 	data->pwd = cwd;
