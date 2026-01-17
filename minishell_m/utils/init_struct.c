@@ -66,6 +66,7 @@ t_minishell *init_ms(t_token *token, char **envp)
 		free_ms(token, NULL, 1);
 	minishell->envp = envp;
 	minishell->pwd = getcwd(NULL, 0);
+	//add_var(&minishell->var, "?", "0");
 	return (minishell);
 }
 

@@ -48,7 +48,7 @@ void executor(t_cmd *cmd, int **fds, int total_args)
 			open_redir(cmd, fds);
 			apply_path(cmd);
 			check_access_and_rights(cmd);
-			if (execve(cmd->path, cmd->args, NULL) < 0)
+			if (execve(cmd->path, cmd->args, cmd->minishell->envp) < 0)
 				return (perror(cmd->path), free_ms(cmd->token, NULL, 1));
 		}
 		cmd = cmd->next;
@@ -57,7 +57,7 @@ void executor(t_cmd *cmd, int **fds, int total_args)
 	while (head)
 	{
 		waitpid(head->pid, &head->return_value, 0);
-		//head->return_value = WEXITSTATUS(head->minishell->last_cmd_return_value);
+		head->minishell->last_cmd_return_value = WEXITSTATUS(head->return_value);
 		head = head->next;
 	}
 }
