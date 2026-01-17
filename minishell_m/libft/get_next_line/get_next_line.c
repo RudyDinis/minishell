@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mai <mai@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: bbouarab <bbouarab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 14:58:23 by bbouarab          #+#    #+#             */
-/*   Updated: 2025/12/13 11:41:20 by mai              ###   ########.fr       */
+/*   Updated: 2026/01/17 13:55:48 by bbouarab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,11 @@ char	*get_next_line(int fd, int reset)
 	char		*new_line;
 
 	if (reset)
+	{
+		if (stash && reset == 2)
+			return (free(stash), stash = NULL, NULL);
 		stash = NULL;
+	}
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
 	line = fill_line(fd, &stash, reset);

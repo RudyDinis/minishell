@@ -83,6 +83,7 @@ typedef struct s_cmd
 	int				is_absolute;
 	int				return_value;
 	int				**fds;
+	int				cmd_found;
 	pid_t			pid;
 	char 			*cmd;
 	char 			*path;

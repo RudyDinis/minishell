@@ -63,7 +63,10 @@ void get_here_doc_expand(t_token *token, t_cmd *cmd)
 	i = 0;
 	here_doc_nbr = get_here_doc_nbr(token);
 	if (!here_doc_nbr)
+	{
 		cmd->redir->here_doc_expand = NULL;
+		return ;
+	}
 	cmd->redir->here_doc_expand = malloc(here_doc_nbr * sizeof(int));
 	if (!cmd->redir->here_doc_expand)
 		return ; //TODO Free correctement
@@ -85,7 +88,7 @@ void here_doc_expand(t_cmd *cmd, char *lim, int i)
 
 	nbr = ft_itoa(cmd->i);
 	file = ft_strjoin("/var/tmp/temp", nbr);
-	gnl = get_next_line(0, 0);
+	gnl = get_next_line(0, 1);
 	expanded_line = expand_vars(gnl, cmd->minishell, "HERE_DOC")[0];
 	cmd->redir->fd[i] = open(file, O_RDWR | O_TRUNC | O_CREAT, 0644);
 	while (ft_findstr(lim, expanded_line))
@@ -96,6 +99,9 @@ void here_doc_expand(t_cmd *cmd, char *lim, int i)
 		gnl = get_next_line(0, 0);
 		expanded_line = expand_vars(gnl, cmd->minishell, "HERE_DOC")[0];
 	}
+	free(gnl);
+	gnl = get_next_line(0, 2);
+	free(expanded_line);
 	close(cmd->redir->fd[i]);
 	cmd->redir->fd[i] = open(file, O_RDWR, 0644);
 	unlink(file);
@@ -113,7 +119,7 @@ void here_doc(t_cmd *cmd, char *lim, int i)
 	cmd->minishell->in_here_doc = 1;
 	nbr = ft_itoa(cmd->i);
 	file = ft_strjoin("/var/tmp/temp", nbr);
-	gnl = get_next_line(0, 0);
+	gnl = get_next_line(0, 1);
 	cmd->redir->fd[i] = open(file, O_RDWR | O_TRUNC | O_CREAT, 0644);
 	while (ft_findstr(lim, gnl))
 	{
@@ -121,6 +127,8 @@ void here_doc(t_cmd *cmd, char *lim, int i)
 		free(gnl);
 		gnl = get_next_line(0, 0);
 	}
+	free(gnl);
+	gnl = get_next_line(0, 2);
 	close(cmd->redir->fd[i]);
 	cmd->redir->fd[i] = open(file, O_RDWR, 0644);
 	unlink(file);

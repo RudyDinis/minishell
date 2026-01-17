@@ -43,6 +43,7 @@ void		check_formatting(t_token *token);
 int			number_of_cmds(t_token *token);
 int			get_total_cmds(t_cmd *cmd);
 int			find_number_of_token(char *buf);
+int			get_here_doc_nbr(t_token *token);
 
 /*EXPANDER*/
 char		*ignore_quotes(char *str);

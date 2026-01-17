@@ -64,6 +64,8 @@ t_minishell *init_ms(t_cmd *cmd)
 	minishell->var =  ft_calloc(1, sizeof(t_var));
 	if (!minishell->var)
 		free_ms(NULL, cmd, 1);
+	minishell->var->key = ft_strdup("abc");
+	minishell->var->value = ft_strdup("a     b     c");
 	return (minishell);
 }
 

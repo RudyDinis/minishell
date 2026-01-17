@@ -82,6 +82,7 @@ void pipe_redirection(t_cmd *cmd, int **fds, int in, int out)
 				return (perror("dup2"), free_ms(NULL, cmd, 1));
 		}
 		close(fds[0][1]);
+		fds[0][1] = -1;
 	}
 	if (cmd->i != 0)
 	{
@@ -113,6 +114,7 @@ void open_redir(t_cmd *cmd, int **fds)
 			if (cmd->redir->redir_type[i] == HERE_DOC)
 			{
 				dup2(cmd->redir->fd[i], 0);
+				close(cmd->redir->fd[i]);
 				in++;
 			}
 			if (cmd->redir->redir_type[i] == REDIR_OUT)

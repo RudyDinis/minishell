@@ -46,17 +46,19 @@ char *find_path(char *cmd, t_cmd *cmds)
 		return (cmds->is_absolute = 1, cmd);
 	path = getenv("PATH");
 	if (!path)
-		return (cmd);
+		return (cmds->cmd_found = 0, cmd);
 	directories = ft_split(path, ":");
 	if (!directories)
-		return (cmd);
+		return (cmds->cmd_found = 0, cmd);
 	found_directory = find_cmd_directory(cmd, directories);
 	if (!found_directory)
-		return (cmd);
+		return (free_everything((void **)directories),
+			cmds->cmd_found = 0, cmd);
 	full_path = ft_strtriplejoin(found_directory, "/", cmd);
 	if (!full_path)
-		return (cmd);
-	return (free_everything((void **)directories), full_path);
+		return (cmds->cmd_found = 0, cmd);
+	return (cmds->cmd_found = 1, free_everything((void **)directories),
+		full_path);
 }
 
 void apply_path(t_cmd *cmd)

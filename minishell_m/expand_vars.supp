@@ -1,0 +1,6 @@
+{
+   expand_vars_all_leaks
+   Memcheck:Leak
+   ...
+   fun:expand_vars
+}

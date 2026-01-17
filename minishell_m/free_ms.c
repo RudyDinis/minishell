@@ -23,6 +23,8 @@ void free_redir(t_redir *redir)
 			}
 			free_everything((void **)redir->target);
 		}
+		if (redir->here_doc_expand)
+			free(redir->here_doc_expand);
 		free(redir);
 	}
 }
@@ -56,7 +58,7 @@ void free_cmd(t_cmd *cmd, int n)
 	{
 		if (head->args)
 			free_everything((void **)head->args);
-		if (head->path)
+		if (head->path && head->cmd_found)
 			free(head->path);
 		free_redir(head->redir);
 		free(head);
@@ -79,7 +81,7 @@ void free_minishell(t_minishell *data)
         free(data->env);
         data->env = tmp;
     }
-    while (data->env)
+    while (data->var)
     {
         tmp_var = data->var->next;
         free(data->var->key);
@@ -97,12 +99,14 @@ void free_ms(t_token *token, t_cmd *cmd, int n)
 
 	if (cmd && cmd->fds)
 	{
-		close_all_pipes(cmd->fds, get_total_cmds(cmd) + 1);
+		if (n != -5)
+			close_all_pipes(cmd->fds, get_total_cmds(cmd));
 		free_everything_int(cmd->fds, get_total_cmds(cmd) + 1);
 	}
 	if (token && token->cmd && token->cmd->fds)
 	{
-		close_all_pipes(token->cmd->fds, get_total_cmds(token->cmd) + 1);
+		if (n != -5)
+			close_all_pipes(token->cmd->fds, get_total_cmds(token->cmd));
 		free_everything_int(token->cmd->fds, get_total_cmds(token->cmd) + 1);
 	}
 	if (!token)

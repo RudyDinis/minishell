@@ -11,7 +11,10 @@ static void	close_first_process(int **fds, int total_args)
 	{
 		j = 0;
 		while (i < total_args && j < 2)
-			close(fds[i][j++]);
+		{
+			close(fds[i][j]);
+			fds[i][j++] = - 1;
+		}
 		i++;
 	}
 }

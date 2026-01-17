@@ -33,6 +33,8 @@ int **malloc_fds(int total_args, t_cmd *cmd)
 			free_everything_int(fds, i);
 			free_ms(NULL, cmd, 1);
 		}
+		fds[i][0] = -1;
+		fds[i][1] = -1;
 		i++;
 	}
 	while (cmd)
@@ -61,12 +63,15 @@ void close_all_pipes(int **fds, int total_args)
 	int j;
 
 	i = 0;
+	if (!total_args && fds[0][1] >= 0)
+		close(fds[0][1]);
 	while (i < total_args)
 	{
 		j = 0;
 		while (j < 2)
 		{
-			close(fds[i][j]);
+			if (fds[i][j] >= 0)
+				close(fds[i][j]);
 			j++;
 		}
 		i++;
