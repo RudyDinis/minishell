@@ -83,7 +83,7 @@ void attributes_redir(t_token *token, t_cmd *cmd)
 	}
 }
 
-void check_formatting(t_token *token)
+void check_formatting(t_token *token, char **envp)
 {
 	t_token *head;
 	t_cmd	*cmds;
@@ -100,7 +100,7 @@ void check_formatting(t_token *token)
 			return ((void)printf("formatting error"));
 		token = token->next;
 	}
-	cmds = init_cmd(head);
+	cmds = init_cmd(head, envp);
 	get_redir_number(head, cmds);
 	attributes_redir(head, cmds);
 	append_args(cmds, head);

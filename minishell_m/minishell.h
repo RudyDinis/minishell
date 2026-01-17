@@ -1,10 +1,27 @@
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
+
+# define BLACK		"\033[0;30m"
+# define RED		"\033[0;31m"
+# define GREEN		"\033[0;32m"
+# define YELLOW		"\033[0;33m"
+# define BLUE		"\033[0;34m"
+# define MAGENTA	"\033[0;35m"
+# define CYAN		"\033[0;36m"
+# define WHITE		"\033[0;37m"
+# define RESET		"\033[0m"
+# define BOLD		"\033[1m"
+# define BOLD_RED	"\033[1;31m"
+# define BOLD_GREEN	"\033[1;32m"
+# define BOLD_BLUE	"\033[1;34m"
+# define BOLD_WHITE	"\033[1;37m"
+# define RESET		"\033[0m"
+
 #include "minishell_struct.h"
 
 /*STRUCTURE INITIALISATION*/
-t_cmd		*init_cmd(t_token *token);
+t_cmd		*init_cmd(t_token *token, char **envp);
 t_token		*create_list(char *buf);
 t_repere	init_repere(void);
 t_opcounter	init_counter(void);
@@ -37,7 +54,7 @@ void		find_type(char *buf, t_token *token);
 
 /*PARSER UTILS*/
 void		append_args(t_cmd *cmd, t_token *token);
-void		check_formatting(t_token *token);
+void		check_formatting(t_token *token, char **envp);
 
 /*GENERAL UTILS*/
 int			number_of_cmds(t_token *token);
@@ -54,6 +71,44 @@ char		**expand_vars(char *s, t_minishell *data, char *param);
 void		expander(t_cmd *cmd);
 void		get_here_doc_expand(t_token *token, t_cmd *cmd);
 void		here_doc_expand(t_cmd *cmd, char *lim, int i);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+t_env	*copy_env(char **envp);
+void	init_signals(t_minishell *data);
+void	sigint_handler(int sig);
+
+void	add_env(t_env **env, char *line);
+void	add_var(t_var **var, char *key, char *value);
+void	print_env(t_env *env);
+
+char	**expand_vars(char *s, t_minishell *data, char *param);
+char	*get_env_value(char *name, char *value, t_minishell *data);
+char	*get_var_value(char *name, char *value, t_minishell *data);
+char	*expand_one_var(char *s, int *i, char *res, t_minishell *data);
+
+void	echo(char **argv);
+void	pwd(void);
+void	cd(char **argv, t_minishell *data);
+int		export(char **argv, t_env *env);
+void	unset(t_minishell *data, char *key);
+void	env(t_minishell *data);
+void	exit_shell(t_minishell *data);
+
+void	print_title(void);
+char	*write_line();
 
 
 #endif

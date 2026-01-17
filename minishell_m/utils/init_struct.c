@@ -1,4 +1,4 @@
-#include "minishell.h"
+#include "../minishell.h"
 
 t_opcounter init_counter(void)
 {
@@ -51,7 +51,7 @@ t_token *create_list(char *argv)
 	return (tete);
 }
 
-t_minishell *init_ms(t_token *token)
+t_minishell *init_ms(t_token *token, char **envp)
 {
 	t_minishell *minishell;
 
@@ -64,12 +64,12 @@ t_minishell *init_ms(t_token *token)
 	minishell->var =  ft_calloc(1, sizeof(t_var));
 	if (!minishell->var)
 		free_ms(token, NULL, 1);
-	minishell->var->key = ft_strdup("abc");
-	minishell->var->value = ft_strdup("a     b     c");
+	minishell->envp = envp;
+	minishell->pwd = getcwd(NULL, 0);
 	return (minishell);
 }
 
-t_cmd *init_cmd(t_token *token)
+t_cmd *init_cmd(t_token *token, char **envp)
 {
 	t_cmd *cmds;
 	t_cmd *head;
@@ -80,7 +80,7 @@ t_cmd *init_cmd(t_token *token)
 	if (!cmds)
 		free_ms(token, NULL, 1);
 	token->cmd = cmds;
-	minishell = init_ms(token);
+	minishell = init_ms(token, envp);
 	head = cmds;
 	i = 0;
 	while (i < number_of_cmds(token))

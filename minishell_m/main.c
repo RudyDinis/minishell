@@ -12,30 +12,83 @@ int is_valid_buf(char *buf)
 	}
 	return 0;
 }
-
-int main(void)
+void	while_read(char **envp)
 {
-	char *buf;
+	char	*line;
+	char	*prompt;
 	t_token *token;
 
 	while (1)
 	{
-		buf = readline("$>");
-		if (*buf && is_valid_buf(buf))
+		prompt = write_line();
+		line = readline(prompt);
+		if (*line && is_valid_buf(line))
 		{
-			token = create_list(buf);
-			check_formatting(token);
+			token = create_list(line);
+			check_formatting(token, envp);
 			free_ms(NULL, token->cmd, -5);
 		}
-		free(buf);
+		free(prompt);
+		if (*line)
+		{
+			add_history(line);
+		}
+		free(line);
 	}
+}
 
-	// buf = "./here_doc.o >> cc";
-	// token = create_list(buf);
-	// check_formatting(token);
-	// free_ms(NULL, token->cmd, -5);
+t_env	*copy_env(char **envp)
+{
+	t_env	*env;
+	int		i;
+
+	i = 0;
+	env = NULL;
+	while (envp[i])
+	{
+		add_env(&env, envp[i]);
+		i++;
+	}
+	return (env);
+}
+
+int	main(int ac, char **av, char **envp)
+{
+	char		*cwd;
+
+	(void)ac;
+	(void)av;
+	print_title();
+	while_read(envp);
+	rl_clear_history();
+	return (0);
+}
+
+
+
+// int main(void)
+// {
+// 	char *buf;
+// 	t_token *token;
+
+// 	while (1)
+// 	{
+// 		buf = readline("$>");
+// 		if (*buf && is_valid_buf(buf))
+// 		{
+// 			token = create_list(buf);
+// 			check_formatting(token);
+// 			free_ms(NULL, token->cmd, -5);
+// 		}
+// 		free(buf);
+// 	}
+// 	return 0;
+// }
+
+
+
 	// TODO TRANSFORMER TOUS LES INTS EN LONG POUR EVITER LES OVERFLOW
 	// TODO ISATTY
 	// TODO AJOUTER L'ENVP POUR LES CMDS
-	return 0;
-}
+	//TODO GERER LES || ET && ET quotes non fermées ET erreurs de syntaxe corréctement
+

@@ -6,6 +6,8 @@
 #include <stdio.h>
 #include <readline/readline.h>
 #include <errno.h>
+#include <signal.h>
+# include <readline/history.h>
 
 typedef enum	s_type
 {
@@ -34,8 +36,10 @@ typedef struct s_var
 typedef struct	s_minishell
 {
 	int		last_cmd_return_value;
+	int		exit_status;
 	int		in_here_doc;
 	char	*pwd;
+	char	**envp;
 	t_env	*env;
 	t_var	*var;
 }	t_minishell;
