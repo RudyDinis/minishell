@@ -15,7 +15,6 @@ t_var	*new_var_node(char *key, char *value)
 
 void	add_var(t_var **var, char *key, char *value)
 {
-	t_var	*node;
 	t_var	*tmp;
 
 	tmp = *var;
@@ -29,16 +28,11 @@ void	add_var(t_var **var, char *key, char *value)
 		}
 		tmp = tmp->next;
 	}
-	node = new_var_node(key, value);
-	if (!*var)
-	{
-		*var = node;
-		return ;
-	}
-	tmp = *var;
-	while (tmp->next)
-		tmp = tmp->next;
-	tmp->next = node;
+	while (*var)
+		*var = (*var)->next;
+	*var = ft_calloc(1, sizeof(t_var));
+	(*var)->key = ft_strdup(key);
+	(*var)->value = ft_strdup(value);
 }
 
 char	*get_env_value(char *name, t_minishell *data)

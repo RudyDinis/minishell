@@ -21,10 +21,11 @@
 #include "minishell_struct.h"
 
 /*STRUCTURE INITIALISATION*/
-t_cmd		*init_cmd(t_token *token, char **envp);
+t_cmd		*init_cmd(t_minishell *minishell, t_token *token, char **envp);
 t_token		*create_list(char *buf);
 t_repere	init_repere(void);
 t_opcounter	init_counter(void);
+t_minishell *init_ms(char **envp);
 
 /*EXEC*/
 int			**malloc_fds(int total_args, t_cmd *cmd);
@@ -54,7 +55,7 @@ void		find_type(char *buf, t_token *token);
 
 /*PARSER UTILS*/
 void		append_args(t_cmd *cmd, t_token *token);
-void		check_formatting(t_token *token, char **envp);
+void		check_formatting(t_token *token, char **envp, t_minishell *minishell);
 
 /*GENERAL UTILS*/
 int			number_of_cmds(t_token *token);

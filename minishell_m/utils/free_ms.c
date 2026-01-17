@@ -111,13 +111,13 @@ void free_ms(t_token *token, t_cmd *cmd, int n)
 	}
 	if (!token)
 	{
-		if (cmd->minishell)
+		if (cmd->minishell && n != -5)
 			free_minishell(cmd->minishell);
 		free_cmd(cmd, 0);
 	}
 	if (!cmd)
 	{
-		if (token->cmd && token->cmd->minishell)
+		if (token->cmd && token->cmd->minishell && n != -5)
 			free_minishell(token->cmd->minishell);
 		free_token(token, 1);
 	}

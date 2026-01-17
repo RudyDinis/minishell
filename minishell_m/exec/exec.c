@@ -34,11 +34,28 @@ void check_access_and_rights(t_cmd *cmd)
 	}
 }
 
+void wait_and_get_return_value(t_cmd *cmd)
+{
+	int value;
+	char *value_str;
+
+	while (cmd)
+	{
+		waitpid(cmd->pid, &value, 0);
+		if (!cmd->next)
+			break ;
+		cmd = cmd->next;
+	}
+	value_str = ft_itoa(WEXITSTATUS(value));
+	add_var(&cmd->minishell->var, "?", value_str);
+	free(value_str);
+}
+
 void executor(t_cmd *cmd, int **fds, int total_args)
 {
 	t_cmd *head;
-	head = cmd;
 
+	head = cmd;
 	while (cmd)
 	{
 		cmd->pid = fork();
@@ -54,12 +71,7 @@ void executor(t_cmd *cmd, int **fds, int total_args)
 		cmd = cmd->next;
 	}
 	close_all_pipes(fds, total_args);
-	while (head)
-	{
-		waitpid(head->pid, &head->return_value, 0);
-		//head->return_value = WEXITSTATUS(head->minishell->last_cmd_return_value);
-		head = head->next;
-	}
+	wait_and_get_return_value(head);
 }
 
 void open_here_doc(t_cmd *cmd, int **fds)
@@ -118,7 +130,7 @@ void launcher(t_cmd *cmd, t_token *token)
 	int total_args;
 	int pipe_last;
 
-	print_args(cmd);
+	//print_args(cmd);
 	total_args = get_total_cmds(cmd) + 1;
 	pipe_last = total_args - 1;
 	fds = malloc_fds(total_args, cmd);
@@ -126,4 +138,5 @@ void launcher(t_cmd *cmd, t_token *token)
 	attribute_fds(cmd, fds);
 	open_here_doc(cmd, fds);
 	executor(cmd, fds, total_args);
+
 }
