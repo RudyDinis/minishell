@@ -6,7 +6,7 @@ RM = rm -rf
 OBJ_DIR = obj
 
 SRC = main.c \
-		utils/init_struct.c utils/free_ms.c utils/visual.c \
+		utils/init_struct.c utils/free_ms.c utils/visual.c utils/signal.c \
 		lexer/find_and_assign_type.c lexer/find_token_nbr.c lexer/find_token_nbr_utils.c lexer/extract.c \
 		parser/formatting_and_redir.c parser/add_commands.c \
 		exec/exec.c exec/closing_processes.c exec/exec_redir.c exec/exec_utils.c exec/find_path.c exec/here_doc.c \

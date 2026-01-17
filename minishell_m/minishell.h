@@ -64,10 +64,10 @@ int			get_here_doc_nbr(t_token *token);
 
 /*EXPANDER*/
 char		*ignore_quotes(char *str);
-char		*get_env_value(char *name, char *value, t_minishell *data);
-char		*get_var_value(char *name, char *value, t_minishell *data);
-char		*expand_one_var(char *s, int *i, char *res, t_minishell *data);
-char		**expand_vars(char *s, t_minishell *data, char *param);
+char	**expand_vars(char *s, t_minishell *data, char *param);
+char	*get_env_value(char *name, t_minishell *data);
+char	*get_var_value(char *name, t_minishell *data);
+char	*expand_one_var(char *s, int *i, char *res, t_minishell *data, int quoted);
 void		expander(t_cmd *cmd);
 void		get_here_doc_expand(t_token *token, t_cmd *cmd);
 void		here_doc_expand(t_cmd *cmd, char *lim, int i);
@@ -94,10 +94,6 @@ void	add_env(t_env **env, char *line);
 void	add_var(t_var **var, char *key, char *value);
 void	print_env(t_env *env);
 
-char	**expand_vars(char *s, t_minishell *data, char *param);
-char	*get_env_value(char *name, char *value, t_minishell *data);
-char	*get_var_value(char *name, char *value, t_minishell *data);
-char	*expand_one_var(char *s, int *i, char *res, t_minishell *data);
 
 void	echo(char **argv);
 void	pwd(void);

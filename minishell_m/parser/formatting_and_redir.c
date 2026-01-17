@@ -104,6 +104,6 @@ void check_formatting(t_token *token, char **envp)
 	get_redir_number(head, cmds);
 	attributes_redir(head, cmds);
 	append_args(cmds, head);
-	//expander(cmds);
+	expander(cmds);
 	launcher(cmds, head);
 }

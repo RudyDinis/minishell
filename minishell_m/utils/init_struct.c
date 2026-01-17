@@ -66,6 +66,8 @@ t_minishell *init_ms(t_token *token, char **envp)
 		free_ms(token, NULL, 1);
 	minishell->envp = envp;
 	minishell->pwd = getcwd(NULL, 0);
+	minishell->var->key = ft_strdup("abc");
+	minishell->var->value = ft_strdup("a             b            c");
 	return (minishell);
 }
 

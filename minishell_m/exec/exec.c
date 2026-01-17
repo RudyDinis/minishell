@@ -118,7 +118,7 @@ void launcher(t_cmd *cmd, t_token *token)
 	int total_args;
 	int pipe_last;
 
-	//print_args(cmd);
+	print_args(cmd);
 	total_args = get_total_cmds(cmd) + 1;
 	pipe_last = total_args - 1;
 	fds = malloc_fds(total_args, cmd);

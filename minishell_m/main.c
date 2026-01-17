@@ -26,6 +26,8 @@ void	while_read(char **envp)
 		{
 			token = create_list(line);
 			check_formatting(token, envp);
+			if (token->cmd->minishell->exit_status == 1)
+				free_ms(NULL, token->cmd, 1);
 			free_ms(NULL, token->cmd, -5);
 		}
 		free(prompt);
@@ -65,30 +67,7 @@ int	main(int ac, char **av, char **envp)
 }
 
 
-
-// int main(void)
-// {
-// 	char *buf;
-// 	t_token *token;
-
-// 	while (1)
-// 	{
-// 		buf = readline("$>");
-// 		if (*buf && is_valid_buf(buf))
-// 		{
-// 			token = create_list(buf);
-// 			check_formatting(token);
-// 			free_ms(NULL, token->cmd, -5);
-// 		}
-// 		free(buf);
-// 	}
-// 	return 0;
-// }
-
-
-
 	// TODO TRANSFORMER TOUS LES INTS EN LONG POUR EVITER LES OVERFLOW
 	// TODO ISATTY
-	// TODO AJOUTER L'ENVP POUR LES CMDS
 	//TODO GERER LES || ET && ET quotes non fermées ET erreurs de syntaxe corréctement
 

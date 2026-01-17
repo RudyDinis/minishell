@@ -6,7 +6,7 @@
 /*   By: bbouarab <bbouarab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/12 13:34:41 by rdinis            #+#    #+#             */
-/*   Updated: 2026/01/17 16:33:35 by bbouarab         ###   ########.fr       */
+/*   Updated: 2026/01/17 17:03:21 by bbouarab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ char	*write_line(void)
 
 	pwd = getcwd(NULL, 0);
 
-	top = GREEN "\n┌──(" BOLD_BLUE "Minishell" RESET GREEN ")-[" BOLD_WHITE;
+	top = GREEN "┌──(" BOLD_BLUE "Minishell" RESET GREEN ")-[" BOLD_WHITE;
 	bottom = RESET GREEN "]\n" GREEN "└─" BOLD_BLUE "$ " RESET;
 	prompt_len = strlen(top)
 		+ strlen(pwd)
