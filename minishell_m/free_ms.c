@@ -31,7 +31,7 @@ void free_redir(t_redir *redir)
 
 void free_token(t_token *token, int n)
 {
-	if (n == 1)
+	if (n == 1 && token->cmd)
 		free_cmd(token->cmd, 1);
 	while (token->next)
 	{
@@ -51,7 +51,7 @@ void free_cmd(t_cmd *cmd, int n)
 	t_cmd *head;
 
 	head = cmd;
-	if (n == 0)
+	if (n == 0 && cmd->token)
 		free_token(cmd->token, 0);
 	cmd = cmd->next;
 	while (head)
@@ -111,11 +111,16 @@ void free_ms(t_token *token, t_cmd *cmd, int n)
 	}
 	if (!token)
 	{
-		free_minishell(cmd->minishell);
+		if (cmd->minishell)
+			free_minishell(cmd->minishell);
 		free_cmd(cmd, 0);
 	}
 	if (!cmd)
+	{
+		if (token->cmd && token->cmd->minishell)
+			free_minishell(token->cmd->minishell);
 		free_token(token, 1);
+	}
 	if (n != -5)
 		exit(n);
 }

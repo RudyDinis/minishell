@@ -6,7 +6,7 @@
 /*   By: bbouarab <bbouarab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/07 12:18:08 by bbouarab          #+#    #+#             */
-/*   Updated: 2025/12/17 13:18:01 by bbouarab         ###   ########.fr       */
+/*   Updated: 2026/01/17 15:30:06 by bbouarab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ void	print_arguments_err(int *counter, va_list arg, const char *conversion, ...)
 			continue ;
 		if ((size_t)i < ft_strlen(conversion))
 		{
-			write(1, &conversion[i], 1);
+			write(2, &conversion[i], 1);
 			(*counter)++;
 			i++;
 		}

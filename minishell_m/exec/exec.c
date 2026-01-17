@@ -5,10 +5,14 @@ void check_access_and_rights(t_cmd *cmd)
 	if (cmd->is_absolute == 0)
 	{
 		if (access(cmd->path, F_OK) < 0)
-			return (ft_printf_error("%s: command not found\n", cmd->path),
-				free_ms(NULL, cmd, 127));
+		{
+			close(1);
+			ft_printf_error("%s: command not found\n", cmd->path);
+			free_ms(NULL, cmd, 127);
+		}
 		if (access(cmd->path, X_OK) < 0)
 		{
+			close(1);
 			ft_printf_error("%s: Permission denied\n", cmd->path);
 			free_ms(NULL, cmd, 126);
 		}
@@ -17,11 +21,13 @@ void check_access_and_rights(t_cmd *cmd)
 	{
 		if (access(cmd->path, F_OK) < 0)
 		{
+			close(1);
 			perror(cmd->path);
 			free_ms(NULL, cmd, 127);
 		}
 		if (access(cmd->path, X_OK) < 0)
 		{
+			close(1);
 			perror(cmd->path);
 			free_ms(NULL, cmd, 126);
 		}
@@ -43,7 +49,7 @@ void executor(t_cmd *cmd, int **fds, int total_args)
 			apply_path(cmd);
 			check_access_and_rights(cmd);
 			if (execve(cmd->path, cmd->args, NULL) < 0)
-				return (perror("execve"), free_ms(cmd->token, NULL, 1));
+				return (perror(cmd->path), free_ms(cmd->token, NULL, 1));
 		}
 		cmd = cmd->next;
 	}
@@ -51,7 +57,7 @@ void executor(t_cmd *cmd, int **fds, int total_args)
 	while (head)
 	{
 		waitpid(head->pid, &head->return_value, 0);
-		head->return_value = WEXITSTATUS(head->minishell->last_cmd_return_value);
+		//head->return_value = WEXITSTATUS(head->minishell->last_cmd_return_value);
 		head = head->next;
 	}
 }

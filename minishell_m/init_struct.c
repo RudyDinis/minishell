@@ -51,19 +51,19 @@ t_token *create_list(char *argv)
 	return (tete);
 }
 
-t_minishell *init_ms(t_cmd *cmd)
+t_minishell *init_ms(t_token *token)
 {
 	t_minishell *minishell;
 
 	minishell = ft_calloc(1, sizeof(t_minishell));
 	if (!minishell)
-		free_ms(NULL, cmd, 1);
+		free_ms(token, NULL, 1);
 	minishell->env =  ft_calloc(1, sizeof(t_env));
 	if (!minishell->env)
-		free_ms(NULL, cmd, 1);
+		free_ms(token, NULL, 1);
 	minishell->var =  ft_calloc(1, sizeof(t_var));
 	if (!minishell->var)
-		free_ms(NULL, cmd, 1);
+		free_ms(token, NULL, 1);
 	minishell->var->key = ft_strdup("abc");
 	minishell->var->value = ft_strdup("a     b     c");
 	return (minishell);
@@ -80,7 +80,7 @@ t_cmd *init_cmd(t_token *token)
 	if (!cmds)
 		free_ms(token, NULL, 1);
 	token->cmd = cmds;
-	minishell = init_ms(cmds);
+	minishell = init_ms(token);
 	head = cmds;
 	i = 0;
 	while (i < number_of_cmds(token))

@@ -69,7 +69,7 @@ void get_here_doc_expand(t_token *token, t_cmd *cmd)
 	}
 	cmd->redir->here_doc_expand = malloc(here_doc_nbr * sizeof(int));
 	if (!cmd->redir->here_doc_expand)
-		return ; //TODO Free correctement
+		return (free_ms(cmd->token, NULL, 1));
 	while (token && token->type != PIPE)
 	{
 		if (token->type == HERE_DOC)
