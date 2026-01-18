@@ -83,7 +83,7 @@ void attributes_redir(t_token *token, t_cmd *cmd)
 	}
 }
 
-void check_formatting(t_token *token, char **envp)
+void check_formatting(t_token *token, char **envp, t_minishell *minishell)
 {
 	t_token *head;
 	t_cmd	*cmds;
@@ -100,10 +100,10 @@ void check_formatting(t_token *token, char **envp)
 			return ((void)printf("formatting error"));
 		token = token->next;
 	}
-	cmds = init_cmd(head, envp);
+	cmds = init_cmd(minishell, head, envp);
 	get_redir_number(head, cmds);
 	attributes_redir(head, cmds);
 	append_args(cmds, head);
-	//expander(cmds);
+	expander(cmds);
 	launcher(cmds, head);
 }

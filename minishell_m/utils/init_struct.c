@@ -51,37 +51,29 @@ t_token *create_list(char *argv)
 	return (tete);
 }
 
-t_minishell *init_ms(t_token *token, char **envp)
+t_minishell *init_ms(char **envp)
 {
 	t_minishell *minishell;
 
 	minishell = ft_calloc(1, sizeof(t_minishell));
 	if (!minishell)
-		free_ms(token, NULL, 1);
-	minishell->env =  ft_calloc(1, sizeof(t_env));
-	if (!minishell->env)
-		free_ms(token, NULL, 1);
-	minishell->var =  ft_calloc(1, sizeof(t_var));
-	if (!minishell->var)
-		free_ms(token, NULL, 1);
+		return (NULL);
 	minishell->envp = envp;
 	minishell->pwd = getcwd(NULL, 0);
-	//add_var(&minishell->var, "?", "0");
+	add_var(&minishell->var, "?", "0");
 	return (minishell);
 }
 
-t_cmd *init_cmd(t_token *token, char **envp)
+t_cmd *init_cmd(t_minishell *minishell, t_token *token, char **envp)
 {
 	t_cmd *cmds;
 	t_cmd *head;
-	t_minishell *minishell;
 	int i;
 
 	cmds =  ft_calloc(1, sizeof(t_cmd));;
 	if (!cmds)
 		free_ms(token, NULL, 1);
 	token->cmd = cmds;
-	minishell = init_ms(token, envp);
 	head = cmds;
 	i = 0;
 	while (i < number_of_cmds(token))
@@ -103,6 +95,5 @@ t_cmd *init_cmd(t_token *token, char **envp)
 		cmds = cmds->next;
 		i++;
 	}
-
 	return (head);
 }

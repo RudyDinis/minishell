@@ -12,7 +12,7 @@ int is_valid_buf(char *buf)
 	}
 	return 0;
 }
-void	while_read(char **envp)
+void	while_read(char **envp, t_minishell *minishell)
 {
 	char	*line;
 	char	*prompt;
@@ -22,15 +22,14 @@ void	while_read(char **envp)
 	{
 		prompt = write_line();
 		line = readline(prompt);
+		free(prompt);
 		if (*line && is_valid_buf(line))
 		{
 			token = create_list(line);
-			check_formatting(token, envp);
+			check_formatting(token, envp, minishell);
+			if (token->cmd->minishell->exit_status == 1)
+				return (free(line), free_ms(NULL, token->cmd, 1));
 			free_ms(NULL, token->cmd, -5);
-		}
-		free(prompt);
-		if (*line)
-		{
 			add_history(line);
 		}
 		free(line);
@@ -55,40 +54,23 @@ t_env	*copy_env(char **envp)
 int	main(int ac, char **av, char **envp)
 {
 	char		*cwd;
+	t_minishell	*minishell;
 
+	minishell = init_ms(envp);
+	if (!minishell)
+		exit(1);
 	(void)ac;
 	(void)av;
+	init_signals(minishell);
 	print_title();
-	while_read(envp);
+	while_read(envp, minishell);
 	rl_clear_history();
 	return (0);
 }
 
-
-
-// int main(void)
-// {
-// 	char *buf;
-// 	t_token *token;
-
-// 	while (1)
-// 	{
-// 		buf = readline("$>");
-// 		if (*buf && is_valid_buf(buf))
-// 		{
-// 			token = create_list(buf);
-// 			check_formatting(token);
-// 			free_ms(NULL, token->cmd, -5);
-// 		}
-// 		free(buf);
-// 	}
-// 	return 0;
-// }
-
-
-
+	//TODO IMPLEMENTER SIGNAL POUR HEREDOC
+	//TODO IMPLEMENTER SHLVL + 1;
 	// TODO TRANSFORMER TOUS LES INTS EN LONG POUR EVITER LES OVERFLOW
 	// TODO ISATTY
-	// TODO AJOUTER L'ENVP POUR LES CMDS
 	//TODO GERER LES || ET && ET quotes non fermées ET erreurs de syntaxe corréctement
 

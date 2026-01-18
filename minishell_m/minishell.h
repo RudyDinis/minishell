@@ -21,10 +21,11 @@
 #include "minishell_struct.h"
 
 /*STRUCTURE INITIALISATION*/
-t_cmd		*init_cmd(t_token *token, char **envp);
+t_cmd		*init_cmd(t_minishell *minishell, t_token *token, char **envp);
 t_token		*create_list(char *buf);
 t_repere	init_repere(void);
 t_opcounter	init_counter(void);
+t_minishell *init_ms(char **envp);
 
 /*EXEC*/
 int			**malloc_fds(int total_args, t_cmd *cmd);
@@ -54,7 +55,7 @@ void		find_type(char *buf, t_token *token);
 
 /*PARSER UTILS*/
 void		append_args(t_cmd *cmd, t_token *token);
-void		check_formatting(t_token *token, char **envp);
+void		check_formatting(t_token *token, char **envp, t_minishell *minishell);
 
 /*GENERAL UTILS*/
 int			number_of_cmds(t_token *token);
@@ -64,10 +65,10 @@ int			get_here_doc_nbr(t_token *token);
 
 /*EXPANDER*/
 char		*ignore_quotes(char *str);
-char		*get_env_value(char *name, char *value, t_minishell *data);
-char		*get_var_value(char *name, char *value, t_minishell *data);
-char		*expand_one_var(char *s, int *i, char *res, t_minishell *data);
-char		**expand_vars(char *s, t_minishell *data, char *param);
+char	**expand_vars(char *s, t_minishell *data, char *param);
+char	*get_env_value(char *name, t_minishell *data);
+char	*get_var_value(char *name, t_minishell *data);
+char	*expand_one_var(char *s, int *i, char *res, t_minishell *data, int quoted);
 void		expander(t_cmd *cmd);
 void		get_here_doc_expand(t_token *token, t_cmd *cmd);
 void		here_doc_expand(t_cmd *cmd, char *lim, int i);
@@ -94,10 +95,6 @@ void	add_env(t_env **env, char *line);
 void	add_var(t_var **var, char *key, char *value);
 void	print_env(t_env *env);
 
-char	**expand_vars(char *s, t_minishell *data, char *param);
-char	*get_env_value(char *name, char *value, t_minishell *data);
-char	*get_var_value(char *name, char *value, t_minishell *data);
-char	*expand_one_var(char *s, int *i, char *res, t_minishell *data);
 
 void	echo(char **argv);
 void	pwd(void);
