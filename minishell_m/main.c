@@ -68,7 +68,8 @@ int	main(int ac, char **av, char **envp)
 	return (0);
 }
 
-
+	//TODO IMPLEMENTER SIGNAL POUR HEREDOC
+	//TODO IMPLEMENTER SHLVL + 1;
 	// TODO TRANSFORMER TOUS LES INTS EN LONG POUR EVITER LES OVERFLOW
 	// TODO ISATTY
 	//TODO GERER LES || ET && ET quotes non fermées ET erreurs de syntaxe corréctement
