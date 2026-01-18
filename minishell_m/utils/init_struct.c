@@ -80,7 +80,7 @@ t_cmd *init_cmd(t_minishell *minishell, t_token *token, char **envp)
 	{
 		cmds->token = token;
 		cmds->minishell = minishell;
-		cmds->redir =  ft_calloc(1, sizeof(t_redir));;
+		cmds->redir = ft_calloc(1, sizeof(t_redir));;
 		if (!cmds->redir)
 			free_ms(token, NULL, 1);
 		cmds->i = i;
@@ -88,7 +88,7 @@ t_cmd *init_cmd(t_minishell *minishell, t_token *token, char **envp)
 			cmds->next = NULL;
 		else
 		{
-			cmds->next =  ft_calloc(1, sizeof(t_cmd));;
+			cmds->next = ft_calloc(1, sizeof(t_cmd));;
 			if (!cmds->next)
 				free_ms(token, NULL, 1);
 		}

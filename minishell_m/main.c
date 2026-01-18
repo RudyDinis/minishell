@@ -16,13 +16,23 @@ void	while_read(char **envp, t_minishell *minishell)
 {
 	char	*line;
 	char	*prompt;
-	t_token *token;
+	t_token	*token;
 
 	while (1)
 	{
 		prompt = write_line();
 		line = readline(prompt);
 		free(prompt);
+		if (!line)
+		{
+			if (minishell->in_here_doc)
+			{
+				minishell->exit_status = 0;
+				break ;
+			}
+			write(1, "exit\n", 5);
+			exit_shell(minishell);
+		}
 		if (*line && is_valid_buf(line))
 		{
 			token = create_list(line);
@@ -51,6 +61,24 @@ t_env	*copy_env(char **envp)
 	return (env);
 }
 
+void debug_print(const char *s)
+{
+    int i = 0;
+	printf("[");
+    while (s[i])
+    {
+        if (s[i] == '\a')
+            printf("\\a");
+        else if (s[i] == ' ')
+            printf(" ");
+        else
+            printf("%c", s[i]);
+        i++;
+    }
+	printf("]");
+    printf("\n");
+}
+
 int	main(int ac, char **av, char **envp)
 {
 	char		*cwd;
@@ -63,6 +91,12 @@ int	main(int ac, char **av, char **envp)
 	(void)av;
 	init_signals(minishell);
 	print_title();
+	add_var(&minishell->var, "abc", "a             b              c");
+	char **test = expand_vars("\"123\"$abc'i              j           k'", minishell, "HERE_DOC");
+	int i = 0;
+	while (test[i])
+		debug_print(test[i++]);
+	printf("\n");
 	while_read(envp, minishell);
 	rl_clear_history();
 	return (0);

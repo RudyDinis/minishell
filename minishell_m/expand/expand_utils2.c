@@ -13,6 +13,7 @@ char *handle_squote(char *s, int *i, char *res, char *param)
 {
 	int start;
 
+	res = char_join(res, '\a');
 	(*i)++;
 	start = *i;
 	while (s[*i] && s[*i] != '\'')
@@ -22,7 +23,10 @@ char *handle_squote(char *s, int *i, char *res, char *param)
 	else
 		res = ft_strjoin(res, ft_substr(s, start, *i - start));
 	if (s[*i] == '\'')
+	{
+		res = char_join(res, '\a');
 		(*i)++;
+	}
 	return (res);
 }
 
@@ -86,27 +90,21 @@ void expand_vars2(t_minishell *data, t_expand_vars_vars *vars, char *param)
 char **expand_vars(char *s, t_minishell *data, char *param)
 {
 	t_expand_vars_vars	vars;
-	char 				**res_array;
-	char 				*final;
+	char				*final;
 
+	if (!s)
+		return (NULL);
 	vars.i = 0;
 	vars.res = ft_strdup("");
 	vars.s = s;
 	while (s[vars.i])
 		expand_vars2(data, &vars, param);
-
 	final = ft_strdup(vars.res);
 	free(vars.res);
 	if (!ft_strcmp(param, "FILE")
 		|| !ft_strcmp(param, "HERE_DOC"))
 	{
-		res_array = malloc(sizeof(char *) * 2);
-		res_array[0] = final;
-		res_array[1] = NULL;
-		return res_array;
+		return(ft_split(final, "\a"));
 	}
-	return (res_array = malloc(sizeof(char *) * 2),
-		res_array[0] = final,
-		res_array[1] = NULL,
-		res_array);
+	return(ft_split(final, "\a"));
 }

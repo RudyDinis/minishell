@@ -61,11 +61,11 @@ char	*get_var_value(char *name, t_minishell *data)
 	}
 }
 
-void expand_one_var2(char *val, char *env, char **res, int quoted)
+void	expand_one_var2(char *val, char *env, char **res, int quoted)
 {
-	char **split;
-	int j;
-	char *v;
+	char		**split;
+	int			j;
+	char		*v;
 
 	if (val != NULL)
 		v = val;
@@ -75,13 +75,17 @@ void expand_one_var2(char *val, char *env, char **res, int quoted)
 	{
 		split = ft_split(v, " \t");
 		if (!split)
-			return;
+			return ;
 		j = 0;
 		while (split[j] != NULL)
 		{
-			*res = ft_strjoin(*res, split[j]);
-			if (split[j + 1] != NULL)
-				*res = ft_strjoin(*res, " ");
+			if (j == 0)
+				*res = ft_strjoin(*res, split[j]);
+			else
+			{
+				*res = ft_strjoin(*res, "\a");
+				*res = ft_strjoin(*res, split[j]);
+			}
 			j++;
 		}
 		//free_tab(split);
