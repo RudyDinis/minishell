@@ -73,8 +73,14 @@ void		expander(t_cmd *cmd);
 void		get_here_doc_expand(t_token *token, t_cmd *cmd);
 void		here_doc_expand(t_cmd *cmd, char *lim, int i);
 
-
-
+/*BUILT-IN*/
+void	echo(char **argv);
+void	pwd(void);
+void	cd(char **argv, t_minishell *data);
+int		export(char **argv, t_env *env);
+void	unset(t_minishell *data, char *key);
+void	env(t_minishell *data);
+void	exit_shell(t_cmd *cmd, char **argv);
 
 
 
@@ -96,13 +102,6 @@ void	add_var(t_var **var, char *key, char *value);
 void	print_env(t_env *env);
 
 
-void	echo(char **argv);
-void	pwd(void);
-void	cd(char **argv, t_minishell *data);
-int		export(char **argv, t_env *env);
-void	unset(t_minishell *data, char *key);
-void	env(t_minishell *data);
-void	exit_shell(t_minishell *data);
 
 void	print_title(void);
 char	*write_line();

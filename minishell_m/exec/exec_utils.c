@@ -22,6 +22,8 @@ int **malloc_fds(int total_args, t_cmd *cmd)
 	int i;
 
 	i = 0;
+	if (total_args - 1)
+		total_args = total_args - 1;
 	fds = malloc((total_args) * sizeof(int *));
 	if (!fds)
 		free_ms(NULL, cmd, 1);
@@ -50,6 +52,8 @@ void open_pipes(int **fds, int total_args)
 	int i;
 
 	i = 0;
+	if (total_args - 1 > 0)
+		total_args = total_args - 1;
 	while (i < (total_args))
 	{
 		pipe(fds[i]);
@@ -63,16 +67,27 @@ void close_all_pipes(int **fds, int total_args)
 	int j;
 
 	i = 0;
-	if (!total_args && fds[0][1] >= 0)
-		close(fds[0][1]);
+	if (total_args - 1 > 0)
+		total_args = total_args - 1;
+	// if (!total_args)
+	// {
+	// 	if (fds[0][1] >= 0)
+	// 		close(fds[0][1]);
+	// 	if (fds[0][0] >= 0)
+	// 		close(fds[0][0]);
+	// }
 	while (i < total_args)
 	{
 		j = 0;
 		while (j < 2)
 		{
 			if (fds[i][j] >= 0)
+			{
 				close(fds[i][j]);
+				fds[i][j] = -1;
+			}
 			j++;
+
 		}
 		i++;
 	}

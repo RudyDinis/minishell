@@ -31,6 +31,8 @@ void	unset_env(t_env **env, char *key)
 	t_env	*tmp;
 	t_env	*prev;
 
+	if (!key)
+		return ;
 	tmp = *env;
 	prev = NULL;
 	while (tmp)

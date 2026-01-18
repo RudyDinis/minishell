@@ -23,6 +23,11 @@ void	while_read(char **envp, t_minishell *minishell)
 		prompt = write_line();
 		line = readline(prompt);
 		free(prompt);
+		if (!line)
+        {
+            write(1, "exit\n", 5);
+            exit(1);
+        }
 		if (*line && is_valid_buf(line))
 		{
 			token = create_list(line);
@@ -68,6 +73,7 @@ int	main(int ac, char **av, char **envp)
 	return (0);
 }
 
+	//TODO GERER L'OVERLAPPING DES MESSAGES D'ERREURS
 	//TODO IMPLEMENTER SIGNAL POUR HEREDOC
 	//TODO IMPLEMENTER SHLVL + 1;
 	// TODO TRANSFORMER TOUS LES INTS EN LONG POUR EVITER LES OVERFLOW
