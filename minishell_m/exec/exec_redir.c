@@ -29,19 +29,18 @@ void redir_out(t_cmd *cmd, char *file, int i, int *out)
 {
 	(*out)++;
 	cmd->redir->fd[i] = open(file, O_WRONLY | O_TRUNC | O_CREAT, 0644);
-	// if (access(file, W_OK) < 0 && access(file, F_OK) == 0)
-	// 	return (close(cmd->redir->fd[i]),
-	// 		perror(file), free_ms(cmd->token, NULL, 1));
-	// else if (cmd->redir->fd[i] < 0)
-	// 	return (perror(file), free_ms(cmd->token, NULL, 1));
-	// else
-	// {
+	if (access(file, W_OK) < 0 && access(file, F_OK) == 0)
+		return (perror(file), free_ms(cmd->token, NULL, 1));
+	else if (cmd->redir->fd[i] < 0)
+		return (perror(file), free_ms(cmd->token, NULL, 1));
+	else
+	{
 	if (dup2(cmd->redir->fd[i], 1) < 0)
 		return (close(cmd->redir->fd[i]), perror("dup2"),
 			free_ms(cmd->token, NULL, 1));
 	close(cmd->redir->fd[i]);
 	cmd->redir->fd[i] = -1;
-	//}
+	}
 }
 
 void append(t_cmd *cmd, char *file, int i, int *out)
@@ -73,6 +72,7 @@ void redir_in(t_cmd *cmd, char *file, int i, int *in)
 		if (dup2(cmd->redir->fd[i], 0) < 0)
 			return (perror("dup2"), free_ms(cmd->token, NULL, 1));
 		close(cmd->redir->fd[i]);
+		cmd->redir->fd[i] = -1;
 	}
 }
 
@@ -85,6 +85,9 @@ void pipe_redirection(t_cmd *cmd, int **fds, int in, int out)
 			if (dup2(fds[0][1], 1) < 0)
 				return (perror("dup2"), free_ms(cmd->token, NULL, 1));
 		}
+	}
+	if (cmd->i == 0)
+	{
 		close(fds[0][1]);
 		fds[0][1] = -1;
 	}
@@ -94,13 +97,16 @@ void pipe_redirection(t_cmd *cmd, int **fds, int in, int out)
 		{
 			if (dup2(fds[cmd->i - 1][0], 0) < 0)
 				return (perror("dup2"), free_ms(cmd->token, NULL, 1));
-			close(fds[cmd->i - 1][0]);
+
 		}
+		close(fds[cmd->i - 1][0]);
+		fds[cmd->i - 1][0] = -1;
 		if (out == 0 && cmd->i < (get_total_cmds(cmd)))
 		{
 			if (dup2(fds[cmd->i][1], 1) < 0)
 				return (perror("dup2"), free_ms(cmd->token, NULL, 1));
 			close(fds[cmd->i][1]);
+			fds[cmd->i][1] = -1;
 		}
 	}
 }
@@ -119,6 +125,7 @@ void open_redir(t_cmd *cmd, int **fds)
 			{
 				dup2(cmd->redir->fd[i], 0);
 				close(cmd->redir->fd[i]);
+				cmd->redir->fd[i] = -1;
 				in++;
 			}
 			if (cmd->redir->redir_type[i] == REDIR_OUT)
@@ -132,4 +139,5 @@ void open_redir(t_cmd *cmd, int **fds)
 		}
 	}
 	pipe_redirection(cmd, fds, in, out);
+	//close_all_pipes(fds, get_total_cmds(cmd) + 1);
 }

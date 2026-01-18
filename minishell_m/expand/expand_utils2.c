@@ -93,7 +93,9 @@ char **expand_vars(char *s, t_minishell *data, char *param)
 	vars.res = ft_strdup("");
 	vars.s = s;
 	while (s[vars.i])
+	{
 		expand_vars2(data, &vars, param);
+	}
 
 	final = ft_strdup(vars.res);
 	free(vars.res);

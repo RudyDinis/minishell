@@ -38,6 +38,7 @@ typedef struct	s_minishell
 	int		last_cmd_return_value;
 	int		exit_status;
 	int		in_here_doc;
+	int		std_out;
 	char	*pwd;
 	char	**envp;
 	t_env	*env;

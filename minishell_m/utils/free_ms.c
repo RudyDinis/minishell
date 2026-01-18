@@ -100,13 +100,13 @@ void free_ms(t_token *token, t_cmd *cmd, int n)
 	if (cmd && cmd->fds)
 	{
 		if (n != -5)
-			close_all_pipes(cmd->fds, get_total_cmds(cmd));
+			close_all_pipes(cmd->fds, get_total_cmds(cmd) + 1);
 		free_everything_int(cmd->fds, get_total_cmds(cmd) + 1);
 	}
 	if (token && token->cmd && token->cmd->fds)
 	{
 		if (n != -5)
-			close_all_pipes(token->cmd->fds, get_total_cmds(token->cmd));
+			close_all_pipes(token->cmd->fds, get_total_cmds(token->cmd) + 1);
 		free_everything_int(token->cmd->fds, get_total_cmds(token->cmd) + 1);
 	}
 	if (!token)
@@ -121,6 +121,7 @@ void free_ms(t_token *token, t_cmd *cmd, int n)
 			free_minishell(token->cmd->minishell);
 		free_token(token, 1);
 	}
+	//system("ls -l /proc/self/fd");
 	if (n != -5)
 		exit(n);
 }
