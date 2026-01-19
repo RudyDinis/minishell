@@ -20,6 +20,8 @@
 
 #include "minishell_struct.h"
 
+t_minishell *minishell;
+
 /*STRUCTURE INITIALISATION*/
 t_cmd		*init_cmd(t_minishell *minishell, t_token *token, char **envp);
 t_token		*create_list(char *buf);
@@ -42,6 +44,7 @@ void		launcher(t_cmd *cmd, t_token *token);
 void		free_ms(t_token *token, t_cmd *cmd, int n);
 void		free_cmd(t_cmd *cmd, int n);
 void		free_token(t_token *token, int n);
+void		free_minishell(t_minishell *data);
 
 /*LEXER UTILS*/
 int			is_blank(char c);

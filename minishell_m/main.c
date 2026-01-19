@@ -1,5 +1,7 @@
 #include "minishell.h"
 
+t_minishell *minishell;
+
 int is_valid_buf(char *buf)
 {
 	int i;
@@ -18,6 +20,7 @@ void	while_read(char **envp, t_minishell *minishell)
 	char	*prompt;
 	t_token *token;
 
+	token = NULL;
 	while (1)
 	{
 		prompt = write_line();
@@ -25,8 +28,8 @@ void	while_read(char **envp, t_minishell *minishell)
 		free(prompt);
 		if (!line)
         {
-            write(1, "exit\n", 5);
-            exit(1);
+				write(1, "exit\n", 5);
+				free_minishell(minishell), exit(1);
         }
 		if (*line && is_valid_buf(line))
 		{
@@ -37,7 +40,8 @@ void	while_read(char **envp, t_minishell *minishell)
 			free_ms(NULL, token->cmd, -5);
 			add_history(line);
 		}
-		free(line);
+		if (line)
+			free(line);
 	}
 }
 
@@ -59,7 +63,6 @@ t_env	*copy_env(char **envp)
 int	main(int ac, char **av, char **envp)
 {
 	char		*cwd;
-	t_minishell	*minishell;
 
 	minishell = init_ms(envp);
 	if (!minishell)

@@ -177,5 +177,10 @@ void launcher(t_cmd *cmd, t_token *token)
 	open_pipes(fds, total_args);
 	attribute_fds(cmd, fds);
 	open_here_doc(cmd, fds);
+	if (cmd->minishell->g_stop)
+	{
+		cmd->minishell->g_stop = 0;
+		return ;
+	}
 	executor(cmd, fds, total_args);
 }
