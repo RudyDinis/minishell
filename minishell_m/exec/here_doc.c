@@ -80,28 +80,37 @@ void get_here_doc_expand(t_token *token, t_cmd *cmd)
 
 void here_doc_expand(t_cmd *cmd, char *lim, int i)
 {
-	char *gnl;
 	int fd;
 	char *file;
 	char *nbr;
 	char *expanded_line;
 
+	expanded_line = NULL;
 	nbr = ft_itoa(cmd->i);
 	file = ft_strjoin("/var/tmp/temp", nbr);
-	gnl = get_next_line(0, 1);
-	expanded_line = expand_vars(gnl, cmd->minishell, "HERE_DOC")[0];
+	cmd->minishell->in_here_doc = 1;
 	cmd->redir->fd[i] = open(file, O_RDWR | O_TRUNC | O_CREAT, 0644);
-	while (ft_findstr(lim, expanded_line))
+	while (cmd->minishell->in_here_doc && ft_findstr(lim, expanded_line))
 	{
-		write(cmd->redir->fd[i], expanded_line, ft_strlen(expanded_line));
-		free(gnl);
-		free(expanded_line);
-		gnl = get_next_line(0, 0);
-		expanded_line = expand_vars(gnl, cmd->minishell, "HERE_DOC")[0];
+		if (cmd->minishell->gnl)
+			free(cmd->minishell->gnl);
+		if (expanded_line)
+			free(expanded_line);
+		cmd->minishell->gnl = get_next_line(0, 0);
+		if (cmd->minishell->gnl)
+		{
+			expanded_line = expand_vars(cmd->minishell->gnl, cmd->minishell, "HERE_DOC")[0];
+			write(cmd->redir->fd[i], expanded_line, ft_strlen(expanded_line));
+		}
+		if (!cmd->minishell->gnl || !expanded_line)
+			break ;
 	}
-	free(gnl);
-	gnl = get_next_line(0, 2);
-	free(expanded_line);
+	cmd->minishell->in_here_doc = 0;
+	if (cmd->minishell->gnl)
+		free(cmd->minishell->gnl);
+	cmd->minishell->gnl = get_next_line(0, 2);
+	// if (expanded_line)
+	// 	free(expanded_line);
 	close(cmd->redir->fd[i]);
 	cmd->redir->fd[i] = open(file, O_RDWR, 0644);
 	unlink(file);

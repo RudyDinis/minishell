@@ -6,7 +6,7 @@
 /*   By: bbouarab <bbouarab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 14:58:23 by bbouarab          #+#    #+#             */
-/*   Updated: 2026/01/17 13:55:48 by bbouarab         ###   ########.fr       */
+/*   Updated: 2026/01/19 16:24:29 by bbouarab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,11 @@ char	*get_next_char(int fd)
 	ret = read(fd, (void *)buf, BUFFER_SIZE);
 	if (ret <= 0)
 	{
+		if (minishell->g_stop)
+		{
+			free(buf);
+			return (NULL);
+		}
 		free(buf);
 		return (NULL);
 	}
@@ -83,8 +88,10 @@ char	*get_next_line(int fd, int reset)
 
 	if (reset)
 	{
-		if (stash && reset == 2)
-			return (free(stash), stash = NULL, NULL);
+		if (stash)
+			free(stash);
+		if (reset == 2)
+			return (stash = NULL, NULL);
 		stash = NULL;
 	}
 	if (fd < 0 || BUFFER_SIZE <= 0)
@@ -95,10 +102,7 @@ char	*get_next_line(int fd, int reset)
 	if (!line)
 	{
 		if (!stash || !stash[0])
-		{
-			free(stash);
 			return (NULL);
-		}
 		new_line = ft_strdup_newline(stash, &stash, 1);
 		return (new_line);
 	}

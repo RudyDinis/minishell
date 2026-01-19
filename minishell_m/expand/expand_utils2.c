@@ -89,6 +89,8 @@ char **expand_vars(char *s, t_minishell *data, char *param)
 	char 				**res_array;
 	char 				*final;
 
+	if (!s)
+		return NULL;
 	vars.i = 0;
 	vars.res = ft_strdup("");
 	vars.s = s;

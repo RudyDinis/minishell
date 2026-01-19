@@ -19,5 +19,5 @@ void	cd(char **argv, t_minishell *data)
 		data->pwd = getcwd(NULL, 0);
 	}
 	else
-		ft_printf_error("%s: No such file or directory\n", argv[1]);
+		perror(argv[1]);
 }

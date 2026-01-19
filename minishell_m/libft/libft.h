@@ -19,6 +19,7 @@
 # include <fcntl.h>
 # include <stdint.h>
 # include <string.h>
+# include "get_next_line/get_next_line.h"
 
 typedef struct	s_list {
 	void	*img;
