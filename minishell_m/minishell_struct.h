@@ -101,6 +101,7 @@ typedef struct s_cmd
 typedef struct s_expand_vars_vars
 {
 	int		i;
+	int		a;
 	int		in_quotes;
 	char	*s;
 	char	*res;

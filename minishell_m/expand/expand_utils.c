@@ -1,15 +1,28 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   expand_utils.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rdinis <rdinis@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/01/19 13:32:36 by rdinis            #+#    #+#             */
+/*   Updated: 2026/01/19 13:38:39 by rdinis           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../minishell.h"
 
 t_var	*new_var_node(char *key, char *value)
 {
-	t_var *node = malloc(sizeof(t_var));
-	if (!node)
-		return NULL;
+	t_var	*node;
 
+	node = malloc(sizeof(t_var));
+	if (!node)
+		return (NULL);
 	node->key = ft_strdup(key);
 	node->value = ft_strdup(value);
 	node->next = NULL;
-	return node;
+	return (node);
 }
 
 
@@ -24,7 +37,7 @@ void	add_var(t_var **var, char *key, char *value)
 		{
 			free(tmp->value);
 			tmp->value = ft_strdup(value);
-			return;
+			return ;
 		}
 		tmp = tmp->next;
 	}
@@ -61,11 +74,12 @@ char	*get_var_value(char *name, t_minishell *data)
 	}
 }
 
-void	expand_one_var2(char *val, char *env, char **res, int quoted)
+void	expand_one_var2_doc(char *val, char *env,
+	t_expand_vars_vars *vars, int quoted)
 {
-	char		**split;
-	int			j;
-	char		*v;
+	char	**split;
+	int		j;
+	char	*v;
 
 	if (val != NULL)
 		v = val;
@@ -79,40 +93,38 @@ void	expand_one_var2(char *val, char *env, char **res, int quoted)
 		j = 0;
 		while (split[j] != NULL)
 		{
-			if (j == 0)
-				*res = ft_strjoin(*res, split[j]);
-			else
-			{
-				*res = ft_strjoin(*res, "\a");
-				*res = ft_strjoin(*res, split[j]);
-			}
+			vars->res = ft_strjoin(vars->res, split[j]);
+			if (split[j + 1] != NULL)
+				vars->res = ft_strjoin_free(vars->res, " ");
 			j++;
 		}
-		//free_tab(split);
+		free_tab(split);
 	}
 	else
-		*res = ft_strjoin(*res, v);
+		vars->res = ft_strjoin(vars->res, v);
 }
 
 
-char *expand_one_var(char *s, int *i, char *res, t_minishell *data, int quoted)
+char	*expand_one_var_doc(t_expand_vars_vars *vars,
+	t_minishell *data, int quoted)
 {
-	char *name;
-	char *val;
-	char *env;
-	int start;
+	char	*name;
+	char	*val;
+	char	*env;
+	int		start;
 
-	(*i)++;
-	start = *i;
-	if (s[*i] == '?')
-		return (res = ft_strjoin(res, ft_itoa(data->last_cmd_return_value)), (*i)++, res);
-	while (ft_isalnum(s[*i]) || s[*i] == '_')
-		(*i)++;
-	name = ft_substr(s, start, *i - start);
+	(vars->i)++;
+	start = vars->i;
+	if (vars->s[vars->i] == '?')
+		return (vars->res = ft_strjoin(vars->res,
+				ft_itoa(data->last_cmd_return_value)), vars->i++, vars->res);
+	while (ft_isalnum(vars->s[vars->i]) || vars->s[vars->i] == '_')
+		vars->i++;
+	name = ft_substr(vars->s, start, vars->i - start);
 	val = get_var_value(name, data);
 	env = get_env_value(name, data);
 	if (val || env)
-		expand_one_var2(val, env, &res, quoted);
+		expand_one_var2_doc(val, env, vars, quoted);
 	free(name);
-	return (res);
+	return (vars->res);
 }

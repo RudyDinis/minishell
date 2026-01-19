@@ -61,24 +61,6 @@ t_env	*copy_env(char **envp)
 	return (env);
 }
 
-void debug_print(const char *s)
-{
-    int i = 0;
-	printf("[");
-    while (s[i])
-    {
-        if (s[i] == '\a')
-            printf("\\a");
-        else if (s[i] == ' ')
-            printf(" ");
-        else
-            printf("%c", s[i]);
-        i++;
-    }
-	printf("]");
-    printf("\n");
-}
-
 int	main(int ac, char **av, char **envp)
 {
 	char		*cwd;
@@ -92,10 +74,9 @@ int	main(int ac, char **av, char **envp)
 	init_signals(minishell);
 	print_title();
 	add_var(&minishell->var, "abc", "a             b              c");
-	char **test = expand_vars("\"123\"$abc'i              j           k'", minishell, "HERE_DOC");
-	int i = 0;
-	while (test[i])
-		debug_print(test[i++]);
+	char **test = expand_vars("\"123\"$abc'i              j           k'",
+			minishell, "HERE_DOC");
+	free_tab(test);
 	printf("\n");
 	while_read(envp, minishell);
 	rl_clear_history();

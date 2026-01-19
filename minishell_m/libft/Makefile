@@ -15,7 +15,7 @@ SRC = ft_isalpha.c ft_isdigit.c ft_isalnum.c ft_isascii.c ft_isprint.c \
       ft_strmapi.c ft_striteri.c ft_putchar_fd.c ft_putstr_fd.c \
       ft_putendl_fd.c ft_putnbr_fd.c ft_lstadd_back.c  ft_lstadd_front.c \
 	  ft_lstlast.c ft_findstr.c free_char.c free_int.c \
-	  ft_lstnew.c  ft_lstsize.c hexa_conversion.c ft_strcmp.c \
+	  ft_lstnew.c  ft_lstsize.c hexa_conversion.c ft_strcmp.c ft_strjoin_free.c\
 	  ft_printf/ft_printf.c ft_printf/srcs/hexa_conversion.c ft_printf/srcs/check_type.c ft_printf/srcs/ft_put_counter.c \
 	  get_next_line/get_next_line.c get_next_line/get_next_line_utils.c \
 	  ft_printf_error/ft_printf_error.c ft_printf_error/srcs/hexa_conversion.c ft_printf_error/srcs/check_type.c ft_printf_error/srcs/ft_put_counter.c

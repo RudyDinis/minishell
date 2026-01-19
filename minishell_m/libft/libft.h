@@ -50,6 +50,7 @@ char	*ft_itoa(int n);
 char	*ft_strmapi(const char *s, char (*f)(unsigned int, char));
 char	*get_next_line(int fd, int reset);
 char	*to_hexa(unsigned long long base10);
+char	*ft_strjoin_free(char *s1, char *s2);
 
 void	ft_striteri(char *s, void (*f)(unsigned int, char*));
 void	*ft_memset(void *b, int c, size_t len);
