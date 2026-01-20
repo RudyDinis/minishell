@@ -66,7 +66,8 @@ void apply_path(t_cmd *cmd)
 	while (cmd)
 	{
 		cmd->is_absolute = 0;
-		cmd->path = find_path(cmd->cmd, cmd);
+		if (cmd->cmd)
+			cmd->path = find_path(cmd->cmd, cmd);
 		cmd = cmd->next;
 	}
 }

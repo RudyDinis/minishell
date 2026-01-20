@@ -20,7 +20,7 @@
 
 #include "minishell_struct.h"
 
-t_minishell *minishell;
+extern t_minishell *minishell;
 
 /*STRUCTURE INITIALISATION*/
 t_cmd		*init_cmd(t_minishell *minishell, t_token *token, char **envp);
@@ -33,7 +33,7 @@ t_minishell *init_ms(char **envp);
 int			**malloc_fds(int total_args, t_cmd *cmd);
 void		tree_of_closing(int **fds, int current_process, int total_args);
 void		here_doc(t_cmd *cmd, char *lim, int i);
-void		malloc_redir(t_cmd *cmd, int **fds);
+void		malloc_redir(t_cmd *cmd);
 void		open_pipes(int **fds, int total_args);
 void		close_all_pipes(int **fds, int total_args);
 void		open_redir(t_cmd *cmd, int **fds);
@@ -57,8 +57,8 @@ void		if_d_quotes(t_repere *repere);
 void		find_type(char *buf, t_token *token);
 
 /*PARSER UTILS*/
+int			check_formatting(t_token *token, char **envp, t_minishell *minishell);
 void		append_args(t_cmd *cmd, t_token *token);
-void		check_formatting(t_token *token, char **envp, t_minishell *minishell);
 
 /*GENERAL UTILS*/
 int			number_of_cmds(t_token *token);
@@ -68,13 +68,23 @@ int			get_here_doc_nbr(t_token *token);
 
 /*EXPANDER*/
 char		*ignore_quotes(char *str);
-char	**expand_vars(char *s, t_minishell *data, char *param);
-char	*get_env_value(char *name, t_minishell *data);
-char	*get_var_value(char *name, t_minishell *data);
-char	*expand_one_var(char *s, int *i, char *res, t_minishell *data, int quoted);
+char		**expand_vars(char *s, t_minishell *data, char *param);
+char		*get_env_value(char *name, t_minishell *data);
+char		*get_var_value(char *name, t_minishell *data);
+char		*expand_one_var_doc(t_expand_vars_vars *vars,
+				t_minishell *data, int quoted);
 void		expander(t_cmd *cmd);
 void		get_here_doc_expand(t_token *token, t_cmd *cmd);
 void		here_doc_expand(t_cmd *cmd, char *lim, int i);
+char		**expand_vars_doc(char *s, t_minishell *data, char *param);
+char		*char_join(char *s, char c);
+void		free_tab(char **tab);
+char		**expand_vars_jsp(char *s, t_minishell *data, char *param);
+char		*expand_one_var(t_expand_vars_vars *vars, t_minishell *data, int quoted);
+void 		debug_print(const char *s);
+char		*ft_strjoin_free(char *s1, char *s2);
+
+
 
 /*BUILT-IN*/
 void	echo(char **argv);

@@ -66,6 +66,7 @@ typedef struct	s_repere
 	int	in_pipe;
 	int	in_redir_in;
 	int	in_redir_out;
+	int	error;
 }	t_repere;
 
 typedef struct	s_opcounter
@@ -104,6 +105,7 @@ typedef struct s_cmd
 typedef struct s_expand_vars_vars
 {
 	int		i;
+	int		a;
 	int		in_quotes;
 	char	*s;
 	char	*res;

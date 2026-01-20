@@ -2,6 +2,11 @@
 
 void check_access_and_rights(t_cmd *cmd, int **fds)
 {
+	if (!cmd->path)
+	{
+		write(2,": command not found\n", 20);
+		free_ms(cmd->token, NULL, 127);
+	}
 	if (cmd->is_absolute == 0)
 	{
 		if (access(cmd->path, F_OK) < 0)
@@ -11,7 +16,7 @@ void check_access_and_rights(t_cmd *cmd, int **fds)
 		}
 		if (access(cmd->path, X_OK) < 0)
 		{
-			ft_printf_error("%s: Permission denied\n", cmd->path);
+			perror(cmd->path);
 			free_ms(NULL, cmd, 126);
 		}
 	}
@@ -57,9 +62,9 @@ int check_built_int_parent(t_cmd *cmd)
 		if (ft_strcmp(cmd->cmd, "exit") == 0)
 			return (exit_shell(cmd, cmd->args), 1);
 		if (ft_strcmp(cmd->cmd, "export") == 0)
-			return (export(cmd->args, cmd->minishell->env), cmd->minishell->last_cmd_return_value = 0,  1);
+			return (export(cmd->args, cmd->minishell->env), cmd->minishell->last_cmd_return_value = 0, 1);
 		if (ft_strcmp(cmd->cmd, "unset") == 0)
-			return (unset(cmd->minishell, cmd->args[1]), cmd->minishell->last_cmd_return_value = 0,  1);
+			return (unset(cmd->minishell, cmd->args[1]), cmd->minishell->last_cmd_return_value = 0, 1);
 	}
 	return 0;
 }
@@ -69,23 +74,23 @@ void check_built_int_child(t_cmd *cmd)
 	if (ft_strcmp(cmd->cmd, "echo") == 0)
 		return (echo(cmd->args), close(0), close(1), free_ms(cmd->token, NULL, 0));
 	if (ft_strcmp(cmd->cmd, "env") == 0)
-		return (env(cmd->minishell),  close(0), close(1),free_ms(NULL, cmd, 0));
+		return (env(cmd->minishell), close(0), close(1), free_ms(NULL, cmd, 0));
 	if (ft_strcmp(cmd->cmd, "cd") == 0)
 		return (cd(cmd->args, cmd->minishell), close(0), close(1), free_ms(NULL, cmd, 0));
 	if (ft_strcmp(cmd->cmd, "exit") == 0)
-		return ( close(0), close(1), exit_shell(cmd, cmd->args));
+		return (close(0), close(1), exit_shell(cmd, cmd->args));
 	if (ft_strcmp(cmd->cmd, "export") == 0)
-		return (export(cmd->args, cmd->minishell->env),  close(0), close(1), free_ms(NULL, cmd, 0));
+		return (export(cmd->args, cmd->minishell->env), close(0), close(1), free_ms(NULL, cmd, 0));
 	if (ft_strcmp(cmd->cmd, "pwd") == 0)
-		return (pwd(),  close(0), close(1), free_ms(NULL, cmd, 0));
+		return (pwd(), close(0), close(1), free_ms(NULL, cmd, 0));
 	if (ft_strcmp(cmd->cmd, "unset") == 0)
-		return (unset(cmd->minishell, cmd->args[1]),  close(0), close(1), free_ms(NULL, cmd, 0));
+		return (unset(cmd->minishell, cmd->args[1]), close(0), close(1), free_ms(NULL, cmd, 0));
 }
 
 void executor(t_cmd *cmd, int **fds, int total_args)
 {
 	t_cmd *head;
-	int		parent;
+	int parent;
 
 	parent = 0;
 	head = cmd;
@@ -94,7 +99,7 @@ void executor(t_cmd *cmd, int **fds, int total_args)
 		if (check_built_int_parent(cmd))
 		{
 			parent = 1;
-			break ;
+			break;
 		}
 		cmd->pid = fork();
 		if (cmd->pid == 0)
@@ -114,7 +119,7 @@ void executor(t_cmd *cmd, int **fds, int total_args)
 		wait_and_get_return_value(head);
 }
 
-void open_here_doc(t_cmd *cmd, int **fds)
+void open_here_doc(t_cmd *cmd)
 {
 	int i;
 	int j;
@@ -126,7 +131,7 @@ void open_here_doc(t_cmd *cmd, int **fds)
 		j = 0;
 		if (cmd->redir->target)
 		{
-			malloc_redir(cmd, fds);
+			malloc_redir(cmd);
 			while (cmd->redir->target[i])
 			{
 				if (cmd->redir->redir_type[i] == HERE_DOC)
@@ -172,15 +177,15 @@ void launcher(t_cmd *cmd, t_token *token)
 	int pipe_last;
 
 	// print_args(cmd);
+	open_here_doc(cmd);
+	if (cmd->minishell->g_stop)
+	{
+		cmd->minishell->g_stop = 0;
+		return;
+	}
 	total_args = get_total_cmds(cmd) + 1;
 	fds = malloc_fds(total_args, cmd);
 	open_pipes(fds, total_args);
 	attribute_fds(cmd, fds);
-	open_here_doc(cmd, fds);
-	if (cmd->minishell->g_stop)
-	{
-		cmd->minishell->g_stop = 0;
-		return ;
-	}
 	executor(cmd, fds, total_args);
 }

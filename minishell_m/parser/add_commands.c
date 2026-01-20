@@ -22,8 +22,15 @@ int get_number_args(t_cmd *cmd, t_token *token)
 			token = token->next;
 		if (token->previous && token->previous->type != PIPE && token->previous->type != STR)
 			token = token->next;
-		while (token && token->type != PIPE && token->type == STR)
+		while (token && token->type != PIPE)
 		{
+			if (token->type != PIPE && token->type != STR)
+			{
+				token = token->next;
+				if (token && !token->next)
+					break;
+				token = token->next;
+			}
 			i++;
 			token = token->next;
 		}
@@ -48,8 +55,15 @@ void append_args(t_cmd *cmd, t_token *token)
 			token = token->next;
 		if (token->previous && token->previous->type != PIPE && token->previous->type != STR)
 			token = token->next;
-		while (token && token->type != PIPE && token->type == STR)
+		while (token && token->type != PIPE)
 		{
+			if (token->type != PIPE && token->type != STR)
+			{
+				token = token->next;
+				if (token && !token->next)
+					break;
+				token = token->next;
+			}
 			cmd->args[i++] = ft_strdup(token->line);
 			token = token->next;
 		}
