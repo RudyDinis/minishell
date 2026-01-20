@@ -6,7 +6,7 @@
 /*   By: rdinis <rdinis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/19 13:49:27 by rdinis            #+#    #+#             */
-/*   Updated: 2026/01/19 16:22:53 by rdinis           ###   ########.fr       */
+/*   Updated: 2026/01/20 13:30:21 by rdinis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,18 +16,25 @@
 
 char	*handle_squote(t_expand_vars_vars	*vars, char *param)
 {
-	int	start;
+	int		start;
+	char	*tmp;
 
 	vars->i++;
 	start = vars->i;
 	while (vars->s[vars->i] && vars->s[vars->i] != '\'')
 		vars->i++;
 	if (ft_strcmp(param, "HERE_DOC") == 0)
-		vars->res = ft_strjoin_free(vars->res,
-				ft_substr(vars->s, start - 1, vars->i + 1));
+	{
+		tmp = ft_substr(vars->s, start - 1, vars->i + 1);
+		vars->res = ft_strjoin_free(vars->res, tmp);
+		free(tmp);
+	}
 	else
-		vars->res = ft_strjoin_free(vars->res,
-				ft_substr(vars->s, start, vars->i - start));
+	{
+		tmp = ft_substr(vars->s, start, vars->i - start);
+		vars->res = ft_strjoin_free(vars->res, tmp);
+		free(tmp);
+	}
 	if (vars->s[vars->i] == '\'')
 		vars->i++;
 	return (vars->res);
@@ -82,6 +89,7 @@ char	**expand_vars_jsp(char *s, t_minishell *data, char *param)
 {
 	t_expand_vars_vars	vars;
 	char				*final;
+	char				**ret;
 
 	if (!s)
 		return (NULL);
@@ -92,6 +100,8 @@ char	**expand_vars_jsp(char *s, t_minishell *data, char *param)
 	while (s[vars.i])
 		expand_vars2(data, &vars, param);
 	final = ft_strdup(vars.res);
+	ret = ft_split(final, "\a");
+	free(final);
 	free(vars.res);
-	return (ft_split(final, "\a"));
+	return (ret);
 }

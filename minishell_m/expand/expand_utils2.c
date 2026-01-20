@@ -6,7 +6,7 @@
 /*   By: rdinis <rdinis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/19 13:32:04 by rdinis            #+#    #+#             */
-/*   Updated: 2026/01/19 16:14:10 by rdinis           ###   ########.fr       */
+/*   Updated: 2026/01/20 13:40:16 by rdinis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,18 @@ void	free_tab(char **tab)
 	free(tab);
 }
 
+void	expand_one_var3(int *j, char **split, t_expand_vars_vars *vars)
+{
+	if ((*j) == 0)
+		vars->res = ft_strjoin_free(vars->res, split[*j]);
+	else
+	{
+		vars->res = ft_strjoin_free(vars->res, "\a");
+		vars->res = ft_strjoin_free(vars->res, split[*j]);
+	}
+	(*j)++;
+}
+
 void	expand_one_var2(char *val, char *env,
 		t_expand_vars_vars *vars, int quoted)
 {
@@ -50,19 +62,12 @@ void	expand_one_var2(char *val, char *env,
 		j = 0;
 		while (split[j] != NULL)
 		{
-			if (j == 0)
-				vars->res = ft_strjoin(vars->res, split[j]);
-			else
-			{
-				vars->res = ft_strjoin(vars->res, "\a");
-				vars->res = ft_strjoin(vars->res, split[j]);
-			}
-			j++;
+			expand_one_var3(&j, split, vars);
 		}
 		free_tab(split);
 	}
 	else
-		vars->res = ft_strjoin(vars->res, v);
+		vars->res = ft_strjoin_free(vars->res, v);
 }
 
 char	*expand_one_var(t_expand_vars_vars *vars, t_minishell *data, int quoted)
@@ -77,7 +82,7 @@ char	*expand_one_var(t_expand_vars_vars *vars, t_minishell *data, int quoted)
 	vars->i++;
 	start = vars->i;
 	if (vars->s[vars->i] == '?')
-		return (vars->res = ft_strjoin(vars->res,
+		return (vars->res = ft_strjoin_free(vars->res,
 				ft_itoa(data->last_cmd_return_value)), vars->i++, vars->res);
 	while (ft_isalnum(vars->s[vars->i]) || vars->s[vars->i] == '_')
 		vars->i++;
@@ -97,5 +102,5 @@ char	**expand_vars(char *s, t_minishell *data, char *param)
 	if (!strcmp(param, "HERE_DOC") || !strcmp(param, "FILE"))
 		return (expand_vars_doc(s, data, param));
 	else
-		expand_vars_jsp(s, data, param);
+		return (expand_vars_jsp(s, data, param));
 }

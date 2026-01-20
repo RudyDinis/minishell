@@ -6,7 +6,7 @@
 /*   By: rdinis <rdinis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/19 11:31:01 by rdinis            #+#    #+#             */
-/*   Updated: 2026/01/19 14:01:44 by rdinis           ###   ########.fr       */
+/*   Updated: 2026/01/20 13:13:08 by rdinis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,16 +14,25 @@
 
 char	*handle_squote_doc(char *s, int *i, char *res, char *param)
 {
-	int	start;
+	int		start;
+	char	*tmp;
 
 	(*i)++;
 	start = *i;
 	while (s[*i] && s[*i] != '\'')
 		(*i)++;
 	if (ft_strcmp(param, "HERE_DOC") == 0)
-		res = ft_strjoin_free(res, ft_substr(s, start - 1, *i + 1));
+	{
+		tmp = ft_substr(s, start - 1, *i + 1);
+		res = ft_strjoin_free(res, tmp);
+		free(tmp);
+	}
 	else
-		res = ft_strjoin_free(res, ft_substr(s, start, *i - start));
+	{
+		tmp = ft_substr(s, start, *i - start);
+		res = ft_strjoin_free(res, tmp);
+		free(tmp);
+	}
 	if (s[*i] == '\'')
 		(*i)++;
 	return (res);
