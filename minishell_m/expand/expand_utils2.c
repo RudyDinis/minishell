@@ -1,116 +1,106 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   expand_utils2.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rdinis <rdinis@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/01/19 13:32:04 by rdinis            #+#    #+#             */
+/*   Updated: 2026/01/20 13:40:16 by rdinis           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../minishell.h"
 
-char *char_join(char *s, char c)
+char	*char_join(char *s, char c)
 {
-	char tmp[2];
+	char	tmp[2];
 
 	tmp[0] = c;
 	tmp[1] = 0;
-	return (ft_strjoin(s, tmp));
+	return (ft_strjoin_free(s, tmp));
 }
 
-char *handle_squote(char *s, int *i, char *res, char *param)
+void	free_tab(char **tab)
 {
-	int start;
+	int	i;
 
-	(*i)++;
-	start = *i;
-	while (s[*i] && s[*i] != '\'')
-		(*i)++;
-	if (ft_strcmp(param, "HERE_DOC") == 0)
-		res = ft_strjoin(res, ft_substr(s, start - 1, *i + 1));
+	i = 0;
+	while (tab && tab[i])
+		free(tab[i++]);
+	free(tab);
+}
+
+void	expand_one_var3(int *j, char **split, t_expand_vars_vars *vars)
+{
+	if ((*j) == 0)
+		vars->res = ft_strjoin_free(vars->res, split[*j]);
 	else
-		res = ft_strjoin(res, ft_substr(s, start, *i - start));
-	if (s[*i] == '\'')
-		(*i)++;
-	return (res);
+	{
+		vars->res = ft_strjoin_free(vars->res, "\a");
+		vars->res = ft_strjoin_free(vars->res, split[*j]);
+	}
+	(*j)++;
 }
 
-char *handle_dquote(t_expand_vars_vars *vars, t_minishell *data, char *param)
+void	expand_one_var2(char *val, char *env,
+		t_expand_vars_vars *vars, int quoted)
 {
-	vars->i++;
+	char		**split;
+	int			j;
+	char		*v;
 
-	if (!ft_strcmp(param, "HERE_DOC"))
-		vars->res = char_join(vars->res, '"');
-
-	while (vars->s[vars->i] && vars->s[vars->i] != '"')
+	if (val != NULL)
+		v = val;
+	else
+		v = env;
+	if (!quoted)
 	{
-		if (vars->s[vars->i] == '$'
-			&& (isalnum(vars->s[vars->i + 1]) || vars->s[vars->i + 1] == '?'))
-			vars->res = expand_one_var(vars->s, &vars->i, vars->res, data, 1);
-		else
-			vars->res = char_join(vars->res, vars->s[vars->i++]);
+		split = ft_split(v, " \t");
+		if (!split)
+			return ;
+		j = 0;
+		while (split[j] != NULL)
+		{
+			expand_one_var3(&j, split, vars);
+		}
+		free_tab(split);
 	}
-	if (vars->s[vars->i] == '"')
+	else
+		vars->res = ft_strjoin_free(vars->res, v);
+}
+
+char	*expand_one_var(t_expand_vars_vars *vars, t_minishell *data, int quoted)
+{
+	char	*name;
+	char	*val;
+	char	*env;
+	int		start;
+
+	if (vars->s[vars->i - 1] && vars->s[vars->i - 1] == ' ')
+		vars->res = char_join(vars->res, '\a');
+	vars->i++;
+	start = vars->i;
+	if (vars->s[vars->i] == '?')
+		return (vars->res = ft_strjoin_free(vars->res,
+				ft_itoa(data->last_cmd_return_value)), vars->i++, vars->res);
+	while (ft_isalnum(vars->s[vars->i]) || vars->s[vars->i] == '_')
 		vars->i++;
-
-	if (!ft_strcmp(param, "HERE_DOC"))
-		vars->res = char_join(vars->res, '"');
-
+	name = ft_substr(vars->s, start, vars->i - start);
+	val = get_var_value(name, data);
+	env = get_env_value(name, data);
+	if (val || env)
+		expand_one_var2(val, env, vars, quoted);
+	free(name);
+	if (vars->s[vars->i] && vars->s[vars->i] == ' ')
+		vars->res = char_join(vars->res, '\a');
 	return (vars->res);
 }
 
-
-char *handle_squote_doc(t_expand_vars_vars *vars, t_minishell *data, char *param)
+char	**expand_vars(char *s, t_minishell *data, char *param)
 {
-	vars->i++;
-	vars->res = char_join(vars->res, '\'');
-	while (vars->s[vars->i] && vars->s[vars->i] != '\'')
-	{
-		if (vars->s[vars->i] == '$' && (vars->s[vars->i + 1] && (isalnum(vars->s[vars->i + 1]) || vars->s[vars->i + 1] == '?')))
-			vars->res = expand_one_var(vars->s, &vars->i, vars->res, data, 1);
-		else
-			vars->res = char_join(vars->res, vars->s[vars->i++]);
-	}
-	if (vars->s[vars->i] == '\'')
-		vars->i++;
-	vars->res = char_join(vars->res, '\'');
-	return (vars->res);
-}
-
-void expand_vars2(t_minishell *data, t_expand_vars_vars *vars, char *param)
-{
-	if (vars->s[vars->i] == '\'' && !ft_strcmp(param, "HERE_DOC"))
-		handle_squote_doc(vars, data, param);
-	else if (vars->s[vars->i] == '\'')
-		vars->res = handle_squote(vars->s, &vars->i, vars->res, param);
-	else if (vars->s[vars->i] == '"')
-		vars->res = handle_dquote(vars, data, param);
-	else if (vars->s[vars->i] == '$'
-		&& (isalnum(vars->s[vars->i + 1]) || vars->s[vars->i + 1] == '?'))
-		vars->res = expand_one_var(vars->s, &vars->i, vars->res, data, 0);
+	if (!strcmp(param, "HERE_DOC") || !strcmp(param, "FILE"))
+		return (expand_vars_doc(s, data, param));
 	else
-		vars->res = char_join(vars->res, vars->s[vars->i++]);
-}
-
-char **expand_vars(char *s, t_minishell *data, char *param)
-{
-	t_expand_vars_vars	vars;
-	char 				**res_array;
-	char 				*final;
-
-	if (!s)
-		return NULL;
-	vars.i = 0;
-	vars.res = ft_strdup("");
-	vars.s = s;
-	while (s[vars.i])
-	{
-		expand_vars2(data, &vars, param);
-	}
-
-	final = ft_strdup(vars.res);
-	free(vars.res);
-	if (!ft_strcmp(param, "FILE")
-		|| !ft_strcmp(param, "HERE_DOC"))
-	{
-		res_array = malloc(sizeof(char *) * 2);
-		res_array[0] = final;
-		res_array[1] = NULL;
-		return res_array;
-	}
-	return (res_array = malloc(sizeof(char *) * 2),
-		res_array[0] = final,
-		res_array[1] = NULL,
-		res_array);
+		return (expand_vars_jsp(s, data, param));
 }

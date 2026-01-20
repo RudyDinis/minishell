@@ -43,7 +43,6 @@ void free_token(t_token *token, int n)
 	if (token->type == STR)
 		free(token->line);
 	free(token);
-
 }
 
 void free_cmd(t_cmd *cmd, int n)

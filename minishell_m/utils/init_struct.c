@@ -20,6 +20,7 @@ t_repere init_repere(void)
 	repere.in_word = 0;
 	repere.in_d_quote = 0;
 	repere.in_s_quote = 0;
+	repere.error = 0;
 	return (repere);
 }
 
@@ -31,6 +32,8 @@ t_token *create_list(char *argv)
 	t_token *tete;
 
 	token_nb = find_number_of_token(argv);
+	if (!token_nb)
+		return (NULL);
 	i = 0;
 	if (token_nb)
 		head = ft_calloc(1, sizeof(t_token));;

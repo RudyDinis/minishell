@@ -83,7 +83,7 @@ void attributes_redir(t_token *token, t_cmd *cmd)
 	}
 }
 
-void check_formatting(t_token *token, char **envp, t_minishell *minishell)
+int check_formatting(t_token *token, char **envp, t_minishell *minishell)
 {
 	t_token *head;
 	t_cmd	*cmds;
@@ -92,12 +92,12 @@ void check_formatting(t_token *token, char **envp, t_minishell *minishell)
 	while (token)
 	{
 		if ((token->index == 0 || !token->next) && token->type == PIPE)
-			return ((void)printf("formatting error"));
+			return (ft_printf_error("syntax error near unexpected token `|'\n"), free_ms(head, NULL, -5), 1);
 		if ((token->type == REDIR_IN || token->type == REDIR_OUT
-			|| token->type == APPEND || token->type == HERE_DOC) && token->next->type != STR)
-			return ((void)printf("formatting error"));
-		if (token->type == PIPE && token->next->type == PIPE)
-			return ((void)printf("formatting error"));
+			|| token->type == APPEND || token->type == HERE_DOC) && (!token->next || token->next->type != STR))
+			return (ft_printf_error("syntax error near unexpected token `newline'\n"), free_ms(head, NULL, -5), 1);
+		if (token->type == PIPE && token->next && token->next->type == PIPE)
+			return (ft_printf_error("syntax error near unexpected token `|'\n"), free_ms(head, NULL, -5), 1);
 		token = token->next;
 	}
 	cmds = init_cmd(minishell, head, envp);
@@ -106,4 +106,5 @@ void check_formatting(t_token *token, char **envp, t_minishell *minishell)
 	append_args(cmds, head);
 	expander(cmds);
 	launcher(cmds, head);
+	return 0;
 }

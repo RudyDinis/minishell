@@ -1,6 +1,6 @@
 #include "../minishell.h"
 
-void malloc_redir(t_cmd *cmd, int **fds)
+void malloc_redir(t_cmd *cmd)
 {
 	int i;
 	int j;
