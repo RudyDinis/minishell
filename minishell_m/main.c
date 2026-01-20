@@ -21,27 +21,31 @@ void	while_read(char **envp, t_minishell *minishell)
 	t_token *token;
 
 	token = NULL;
-	while (1)
+	if (isatty(0))
 	{
-		prompt = write_line();
-		line = readline(prompt);
-		free(prompt);
-		if (!line)
-        {
-				write(1, "exit\n", 5);
-				free_minishell(minishell), exit(1);
-        }
-		if (*line && is_valid_buf(line))
+		while (1)
 		{
-			token = create_list(line);
-			check_formatting(token, envp, minishell);
-			if (token->cmd->minishell->exit_status == 1)
-				return (free(line), free_ms(NULL, token->cmd, 1));
-			free_ms(NULL, token->cmd, -5);
-			add_history(line);
+			prompt = write_line();
+			line = readline(prompt);
+			free(prompt);
+			if (!line)
+			{
+					write(1, "exit\n", 5);
+					free_minishell(minishell), exit(1);
+			}
+			if (*line && is_valid_buf(line))
+			{
+				token = create_list(line);
+				if (!token || check_formatting(token, envp, minishell))
+					continue ;
+				if (token && token->cmd && token->cmd->minishell->exit_status == 1)
+					return (free(line), free_ms(NULL, token->cmd, 1));
+				if (token && token->cmd)
+					free_ms(NULL, token->cmd, -5);
+				add_history(line);
+				free(line);
+			}
 		}
-		if (line)
-			free(line);
 	}
 }
 
@@ -77,7 +81,6 @@ int	main(int ac, char **av, char **envp)
 }
 
 	//TODO GERER L'OVERLAPPING DES MESSAGES D'ERREURS
-	//TODO IMPLEMENTER SIGNAL POUR HEREDOC
 	//TODO IMPLEMENTER SHLVL + 1;
 	// TODO TRANSFORMER TOUS LES INTS EN LONG POUR EVITER LES OVERFLOW
 	// TODO ISATTY
