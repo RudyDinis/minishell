@@ -20,9 +20,8 @@ void	while_read(char **envp, t_minishell *minishell)
 
 	while (1)
 	{
-		prompt = write_line();
-		line = readline(prompt);
-		free(prompt);
+		write_line();
+		line = readline("\001\033[0;32m\002> \001\033[0m\002");
 		if (!line)
 		{
 			if (minishell->in_here_doc)

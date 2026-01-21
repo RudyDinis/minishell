@@ -6,7 +6,7 @@
 /*   By: rdinis <rdinis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/12 13:34:41 by rdinis            #+#    #+#             */
-/*   Updated: 2026/01/21 12:42:44 by rdinis           ###   ########.fr       */
+/*   Updated: 2026/01/21 14:47:09 by rdinis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ char	*write_line(void)
 	pwd = getcwd(NULL, 0);
 
 	top = GREEN "┌──(" BOLD_BLUE "Minishell" RESET GREEN ")-[" BOLD_WHITE;
-	bottom = RESET GREEN "]\n" GREEN "└─" BOLD_BLUE "$ " RESET;
+	bottom = RESET GREEN "]\n";
 	prompt_len = strlen(top)
 		+ strlen(pwd)
 		+ strlen(bottom)
@@ -35,7 +35,8 @@ char	*write_line(void)
 	ft_strcat(prompt, pwd);
 	ft_strcat(prompt, bottom);
 	free(pwd);
-	return (prompt);
+	printf("%s", prompt);
+	free(prompt);
 }
 
 void	print_title(void)
