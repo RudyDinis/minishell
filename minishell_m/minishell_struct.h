@@ -42,7 +42,7 @@ typedef struct	s_minishell
 	char	*gnl;
 	char	*pwd;
 	char	**envp;
-	bool	g_stop;
+	int		g_stop;
 	t_env	*env;
 	t_var	*var;
 }	t_minishell;

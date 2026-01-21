@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand_utils4.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rdinis <rdinis@student.42.fr>              +#+  +:+       +#+        */
+/*   By: bbouarab <bbouarab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/20 13:33:38 by rdinis            #+#    #+#             */
-/*   Updated: 2026/01/20 13:38:57 by rdinis           ###   ########.fr       */
+/*   Updated: 2026/01/21 15:47:28 by bbouarab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,10 +53,8 @@ char	*expand_one_var_doc(t_expand_vars_vars *vars,
 
 	(vars->i)++;
 	start = vars->i;
-	if (vars->s[vars->i] == '?')
-		return (vars->res = ft_strjoin_free(vars->res,
-				ft_itoa(data->last_cmd_return_value)), vars->i++, vars->res);
-	while (ft_isalnum(vars->s[vars->i]) || vars->s[vars->i] == '_')
+	while (ft_isalnum(vars->s[vars->i]) || vars->s[vars->i] == '_'
+		|| vars->s[vars->i] == '?')
 		vars->i++;
 	name = ft_substr(vars->s, start, vars->i - start);
 	val = get_var_value(name, data);

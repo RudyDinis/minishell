@@ -111,7 +111,8 @@ void	exit_shell(t_cmd *cmd, char **argv);
 t_env	*copy_env(char **envp);
 void	init_signals(t_minishell *data);
 void	sigint_handler(int sig);
-
+void	init_signals_parent_exec(void);
+void	init_signals_child(void);
 void	add_env(t_env **env, char *line);
 void	add_var(t_var **var, char *key, char *value);
 void	print_env(t_env *env);
@@ -119,7 +120,7 @@ void	print_env(t_env *env);
 
 
 void	print_title(void);
-char	*write_line();
+void    write_line(void);
 
 
 #endif

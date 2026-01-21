@@ -19,19 +19,21 @@ void	while_read(char **envp, t_minishell *minishell)
 	char	*line;
 	char	*prompt;
 	t_token *token;
+	int		exit_value;
 
 	token = NULL;
 	if (isatty(0))
 	{
 		while (1)
 		{
-			prompt = write_line();
-			line = readline(prompt);
-			free(prompt);
+			init_signals(minishell);
+			write_line();
+			line = readline("\001\033[0;32m\002> \001\033[0m\002");
 			if (!line)
 			{
 					write(1, "exit\n", 5);
-					free_minishell(minishell), exit(1);
+					exit_value = ft_atoi(minishell->var->value);
+					return (free_minishell(minishell), exit(exit_value));
 			}
 			if (*line && is_valid_buf(line))
 			{
@@ -76,7 +78,6 @@ int	main(int ac, char **av, char **envp)
 		exit(1);
 	(void)ac;
 	(void)av;
-	init_signals(minishell);
 	print_title();
 	while_read(envp, minishell);
 	rl_clear_history();

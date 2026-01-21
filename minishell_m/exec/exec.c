@@ -91,6 +91,7 @@ void executor(t_cmd *cmd, int **fds, int total_args)
 		cmd->pid = fork();
 		if (cmd->pid == 0)
 		{
+			init_signals_child();
 			tree_of_closing(fds, cmd->i, total_args);
 			open_redir(cmd, fds);
 			check_built_int_child(cmd);
@@ -101,6 +102,7 @@ void executor(t_cmd *cmd, int **fds, int total_args)
 		}
 		cmd = cmd->next;
 	}
+	init_signals_parent_exec();
 	close_all_pipes(fds, total_args);
 	if (!parent)
 		wait_and_get_return_value(head);
