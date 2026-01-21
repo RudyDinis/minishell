@@ -64,6 +64,7 @@ int	main(int ac, char **av, char **envp)
 {
 	char		*cwd;
 	t_minishell	*minishell;
+	pid_t	pid;
 
 	minishell = init_ms(envp);
 	if (!minishell)
@@ -71,6 +72,8 @@ int	main(int ac, char **av, char **envp)
 	(void)ac;
 	(void)av;
 	init_signals(minishell);
+	pid = fork();
+
 	print_title();
 	printf("\n");
 	while_read(envp, minishell);
