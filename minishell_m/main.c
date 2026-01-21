@@ -72,6 +72,7 @@ int	main(int ac, char **av, char **envp)
 	(void)ac;
 	(void)av;
 	init_signals(minishell);
+	add_var(&minishell->var, "?", "0");
 	print_title();
 	while_read(envp, minishell);
 	rl_clear_history();

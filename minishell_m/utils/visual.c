@@ -6,13 +6,13 @@
 /*   By: rdinis <rdinis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/12 13:34:41 by rdinis            #+#    #+#             */
-/*   Updated: 2026/01/21 15:06:29 by rdinis           ###   ########.fr       */
+/*   Updated: 2026/01/21 15:47:35 by rdinis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-char	*write_line(void)
+void	write_line(void)
 {
 	char		*prompt;
 	size_t		prompt_len;
@@ -24,9 +24,9 @@ char	*write_line(void)
 
 	top = GREEN "┌──(" BOLD_BLUE "Minishell" RESET GREEN ")-[" BOLD_WHITE;
 	bottom = RESET GREEN "]\n";
-	prompt_len = strlen(top)
-		+ strlen(pwd)
-		+ strlen(bottom)
+	prompt_len = ft_strlen(top)
+		+ ft_strlen(pwd)
+		+ ft_strlen(bottom)
 		+ 1;
 	prompt = malloc(prompt_len);
 	if (!prompt)
