@@ -6,7 +6,7 @@
 /*   By: rdinis <rdinis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/19 13:32:04 by rdinis            #+#    #+#             */
-/*   Updated: 2026/01/20 13:40:16 by rdinis           ###   ########.fr       */
+/*   Updated: 2026/01/21 15:41:34 by rdinis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,10 +81,8 @@ char	*expand_one_var(t_expand_vars_vars *vars, t_minishell *data, int quoted)
 		vars->res = char_join(vars->res, '\a');
 	vars->i++;
 	start = vars->i;
-	if (vars->s[vars->i] == '?')
-		return (vars->res = ft_strjoin_free(vars->res,
-				ft_itoa(data->last_cmd_return_value)), vars->i++, vars->res);
-	while (ft_isalnum(vars->s[vars->i]) || vars->s[vars->i] == '_')
+	while (ft_isalnum(vars->s[vars->i]) || vars->s[vars->i] == '_'
+		|| vars->s[vars->i] == '?')
 		vars->i++;
 	name = ft_substr(vars->s, start, vars->i - start);
 	val = get_var_value(name, data);

@@ -72,10 +72,7 @@ int	main(int ac, char **av, char **envp)
 	(void)ac;
 	(void)av;
 	init_signals(minishell);
-	pid = fork();
-
 	print_title();
-	printf("\n");
 	while_read(envp, minishell);
 	rl_clear_history();
 	return (0);
