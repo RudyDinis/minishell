@@ -64,6 +64,8 @@ t_minishell *init_ms(char **envp)
 	minishell->envp = envp;
 	minishell->pwd = getcwd(NULL, 0);
 	add_var(&minishell->var, "?", "0");
+	if (!minishell->var)
+		return (free_minishell(minishell), exit(1), NULL);
 	minishell->env = copy_env(envp);
 	return (minishell);
 }

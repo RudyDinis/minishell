@@ -7,7 +7,8 @@
 #include <readline/readline.h>
 #include <errno.h>
 #include <signal.h>
-# include <readline/history.h>
+#include <readline/history.h>
+# include <stdbool.h>
 
 typedef enum	s_type
 {
@@ -38,11 +39,10 @@ typedef struct	s_minishell
 	int		last_cmd_return_value;
 	int		exit_status;
 	int		in_here_doc;
-	int		g_stop;
-	int		std_out;
 	char	*gnl;
 	char	*pwd;
 	char	**envp;
+	bool	g_stop;
 	t_env	*env;
 	t_var	*var;
 }	t_minishell;
@@ -60,13 +60,13 @@ typedef struct	s_token
 
 typedef struct	s_repere
 {
-	int	in_s_quote;
-	int	in_d_quote;
-	int	in_word;
-	int	in_pipe;
-	int	in_redir_in;
-	int	in_redir_out;
-	int	error;
+	bool	in_s_quote;
+	bool	in_d_quote;
+	bool	in_word;
+	bool	in_pipe;
+	bool	in_redir_in;
+	bool	in_redir_out;
+	bool	error;
 }	t_repere;
 
 typedef struct	s_opcounter
@@ -87,11 +87,11 @@ typedef struct	s_redir
 
 typedef struct s_cmd
 {
-	int				i;
-	int				is_absolute;
 	int				return_value;
 	int				**fds;
-	int				cmd_found;
+	long			i;
+	bool			cmd_found;
+	bool			is_absolute;
 	pid_t			pid;
 	char 			*cmd;
 	char 			*path;

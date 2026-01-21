@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rdinis <rdinis@student.42.fr>              +#+  +:+       +#+        */
+/*   By: bbouarab <bbouarab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/19 13:32:36 by rdinis            #+#    #+#             */
-/*   Updated: 2026/01/20 13:38:52 by rdinis           ###   ########.fr       */
+/*   Updated: 2026/01/21 13:42:42 by bbouarab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,8 @@ void	add_var(t_var **var, char *key, char *value)
 	while (*var)
 		*var = (*var)->next;
 	*var = ft_calloc(1, sizeof(t_var));
+	if (!(*var))
+		return ;
 	(*var)->key = ft_strdup(key);
 	(*var)->value = ft_strdup(value);
 }
