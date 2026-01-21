@@ -30,9 +30,9 @@ void redir_out(t_cmd *cmd, char *file, int i, int *out)
 	(*out)++;
 	cmd->redir->fd[i] = open(file, O_WRONLY | O_TRUNC | O_CREAT, 0644);
 	if (access(file, W_OK) < 0 && access(file, F_OK) == 0)
-		return (perror(file), free_ms(cmd->token, NULL, 1));
+		return (perror(file), free_ms(cmd->token, NULL, 126));
 	else if (cmd->redir->fd[i] < 0)
-		return (perror(file), free_ms(cmd->token, NULL, 1));
+		return (perror(file), free_ms(cmd->token, NULL, 127));
 	else
 	{
 	if (dup2(cmd->redir->fd[i], 1) < 0)
@@ -48,9 +48,9 @@ void append(t_cmd *cmd, char *file, int i, int *out)
 	(*out)++;
 	cmd->redir->fd[i] = open(file, O_WRONLY | O_APPEND | O_CREAT, 0644);
 	if (access(file, W_OK) < 0 && access(file, F_OK) == 0)
-		return (perror(file), free_ms(NULL, cmd, 1));
+		return (perror(file), free_ms(NULL, cmd, 126));
 	else if (cmd->redir->fd[i] < 0)
-		return (perror(file), free_ms(NULL, cmd, 1));
+		return (perror(file), free_ms(NULL, cmd, 127));
 	{
 		if (dup2(cmd->redir->fd[i], 1) < 0)
 			return (perror("dup2"), free_ms(NULL, cmd, 1));
@@ -64,9 +64,9 @@ void redir_in(t_cmd *cmd, char *file, int i, int *in)
 	(*in)++;
 	cmd->redir->fd[i] = open(file, O_RDONLY);
 	if ((access(file, R_OK) < 0 && access(file, F_OK) == 0))
-		return (perror(file), free_ms(cmd->token, NULL, 1));
+		return (perror(file), free_ms(cmd->token, NULL, 126));
 	else if (cmd->redir->fd[i] < 0)
-		return (perror(file), free_ms(cmd->token, NULL, 1));
+		return (perror(file), free_ms(cmd->token, NULL, 127));
 	else
 	{
 		if (dup2(cmd->redir->fd[i], 0) < 0)

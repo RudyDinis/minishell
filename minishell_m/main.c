@@ -48,8 +48,8 @@ void	while_read(char **envp, t_minishell *minishell)
 				if (token && token->cmd)
 					free_ms(NULL, token->cmd, -5);
 				add_history(line);
-				free(line);
 			}
+			free(line);
 		}
 	}
 }

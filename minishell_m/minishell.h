@@ -102,7 +102,7 @@ void	exit_shell(t_cmd *cmd, char **argv);
 
 
 
-
+char *strdup_and_free(char *line, t_minishell *minishell);
 
 
 
