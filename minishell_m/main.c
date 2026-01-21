@@ -37,7 +37,10 @@ void	while_read(char **envp, t_minishell *minishell)
 			{
 				token = create_list(line);
 				if (!token || check_formatting(token, envp, minishell))
+				{
+					free(line);
 					continue ;
+				}
 				if (token && token->cmd && token->cmd->minishell->exit_status == 1)
 					return (free(line), free_ms(NULL, token->cmd, 1));
 				if (token && token->cmd)
@@ -79,7 +82,11 @@ int	main(int ac, char **av, char **envp)
 	rl_clear_history();
 	return (0);
 }
-
+	/*TODO             if (WIFEXITED(data->status)) // Si le processus s'est terminé normalement
+                data->exit_status = WEXITSTATUS(data->status); // Enregistrer le code de sortie
+            else if (WIFSIGNALED(data->status)) // Si le processus a été tué par un signal
+                data->exit_status = 128 + WTERMSIG(data->status);*/
+	//TODO GERER LES COMMANDES TRES LONGUES
 	//TODO GERER L'OVERLAPPING DES MESSAGES D'ERREURS
 	//TODO IMPLEMENTER SHLVL + 1;
 	// TODO TRANSFORMER TOUS LES INTS EN LONG POUR EVITER LES OVERFLOW

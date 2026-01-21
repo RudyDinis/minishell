@@ -2,36 +2,24 @@
 
 void check_access_and_rights(t_cmd *cmd, int **fds)
 {
+	char *merge;
+
 	if (!cmd->path)
-	{
-		write(2,": command not found\n", 20);
-		free_ms(cmd->token, NULL, 127);
-	}
+		return (write(2,": command not found\n", 20), free_ms(cmd->token, NULL, 127));
 	if (cmd->is_absolute == 0)
 	{
 		if (access(cmd->path, F_OK) < 0)
-		{
-			ft_printf_error("%s: command not found\n", cmd->path);
-			free_ms(cmd->token, NULL, 127);
-		}
+			return (merge = ft_strjoin(cmd->path, ": command not found\n"),
+				ft_printf_error("%s", merge), free(merge), free_ms(cmd->token, NULL, 127));
 		if (access(cmd->path, X_OK) < 0)
-		{
-			perror(cmd->path);
-			free_ms(NULL, cmd, 126);
-		}
+			return (perror(cmd->path), free_ms(NULL, cmd, 126));
 	}
 	if (cmd->is_absolute == 1)
 	{
 		if (access(cmd->path, F_OK) < 0)
-		{
-			perror(cmd->path);
-			free_ms(NULL, cmd, 127);
-		}
+			return (perror(cmd->path), free_ms(NULL, cmd, 127));
 		if (access(cmd->path, X_OK) < 0)
-		{
-			perror(cmd->path);
-			free_ms(NULL, cmd, 126);
-		}
+			return (perror(cmd->path), free_ms(NULL, cmd, 126));
 	}
 }
 
@@ -47,7 +35,6 @@ void wait_and_get_return_value(t_cmd *cmd)
 			break;
 		cmd = cmd->next;
 	}
-
 	value_str = ft_itoa(WEXITSTATUS(value));
 	add_var(&cmd->minishell->var, "?", value_str);
 	free(value_str);
@@ -174,14 +161,12 @@ void launcher(t_cmd *cmd, t_token *token)
 	int id;
 	int **fds;
 	int total_args;
-	int pipe_last;
 
-	// print_args(cmd);
 	open_here_doc(cmd);
 	if (cmd->minishell->g_stop)
 	{
 		cmd->minishell->g_stop = 0;
-		return;
+		return ;
 	}
 	total_args = get_total_cmds(cmd) + 1;
 	fds = malloc_fds(total_args, cmd);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand_utils2.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rdinis <rdinis@student.42.fr>              +#+  +:+       +#+        */
+/*   By: bbouarab <bbouarab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/19 13:32:04 by rdinis            #+#    #+#             */
-/*   Updated: 2026/01/20 13:40:16 by rdinis           ###   ########.fr       */
+/*   Updated: 2026/01/21 11:53:13 by bbouarab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ char	*expand_one_var(t_expand_vars_vars *vars, t_minishell *data, int quoted)
 	char	*env;
 	int		start;
 
-	if (vars->s[vars->i - 1] && vars->s[vars->i - 1] == ' ')
+	if (vars->i - 1 >= 0 && vars->s[vars->i - 1] && vars->s[vars->i - 1] == ' ')
 		vars->res = char_join(vars->res, '\a');
 	vars->i++;
 	start = vars->i;

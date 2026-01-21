@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand_here_doc.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rdinis <rdinis@student.42.fr>              +#+  +:+       +#+        */
+/*   By: bbouarab <bbouarab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/19 11:31:01 by rdinis            #+#    #+#             */
-/*   Updated: 2026/01/20 13:13:08 by rdinis           ###   ########.fr       */
+/*   Updated: 2026/01/21 12:09:42 by bbouarab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,12 @@ void	expand_vars2_doc(t_minishell *data,
 		vars->res = handle_dquote_doc(vars, data, param);
 	else if (vars->s[vars->i] == '$'
 		&& (isalnum(vars->s[vars->i + 1]) || vars->s[vars->i + 1] == '?'))
-		vars->res = expand_one_var_doc(vars, data, 0);
+	{
+		if (!ft_strcmp(param, "FILE"))
+			vars->res = expand_one_var_doc(vars, data, 1);
+		else
+			vars->res = expand_one_var_doc(vars, data, 0);
+	}
 	else
 		vars->res = char_join(vars->res, vars->s[vars->i++]);
 }
