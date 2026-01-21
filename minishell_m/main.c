@@ -16,13 +16,23 @@ void	while_read(char **envp, t_minishell *minishell)
 {
 	char	*line;
 	char	*prompt;
-	t_token *token;
+	t_token	*token;
 
 	while (1)
 	{
-		prompt = write_line();
-		line = readline(prompt);
+		write_line();
+		line = readline("\001\033[0;32m\002> \001\033[0m\002");
 		free(prompt);
+		if (!line)
+		{
+			if (minishell->in_here_doc)
+			{
+				minishell->exit_status = 0;
+				break ;
+			}
+			write(1, "exit\n", 5);
+			exit_shell(minishell);
+		}
 		if (*line && is_valid_buf(line))
 		{
 			token = create_list(line);

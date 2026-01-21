@@ -65,13 +65,19 @@ int			get_here_doc_nbr(t_token *token);
 
 /*EXPANDER*/
 char		*ignore_quotes(char *str);
-char	**expand_vars(char *s, t_minishell *data, char *param);
-char	*get_env_value(char *name, t_minishell *data);
-char	*get_var_value(char *name, t_minishell *data);
-char	*expand_one_var(char *s, int *i, char *res, t_minishell *data, int quoted);
+char		**expand_vars(char *s, t_minishell *data, char *param);
+char		*get_env_value(char *name, t_minishell *data);
+char		*get_var_value(char *name, t_minishell *data);
+char		*expand_one_var_doc(t_expand_vars_vars *vars,
+				t_minishell *data, int quoted);
 void		expander(t_cmd *cmd);
 void		get_here_doc_expand(t_token *token, t_cmd *cmd);
 void		here_doc_expand(t_cmd *cmd, char *lim, int i);
+char		**expand_vars_doc(char *s, t_minishell *data, char *param);
+char		*char_join(char *s, char c);
+void		free_tab(char **tab);
+char		**expand_vars_jsp(char *s, t_minishell *data, char *param);
+char		*expand_one_var(t_expand_vars_vars *vars, t_minishell *data, int quoted);
 
 
 
@@ -105,7 +111,7 @@ void	env(t_minishell *data);
 void	exit_shell(t_minishell *data);
 
 void	print_title(void);
-char	*write_line();
+void	write_line();
 
 
 #endif

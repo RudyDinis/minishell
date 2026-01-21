@@ -10,7 +10,7 @@ SRC = main.c \
 		lexer/find_and_assign_type.c lexer/find_token_nbr.c lexer/find_token_nbr_utils.c lexer/extract.c \
 		parser/formatting_and_redir.c parser/add_commands.c \
 		exec/exec.c exec/closing_processes.c exec/exec_redir.c exec/exec_utils.c exec/find_path.c exec/here_doc.c \
-		expand/expander.c expand/expand_utils.c expand/expand_utils2.c \
+		expand/expander.c expand/expand_utils.c expand/expand_utils2.c expand/expand_here_doc.c expand/expand_utils3.c expand/expand_utils4.c \
 		built-in/cd.c built-in/echo.c built-in/env.c built-in/export.c built-in/exit.c built-in/unset.c built-in/pwd.c
 
 OBJ = $(SRC:%.c=$(OBJ_DIR)/%.o)
