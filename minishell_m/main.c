@@ -74,33 +74,14 @@ int	main(int ac, char **av, char **envp)
 	init_signals(minishell);
 	print_title();
 	add_var(&minishell->var, "abc", "a             b              c");
-	char **test = expand_vars("\"123\"$abc'i              j           k'",
-			minishell, "HERE_DOC");
-	char **test1 = expand_vars("\"123\"$abc'i              j           k'",
+	char **test1 = expand_vars("\"123\"$abc'i              j           k $abc'",
 			minishell, "FILE");
-	char **test2 = expand_vars("\"123\"$abc'i              j           k'",
-			minishell, "");
-	char **test3 = expand_vars("$abc",
-			minishell, "");
 	int i = 0;
-	while (test[i])
-		printf("%s", test[i++]);
-	printf("\n");
-	i = 0;
 	while (test1[i])
 		printf("%s", test1[i++]);
 	printf("\n");
-	i = 0;
-	while (test2[i])
-		printf("%s", test2[i++]);
-	printf("\n");
-	i = 0;
-	while (test3[i])
-		printf("%s", test3[i++]);
-	free_tab(test);
 	free_tab(test1);
-	free_tab(test2);
-	free_tab(test3);
+
 	printf("\n");
 	while_read(envp, minishell);
 	rl_clear_history();
