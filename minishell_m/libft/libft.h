@@ -20,12 +20,13 @@
 # include <stdint.h>
 # include <string.h>
 
-typedef struct	s_list {
+typedef struct s_list
+{
 	void	*img;
 	void	*mlx;
 	void	*window;
 	char	*addr;
-	void 	*content;
+	void	*content;
 	int		bits_per_pixel;
 	int		line_length;
 	int		endian;
@@ -51,6 +52,8 @@ char	*ft_strmapi(const char *s, char (*f)(unsigned int, char));
 char	*get_next_line(int fd, int reset);
 char	*to_hexa(unsigned long long base10);
 char	*ft_strjoin_free(char *s1, char *s2);
+char	*ft_strcat(char *dest, char *src);
+char	*ft_strcpy(char *dest, char *src);
 
 void	ft_striteri(char *s, void (*f)(unsigned int, char*));
 void	*ft_memset(void *b, int c, size_t len);

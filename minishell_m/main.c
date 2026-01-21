@@ -73,15 +73,6 @@ int	main(int ac, char **av, char **envp)
 	(void)av;
 	init_signals(minishell);
 	print_title();
-	add_var(&minishell->var, "abc", "a             b              c");
-	char **test1 = expand_vars("\"123\"$abc'i              j           k $abc'",
-			minishell, "FILE");
-	int i = 0;
-	while (test1[i])
-		printf("%s", test1[i++]);
-	printf("\n");
-	free_tab(test1);
-
 	printf("\n");
 	while_read(envp, minishell);
 	rl_clear_history();

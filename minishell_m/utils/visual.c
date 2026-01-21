@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   visual.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bbouarab <bbouarab@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rdinis <rdinis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/12 13:34:41 by rdinis            #+#    #+#             */
-/*   Updated: 2026/01/17 22:31:26 by bbouarab         ###   ########.fr       */
+/*   Updated: 2026/01/21 12:42:44 by rdinis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,9 +31,9 @@ char	*write_line(void)
 	prompt = malloc(prompt_len);
 	if (!prompt)
 		return (exit(1), NULL);
-	strcpy(prompt, top);//TODO EDIT TO LIBFT
-	strcat(prompt, pwd);//TODO EDIT TO LIBFT
-	strcat(prompt, bottom);//TODOEDIT TO LIBFT
+	ft_strcpy(prompt, top);
+	ft_strcat(prompt, pwd);
+	ft_strcat(prompt, bottom);
 	free(pwd);
 	return (prompt);
 }
