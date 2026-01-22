@@ -164,6 +164,7 @@ void launcher(t_cmd *cmd, t_token *token)
 	int **fds;
 	int total_args;
 
+	print_args(cmd);
 	open_here_doc(cmd);
 	if (cmd->minishell->g_stop)
 	{

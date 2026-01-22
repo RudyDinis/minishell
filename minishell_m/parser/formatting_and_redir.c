@@ -107,7 +107,8 @@ int check_formatting(t_token *token, char **envp, t_minishell *minishell)
 		if ((token->type == REDIR_IN || token->type == REDIR_OUT
 			|| token->type == APPEND || token->type == HERE_DOC) && (!token->next || token->next->type != STR))
 			return (ft_printf_error("syntax error near unexpected token `newline'\n"), free_ms(head, NULL, -5), 1);
-		if (token->type == PIPE && token->next && token->next->type == PIPE)
+		if (token->type == PIPE && token->next && ((token->next->type == PIPE)
+			|| (token->next->type == REDIR_OUT  || token->next->type == APPEND)))
 			return (ft_printf_error("syntax error near unexpected token `|'\n"), free_ms(head, NULL, -5), 1);
 		token = token->next;
 	}

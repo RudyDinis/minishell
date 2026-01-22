@@ -54,6 +54,20 @@ void if_redir_out(char *buf, t_repere *repere, int *token)
 		(*token)++;
 }
 
+int if_and_operator(char *buf, t_repere *repere)
+{
+	if (!repere->in_s_quote && !repere->in_d_quote && repere->in_word)
+	{
+		if (buf[0] && buf[0] == '&' && buf[1] && buf[1] == '&')
+			return (ft_printf_error("&& operator not supported\n"),
+				repere->error = 1, 0);
+		if (buf[0] && buf[0] == '&')
+			return (ft_printf_error("& operator not supported\n"),
+				repere->error = 1, 0);
+	}
+	return 1;
+}
+
 int find_number_of_token(char *buf)
 {
 	int (i) = 0;
@@ -76,7 +90,7 @@ int find_number_of_token(char *buf)
 			if_redir_out(&buf[i], &repere, &token);
 		if (buf[i] == '<' && !repere.in_redir_in && !repere.in_s_quote && !repere.in_d_quote)
 			if_redir_in(&buf[i], &repere, &token);
-		if (repere.error)
+		if (!if_and_operator(&buf[i], &repere) && repere.error)
 			return (0);
 		i++;
 	}

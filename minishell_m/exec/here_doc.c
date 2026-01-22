@@ -108,9 +108,7 @@ void here_doc_expand(t_cmd *cmd, char *lim, int i)
 	cmd->minishell->in_here_doc = 0;
 	if (cmd->minishell->gnl)
 		free(cmd->minishell->gnl);
-	cmd->minishell->gnl = get_next_line(0, 2);
-	if (expanded_line)
-		free(expanded_line);
+	cmd->minishell->gnl = get_next_line(0, 2);;
 	close(cmd->redir->fd[i]);
 	cmd->redir->fd[i] = open(file, O_RDWR, 0644);
 	unlink(file);

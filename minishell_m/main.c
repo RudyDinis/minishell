@@ -83,14 +83,10 @@ int	main(int ac, char **av, char **envp)
 	rl_clear_history();
 	return (0);
 }
-	/*TODO             if (WIFEXITED(data->status)) // Si le processus s'est terminé normalement
-                data->exit_status = WEXITSTATUS(data->status); // Enregistrer le code de sortie
-            else if (WIFSIGNALED(data->status)) // Si le processus a été tué par un signal
-                data->exit_status = 128 + WTERMSIG(data->status);*/
-	//TODO GERER LES COMMANDES TRES LONGUES
-	//TODO GERER L'OVERLAPPING DES MESSAGES D'ERREURS
+
+	//TODO HERE DOC LEAKS
+	//TODO MINISHELL DANS MINISHELL DEVRAIT AVOIR DES ENV
+	//TODO REDIR DANS REDIR
 	//TODO IMPLEMENTER SHLVL + 1;
 	// TODO TRANSFORMER TOUS LES INTS EN LONG POUR EVITER LES OVERFLOW
-	// TODO ISATTY
-	//TODO GERER LES || ET && ET quotes non fermées ET erreurs de syntaxe corréctement
 
