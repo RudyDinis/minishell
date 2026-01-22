@@ -120,16 +120,10 @@ char	**expand_vars_doc(char *s, t_minishell *data, char *param)
 
 	final = ft_strdup(vars.res);
 	free(vars.res);
-	if (!ft_strcmp(param, "FILE")
-		|| !ft_strcmp(param, "HERE_DOC"))
-	{
-		res_array = malloc(sizeof(char *) * 2);
-		res_array[0] = final;
-		res_array[1] = NULL;
-		return (res_array);
-	}
-	return (res_array = malloc(sizeof(char *) * 2),
-		res_array[0] = final,
-		res_array[1] = NULL,
-		res_array);
+	res_array = malloc(sizeof(char *) * 2);
+	if (!res_array)
+		return (???); // TODO je sais pas quoi return
+	res_array[0] = final;
+	res_array[1] = NULL;
+	return (res_array);
 }
