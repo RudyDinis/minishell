@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand_here_doc.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bbouarab <bbouarab@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rdinis <rdinis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/19 11:31:01 by rdinis            #+#    #+#             */
-/*   Updated: 2026/01/21 12:09:42 by bbouarab         ###   ########.fr       */
+/*   Updated: 2026/01/23 13:12:00 by rdinis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,12 +117,11 @@ char	**expand_vars_doc(char *s, t_minishell *data, char *param)
 	vars.s = s;
 	while (s[vars.i])
 		expand_vars2_doc(data, &vars, param);
-
 	final = ft_strdup(vars.res);
 	free(vars.res);
 	res_array = malloc(sizeof(char *) * 2);
 	if (!res_array)
-		return (???); // TODO je sais pas quoi return
+		return (free_ms(data->token, data->cmd, 0), NULL);
 	res_array[0] = final;
 	res_array[1] = NULL;
 	return (res_array);

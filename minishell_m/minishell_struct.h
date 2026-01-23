@@ -34,30 +34,6 @@ typedef struct s_var
 	struct s_var	*next;
 }	t_var;
 
-typedef struct	s_minishell
-{
-	int		last_cmd_return_value;
-	int		exit_status;
-	int		in_here_doc;
-	char	*gnl;
-	char	*pwd;
-	char	**envp;
-	int		g_stop;
-	t_env	*env;
-	t_var	*var;
-}	t_minishell;
-
-typedef struct	s_token
-{
-	int				in_quotes;
-	int				index;
-	char			*line;
-	t_type			type;
-	struct s_token	*next;
-	struct s_token	*previous;
-	struct s_cmd	*cmd;
-}	t_token;
-
 typedef struct	s_repere
 {
 	bool	in_s_quote;
@@ -85,6 +61,41 @@ typedef struct	s_redir
 	t_type	*redir_type;
 }	t_redir;
 
+typedef struct s_expand_vars_vars
+{
+	int		i;
+	int		a;
+	int		in_quotes;
+	char	*s;
+	char	*res;
+}	t_expand_vars_vars;
+
+typedef struct	s_token
+{
+	int				in_quotes;
+	int				index;
+	char			*line;
+	t_type			type;
+	struct s_token	*next;
+	struct s_token	*previous;
+	struct s_cmd	*cmd;
+}	t_token;
+
+typedef struct	s_minishell
+{
+	int				last_cmd_return_value;
+	int				exit_status;
+	int				in_here_doc;
+	char			*gnl;
+	char			*pwd;
+	char			**envp;
+	int				g_stop;
+	t_env			*env;
+	t_var			*var;
+	t_token			*token;
+	struct s_cmd	*cmd;
+}	t_minishell;
+
 typedef struct s_cmd
 {
 	int				return_value;
@@ -101,14 +112,5 @@ typedef struct s_cmd
 	t_minishell		*minishell;
 	struct s_cmd	*next;
 }	t_cmd;
-
-typedef struct s_expand_vars_vars
-{
-	int		i;
-	int		a;
-	int		in_quotes;
-	char	*s;
-	char	*res;
-}	t_expand_vars_vars;
 
 #endif
