@@ -6,7 +6,7 @@
 /*   By: rdinis <rdinis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/14 17:27:10 by rdinis            #+#    #+#             */
-/*   Updated: 2026/01/23 16:11:39 by rdinis           ###   ########.fr       */
+/*   Updated: 2026/01/23 16:15:04 by rdinis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ void	exit_shell(t_cmd *cmd, char **argv)
 		if (argv[2])
 			return (ft_printf_error("exit: too many arguments\n"), (void)1);
 		if (ft_atol(argv[1], cmd) == 2147483648)
-			return ;
+			return (free_ms(cmd->token, NULL, 0), (void)1);
 		exit = ft_atol(argv[1], cmd) % 256;
 	}
 	free_ms(cmd->token, NULL, exit);
