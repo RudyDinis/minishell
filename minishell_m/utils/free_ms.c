@@ -57,7 +57,7 @@ void free_cmd(t_cmd *cmd, int n)
 	{
 		if (head->args)
 			free_everything((void **)head->args);
-		if (head->path && head->cmd_found)
+		if (head->path && (head->cmd_found || head->is_absolute))
 			free(head->path);
 		free_redir(head->redir);
 		free(head);

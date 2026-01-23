@@ -43,7 +43,7 @@ char *find_path(char *cmd, t_cmd *cmds)
 	char *full_path;
 
 	if (is_absolute(cmd))
-		return (cmds->is_absolute = 1, cmd);
+		return (cmds->is_absolute = 1, ft_strdup(cmd));
 	path = getenv("PATH");
 	if (!path)
 		return (cmds->cmd_found = 0, cmd);

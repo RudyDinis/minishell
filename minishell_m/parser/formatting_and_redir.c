@@ -94,6 +94,24 @@ void attributes_redir(t_token *token, t_cmd *cmd)
 	}
 }
 
+int check_var(t_cmd *cmd)
+{
+	int i;
+
+	while (cmd)
+	{
+		i = 0;
+		while (cmd->args[i])
+		{
+			if (ft_strchr(cmd->args[i], '$'))
+				return 1;
+			i++;
+		}
+		cmd = cmd->next;
+	}
+	return 0;
+}
+
 int check_formatting(t_token *token, char **envp, t_minishell *minishell)
 {
 	t_token *head;

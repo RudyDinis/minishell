@@ -54,11 +54,11 @@ char **expand_args(t_cmd *cmd)
 	free_everything((void **)cmd->args);
 	return (expanded_args);
 }
+
 void expander(t_cmd *cmd)
 {
 	while (cmd)
 	{
-		//free_everything((void **)cmd->args);
 		cmd->args = expand_args(cmd);
 		cmd->cmd = cmd->args[0];
 		cmd = cmd->next;

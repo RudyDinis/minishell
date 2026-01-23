@@ -6,7 +6,7 @@
 /*   By: bbouarab <bbouarab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/19 13:49:27 by rdinis            #+#    #+#             */
-/*   Updated: 2026/01/21 15:40:08 by bbouarab         ###   ########.fr       */
+/*   Updated: 2026/01/23 15:27:41 by bbouarab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,13 @@ void	expand_vars2(t_minishell *data, t_expand_vars_vars *vars, char *param)
 	}
 }
 
+int check_null_in_quotes(char *s)
+{
+	if (((s[0] == '\"' && s[1] && s[1] == '\"') || (s[0] == '\'' && s[1] && s[1] == '\'')) && !s[2])
+		return (1);
+	return 0;
+}
+
 char	**expand_vars_jsp(char *s, t_minishell *data, char *param)
 {
 	t_expand_vars_vars	vars;
@@ -93,6 +100,11 @@ char	**expand_vars_jsp(char *s, t_minishell *data, char *param)
 
 	if (!s)
 		return (NULL);
+	if (check_null_in_quotes(s))
+	{
+		ret = ft_split(s, " ");
+		return (ret);
+	}
 	vars.i = 0;
 	vars.res = ft_strdup("");
 	vars.s = s;

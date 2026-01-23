@@ -14,6 +14,7 @@ int is_valid_buf(char *buf)
 	}
 	return 0;
 }
+
 void	while_read(char **envp, t_minishell *minishell)
 {
 	char	*line;
@@ -22,35 +23,32 @@ void	while_read(char **envp, t_minishell *minishell)
 	int		exit_value;
 
 	token = NULL;
-	if (isatty(0))
+	while (1)
 	{
-		while (1)
+		init_signals(minishell);
+		write_line();
+		line = readline("\001\033[0;32m\002> \001\033[0m\002");
+		if (!line)
 		{
-			init_signals(minishell);
-			write_line();
-			line = readline("\001\033[0;32m\002> \001\033[0m\002");
-			if (!line)
-			{
-					write(1, "exit\n", 5);
-					exit_value = ft_atoi(minishell->var->value);
-					return (free_minishell(minishell), exit(exit_value));
-			}
-			if (*line && is_valid_buf(line))
-			{
-				token = create_list(line);
-				if (!token || check_formatting(token, envp, minishell))
-				{
-					free(line);
-					continue ;
-				}
-				if (token && token->cmd && token->cmd->minishell->exit_status == 1)
-					return (free(line), free_ms(NULL, token->cmd, 1));
-				if (token && token->cmd)
-					free_ms(NULL, token->cmd, -5);
-				add_history(line);
-			}
-			free(line);
+				write(1, "exit\n", 5);
+				exit_value = ft_atoi(minishell->var->value);
+				return (free_minishell(minishell), exit(exit_value));
 		}
+		if (*line && is_valid_buf(line))
+		{
+			token = create_list(line);
+			if (!token || check_formatting(token, envp, minishell))
+			{
+				free(line);
+				continue ;
+			}
+			if (token && token->cmd && token->cmd->minishell->exit_status == 1)
+				return (free(line), free_ms(NULL, token->cmd, 1));
+			if (token && token->cmd)
+				free_ms(NULL, token->cmd, -5);
+			add_history(line);
+		}
+		free(line);
 	}
 }
 
@@ -73,9 +71,11 @@ int	main(int ac, char **av, char **envp)
 {
 	char		*cwd;
 
+	if (!(isatty(STDIN_FILENO) && isatty(STDOUT_FILENO)))
+		return 0;
 	minishell = init_ms(envp);
 	if (!minishell)
-		exit(1);
+	exit(1);
 	(void)ac;
 	(void)av;
 	print_title();

@@ -6,7 +6,7 @@
 /*   By: bbouarab <bbouarab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/14 17:27:10 by rdinis            #+#    #+#             */
-/*   Updated: 2026/01/18 21:09:45 by bbouarab         ###   ########.fr       */
+/*   Updated: 2026/01/23 16:46:05 by bbouarab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,10 @@ long	ft_atol(char *str, t_cmd *cmd)
 	while (str[i] && is_space(str[i]))
 		i++;
 	if (str[i] == '-')
+	{
+		i++;
 		is_negative = -1;
-	i++;
+	}
 	while (str[i])
 	{
 		result = result * 10 + (str[i] - '0');
@@ -80,12 +82,15 @@ void	exit_shell(t_cmd *cmd, char **argv)
 	else
 	{
 		if (!check_valid_num(argv[1]))
-			return (ft_printf_error("exit: %s: numeric argument required\n", argv[1]), (void)1);
+			return (ft_printf_error("exit: %s: numeric argument required\n", argv[1]), free_ms(cmd->token, NULL, 2));
 		if (argv[2])
 			return (ft_printf_error("exit: too many arguments\n"), (void)1);
 		if (ft_atol(argv[1], cmd) == 2147483648)
-			return ;
-		exit = ft_atol(argv[1], cmd) % 256;
+			return (free_ms(cmd->token, NULL, 2));
+		if (ft_atol(argv[1], cmd) > 255 || ft_atol(argv[1], cmd) < 0)
+			exit = ft_atol(argv[1], cmd) % 256;
+		else
+			exit = ft_atol(argv[1], cmd);
 	}
 	free_ms(cmd->token, NULL, exit);
 }
