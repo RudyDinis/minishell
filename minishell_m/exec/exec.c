@@ -1,19 +1,32 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exec.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bbouarab <bbouarab@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2013/11/18 13:37:42 by kube              #+#    #+#             */
+/*   Updated: 2026/01/24 20:01:16 by bbouarab         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../minishell.h"
 
-int get_new_args_size(t_cmd *cmd)
+int	get_new_args_size(t_cmd *cmd)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (cmd->args[i])
 		i++;
 	return (i);
 }
-void recreate_args_without_empty_quotes(t_cmd *cmd)
+
+void	recreate_args_without_empty_quotes(t_cmd *cmd)
 {
-	char **new_args;
-	int i;
-	int j;
+	int		i;
+	int		j;
+	char	**new_args;
 
 	i = 0;
 	j = 0;
@@ -33,19 +46,22 @@ void recreate_args_without_empty_quotes(t_cmd *cmd)
 	cmd->cmd = new_args[0];
 	cmd->args = new_args;
 }
-void check_access_and_rights(t_cmd *cmd)
+
+void	check_access_and_rights(t_cmd *cmd)
 {
-	char *merge;
+	char	*merge;
 
 	if (ft_strcmp("\"\"", cmd->cmd) == 0)
-		return (write(2,": command not found\n", 20), free_ms(cmd->token, NULL, 127));
+		return (write(2, ": command not found\n", 20),
+			free_ms(cmd->token, NULL, 127));
 	if (!cmd->path)
 		free_ms(cmd->token, NULL, 127);
 	if (cmd->is_absolute == 0)
 	{
 		if (access(cmd->path, F_OK) < 0)
 			return (merge = ft_strjoin(cmd->path, ": command not found\n"),
-				ft_printf_error("%s", merge), free(merge), free_ms(cmd->token, NULL, 127));
+				ft_printf_error("%s", merge), free(merge),
+				free_ms(cmd->token, NULL, 127));
 		if (access(cmd->path, X_OK) < 0)
 			return (perror(cmd->path), free_ms(NULL, cmd, 126));
 	}
@@ -58,50 +74,51 @@ void check_access_and_rights(t_cmd *cmd)
 	}
 }
 
-void wait_and_get_return_value(t_cmd *cmd)
+void	wait_and_get_return_value(t_cmd *cmd)
 {
-	int value;
-	char *value_str;
+	char	*value_str;
 
 	while (cmd)
 	{
-		waitpid(cmd->pid, &value, 0);
+		waitpid(cmd->pid, &cmd->minishell->last_cmd_return_value, 0);
 		if (!cmd->next)
-			break;
+			break ;
 		cmd = cmd->next;
 	}
-	if (WIFSIGNALED(value) && WCOREDUMP(value))
+	if (WIFSIGNALED(cmd->minishell->last_cmd_return_value)
+		&& WCOREDUMP(cmd->minishell->last_cmd_return_value))
 	{
-			ft_printf_error("Quit                       (core dumped) %s\n", cmd->minishell->line);
-			value_str = ft_itoa(131);
+		ft_printf_error("Quit                       (core dumped) %s\n",
+			cmd->minishell->line);
+		value_str = ft_itoa(131);
 	}
 	else
-		value_str = ft_itoa(WEXITSTATUS(value));
+		value_str = ft_itoa(WEXITSTATUS(cmd->minishell->last_cmd_return_value));
 	add_var(&cmd->minishell->var, "?", value_str);
 	free(value_str);
 }
 
-int check_built_int_parent(t_cmd *cmd)
+int	check_built_int_parent(t_cmd *cmd)
 {
 	if (!cmd->next)
 	{
 		if (ft_strcmp(cmd->cmd, "cd") == 0)
 			return (recreate_args_without_empty_quotes(cmd),
-				cd(cmd->args, cmd->minishell), cmd->minishell->last_cmd_return_value = 0, 1);
+				cd(cmd->args, cmd->minishell), 1);
 		if (ft_strcmp(cmd->cmd, "exit") == 0)
 			return (recreate_args_without_empty_quotes(cmd),
 				exit_shell(cmd, cmd->args), 1);
 		if (ft_strcmp(cmd->cmd, "export") == 0)
 			return (recreate_args_without_empty_quotes(cmd),
-				export(cmd->args, cmd->minishell->env), cmd->minishell->last_cmd_return_value = 0, 1);
+				export(cmd->args, cmd->minishell->env), 1);
 		if (ft_strcmp(cmd->cmd, "unset") == 0)
 			return (recreate_args_without_empty_quotes(cmd),
-				unset(cmd->minishell, cmd->args[1]), cmd->minishell->last_cmd_return_value = 0, 1);
+				unset(cmd->minishell, cmd->args[1]), 1);
 	}
-	return 0;
+	return (0);
 }
 
-void check_built_int_child(t_cmd *cmd)
+void	check_built_int_child(t_cmd *cmd)
 {
 	if (ft_strcmp(cmd->cmd, "echo") == 0)
 		return (recreate_args_without_empty_quotes(cmd),
@@ -126,10 +143,11 @@ void check_built_int_child(t_cmd *cmd)
 			unset(cmd->minishell, cmd->args[1]), free_ms(NULL, cmd, 0));
 }
 
-void executor(t_cmd *cmd, int **fds, int total_args)
+void	executor(t_cmd *cmd, int **fds, int total_args)
 {
-	t_cmd *head;
-	int parent;
+	int		parent;
+	t_cmd	*head;
+	char	*value;
 
 	parent = 0;
 	head = cmd;
@@ -138,7 +156,11 @@ void executor(t_cmd *cmd, int **fds, int total_args)
 		if (check_built_int_parent(cmd))
 		{
 			parent = 1;
-			break;
+			value = ft_itoa(cmd->minishell->last_cmd_return_value);
+			add_var(&cmd->minishell->var, "?", value);
+			if (value)
+				free(value);
+			break ;
 		}
 		cmd->pid = fork();
 		if (cmd->pid == 0)
@@ -150,7 +172,6 @@ void executor(t_cmd *cmd, int **fds, int total_args)
 			apply_path(cmd);
 			check_access_and_rights(cmd);
 			recreate_args_without_empty_quotes(cmd);
-			//ft_printf_error("PATH %s\n", cmd->path);
 			if (execve(cmd->path, cmd->args, cmd->minishell->envp) < 0)
 				return (perror(cmd->path), free_ms(cmd->token, NULL, 1));
 		}
@@ -162,10 +183,10 @@ void executor(t_cmd *cmd, int **fds, int total_args)
 		wait_and_get_return_value(head);
 }
 
-void open_here_doc(t_cmd *cmd)
+void	open_here_doc(t_cmd *cmd)
 {
-	int i;
-	int j;
+	int	i;
+	int	j;
 
 	j = 0;
 	while (cmd)
@@ -191,7 +212,7 @@ void open_here_doc(t_cmd *cmd)
 	}
 }
 
-void attribute_fds(t_cmd *cmd, int **fds)
+void	attribute_fds(t_cmd *cmd, int **fds)
 {
 	while (cmd)
 	{
@@ -200,10 +221,10 @@ void attribute_fds(t_cmd *cmd, int **fds)
 	}
 }
 
-void launcher(t_cmd *cmd)
+void	launcher(t_cmd *cmd)
 {
-	int **fds;
-	int total_args;
+	int	**fds;
+	int	total_args;
 
 	open_here_doc(cmd);
 	if (g_stop)

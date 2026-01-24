@@ -1,8 +1,20 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   free_ms.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bbouarab <bbouarab@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2013/11/18 13:37:42 by kube              #+#    #+#             */
+/*   Updated: 2026/01/24 19:09:48 by bbouarab         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../minishell.h"
 
-void free_redir(t_redir *redir)
+void	free_redir(t_redir *redir)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	if (redir)
@@ -29,7 +41,7 @@ void free_redir(t_redir *redir)
 	}
 }
 
-void free_token(t_token *token, int n)
+void	free_token(t_token *token, int n)
 {
 	if (n == 1 && token->cmd)
 		free_cmd(token->cmd, 1);
@@ -45,9 +57,9 @@ void free_token(t_token *token, int n)
 	free(token);
 }
 
-void free_cmd(t_cmd *cmd, int n)
+void	free_cmd(t_cmd *cmd, int n)
 {
-	t_cmd *head;
+	t_cmd	*head;
 
 	head = cmd;
 	if (n == 0 && cmd->token)
@@ -67,35 +79,36 @@ void free_cmd(t_cmd *cmd, int n)
 	}
 }
 
-void free_minishell(t_minishell *data)
+void	free_minishell(t_minishell *data)
 {
-    t_env    *tmp;
-    t_var    *tmp_var;
+	t_env	*tmp;
+	t_var	*tmp_var;
 
-    while (data->env)
-    {
-        tmp = data->env->next;
-        free(data->env->key);
-        free(data->env->value);
-        free(data->env);
-        data->env = tmp;
-    }
-    while (data->var)
-    {
-        tmp_var = data->var->next;
-        free(data->var->key);
-        free(data->var->value);
-        free(data->var);
-        data->var = tmp_var;
-    }
-    if (data->pwd)
-        free(data->pwd);
-    free(data);
+	while (data->env)
+	{
+		tmp = data->env->next;
+		free(data->env->key);
+		free(data->env->value);
+		free(data->env);
+		data->env = tmp;
+	}
+	while (data->var)
+	{
+		tmp_var = data->var->next;
+		free(data->var->key);
+		free(data->var->value);
+		free(data->var);
+		data->var = tmp_var;
+	}
+	if (data->pwd)
+		free(data->pwd);
+	if (data->line)
+		free(data->line);
+	free(data);
 }
 
-void free_ms(t_token *token, t_cmd *cmd, int n)
+void	free_ms(t_token *token, t_cmd *cmd, int n)
 {
-
 	if (cmd && cmd->fds)
 	{
 		if (n != -5)
@@ -120,7 +133,6 @@ void free_ms(t_token *token, t_cmd *cmd, int n)
 			free_minishell(token->cmd->minishell);
 		free_token(token, 1);
 	}
-	//system("ls -l /proc/self/fd");
 	if (n != -5)
 		exit(n);
 }

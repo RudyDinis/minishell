@@ -1,25 +1,39 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bbouarab <bbouarab@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2013/11/18 13:37:42 by kube              #+#    #+#             */
+/*   Updated: 2026/01/24 19:40:41 by bbouarab         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
-int g_stop;
+int	g_stop;
 
-int is_valid_buf(char *buf)
+void	check_stop_and_exit(t_minishell *minishell, char *line)
 {
-	int i;
+	int	exit_value;
 
-	i = 0;
-	while (buf[i])
+	if (g_stop == 1)
 	{
-		if (!is_blank(buf[i++]))
-			return 1;
+		g_stop = 0;
+		add_var(&minishell->var, "?", "130");
 	}
-	return 0;
+	if (!line)
+	{
+		write(1, "exit\n", 5);
+		exit_value = ft_atoi(minishell->var->value);
+		return (free_minishell(minishell), exit(exit_value));
+	}
 }
 
 void	while_read(t_minishell *minishell)
 {
-	char	*line;
-	int		exit_value;
-	t_token *token;
+	t_token	*token;
 
 	token = NULL;
 	while (1)
@@ -27,46 +41,28 @@ void	while_read(t_minishell *minishell)
 		init_signals();
 		write_line();
 		g_stop = 0;
-		line = readline("\001\033[0;32m\002> \001\033[0m\002");
-		minishell->line = line;
-		if (g_stop == 1)
+		minishell->line = readline("\001\033[0;32m\002> \001\033[0m\002");
+		check_stop_and_exit(minishell, minishell->line);
+		if (*minishell->line && is_valid_buf(minishell->line))
 		{
-			g_stop = 0;
-			add_var(&minishell->var, "?", "130");
-		}
-		if (g_stop == 2)
-		{
-			g_stop = 0;
-			add_var(&minishell->var, "?", "131");
-		}
-		if (!line)
-		{
-				write(1, "exit\n", 5);
-				exit_value = ft_atoi(minishell->var->value);
-				return (free_minishell(minishell), exit(exit_value));
-		}
-		if (*line && is_valid_buf(line))
-		{
-			token = create_list(line);
+			token = create_list(minishell->line);
 			if (!token || check_formatting(token, minishell))
 			{
-				free(line);
+				free(minishell->line);
 				continue ;
 			}
-			if (token && token->cmd && token->cmd->minishell->exit_status == 1)
-				return (free(line), free_ms(NULL, token->cmd, 1));
 			if (token && token->cmd)
 				free_ms(NULL, token->cmd, -5);
-			}
-		add_history(line);
-		free(line);
+		}
+		add_history(minishell->line);
+		free(minishell->line);
 	}
 }
 
 t_env	*copy_env(char **envp)
 {
-	t_env	*env;
 	int		i;
+	t_env	*env;
 
 	i = 0;
 	env = NULL;
@@ -100,11 +96,11 @@ void	shell_lvl(char **envp)
 	lvl = ft_atoi(&envp[i][j]) + 1;
 	if (lvl >= 1000)
 	{
-		ft_printf_error("warning: shell level (%l) too high, resetting to 1\n", lvl);
+		ft_printf("warning: shell level (%l) too high, resetting to 1\n", lvl);
 		lvl = 1;
 	}
-	level = ft_itoa(lvl);
-	return (ft_strcat(new_shlvl, level), ft_strcpy(envp[i], new_shlvl), free(level));
+	return (level = ft_itoa(lvl), ft_strcat(new_shlvl, level),
+		ft_strcpy(envp[i], new_shlvl), free(level));
 }
 
 int	main(int ac, char **av, char **envp)
@@ -125,6 +121,4 @@ int	main(int ac, char **av, char **envp)
 	return (0);
 }
 
-	//TODO HERE DOC LEAKS
-	//TODO REDIR DANS REDIR
-	// TODO TRANSFORMER TOUS LES INTS EN LONG POUR EVITER LES OVERFLOW
+// TODO BIEN FAIRE EN SORTE QUE LES BUILT IN INTEGRE LA BONNE RETURN VALUE

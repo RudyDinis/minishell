@@ -6,7 +6,7 @@
 /*   By: bbouarab <bbouarab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2013/11/18 13:37:42 by kube              #+#    #+#             */
-/*   Updated: 2026/01/24 18:13:39 by bbouarab         ###   ########.fr       */
+/*   Updated: 2026/01/24 19:19:36 by bbouarab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ t_minishell	*init_ms(char **envp);
 /*MAIN*/
 void		print_title(void);
 void		write_line(void);
+int			is_valid_buf(char *buf);
 
 /*EXEC*/
 int			**malloc_fds(int total_args, t_cmd *cmd);
@@ -62,7 +63,7 @@ void		free_token(t_token *token, int n);
 void		free_minishell(t_minishell *data);
 
 /*LEXER UTILS*/
-int			is_blank(char c);
+int			v(char c);
 int			check_quotes_error(int token, t_repere repere);
 int			assign_type(char *c, t_token *token, t_repere *repere);
 char		*extract_word(char *buf);

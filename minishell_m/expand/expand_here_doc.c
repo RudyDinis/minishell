@@ -6,7 +6,7 @@
 /*   By: bbouarab <bbouarab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/19 11:31:01 by rdinis            #+#    #+#             */
-/*   Updated: 2026/01/24 18:15:43 by bbouarab         ###   ########.fr       */
+/*   Updated: 2026/01/24 20:01:35 by bbouarab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,14 +38,11 @@ char	*handle_squote_doc(char *s, int *i, char *res, char *param)
 	return (res);
 }
 
-char	*handle_dquote_doc(t_expand_vars_vars *vars,
-	t_minishell *data, char *param)
+char	*handle_dquote_doc(t_expand_vars_vars *vars, t_minishell *data, char *p)
 {
 	vars->i++;
-
-	if (!ft_strcmp(param, "HERE_DOC"))
+	if (!ft_strcmp(p, "HERE_DOC"))
 		vars->res = char_join(vars->res, '"');
-
 	while (vars->s[vars->i] && vars->s[vars->i] != '"')
 	{
 		if (vars->s[vars->i] == '$'
@@ -56,16 +53,12 @@ char	*handle_dquote_doc(t_expand_vars_vars *vars,
 	}
 	if (vars->s[vars->i] == '"')
 		vars->i++;
-
-	if (!ft_strcmp(param, "HERE_DOC"))
+	if (!ft_strcmp(p, "HERE_DOC"))
 		vars->res = char_join(vars->res, '"');
-
 	return (vars->res);
 }
 
-
-char	*handle_squote_doc_doc(t_expand_vars_vars *vars,
-	t_minishell *data)
+char	*handle_squote_doc_doc(t_expand_vars_vars *vars, t_minishell *data)
 {
 	vars->i++;
 	vars->res = char_join(vars->res, '\'');
@@ -84,19 +77,18 @@ char	*handle_squote_doc_doc(t_expand_vars_vars *vars,
 	return (vars->res);
 }
 
-void	expand_vars2_doc(t_minishell *data,
-	t_expand_vars_vars *vars, char *param)
+void	expand_vars2_doc(t_minishell *data, t_expand_vars_vars *vars, char *p)
 {
-	if (vars->s[vars->i] == '\'' && !ft_strcmp(param, "HERE_DOC"))
+	if (vars->s[vars->i] == '\'' && !ft_strcmp(p, "HERE_DOC"))
 		handle_squote_doc_doc(vars, data);
 	else if (vars->s[vars->i] == '\'')
-		vars->res = handle_squote_doc(vars->s, &vars->i, vars->res, param);
+		vars->res = handle_squote_doc(vars->s, &vars->i, vars->res, p);
 	else if (vars->s[vars->i] == '"')
-		vars->res = handle_dquote_doc(vars, data, param);
+		vars->res = handle_dquote_doc(vars, data, p);
 	else if (vars->s[vars->i] == '$'
 		&& (isalnum(vars->s[vars->i + 1]) || vars->s[vars->i + 1] == '?'))
 	{
-		if (!ft_strcmp(param, "FILE"))
+		if (!ft_strcmp(p, "FILE"))
 			vars->res = expand_one_var_doc(vars, data, 1);
 		else
 			vars->res = expand_one_var_doc(vars, data, 0);
@@ -104,7 +96,6 @@ void	expand_vars2_doc(t_minishell *data,
 	else
 		vars->res = char_join(vars->res, vars->s[vars->i++]);
 }
-
 
 char	**expand_vars_doc(char *s, t_minishell *data, char *param)
 {
@@ -117,7 +108,6 @@ char	**expand_vars_doc(char *s, t_minishell *data, char *param)
 	vars.s = s;
 	while (s[vars.i])
 		expand_vars2_doc(data, &vars, param);
-
 	final = ft_strdup(vars.res);
 	free(vars.res);
 	if (!ft_strcmp(param, "FILE")

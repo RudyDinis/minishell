@@ -1,9 +1,21 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exec_utils.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bbouarab <bbouarab@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2013/11/18 13:37:42 by kube              #+#    #+#             */
+/*   Updated: 2026/01/24 20:00:58 by bbouarab         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../minishell.h"
 
-void malloc_redir(t_cmd *cmd)
+void	malloc_redir(t_cmd *cmd)
 {
-	int i;
-	int j;
+	int	i;
+	int	j;
 
 	i = 0;
 	j = 0;
@@ -16,10 +28,10 @@ void malloc_redir(t_cmd *cmd)
 		cmd->redir->fd[j++] = -125;
 }
 
-int **malloc_fds(int total_args, t_cmd *cmd)
+int	**malloc_fds(int total_args, t_cmd *cmd)
 {
-	int **fds;
-	int i;
+	int	**fds;
+	int	i;
 
 	i = 0;
 	if (total_args - 1)
@@ -31,10 +43,8 @@ int **malloc_fds(int total_args, t_cmd *cmd)
 	{
 		fds[i] = malloc(2 * sizeof(int));
 		if (!fds[i])
-		{
-			free_everything_int(fds, i);
-			free_ms(NULL, cmd, 1);
-		}
+			return (free_everything_int(fds, i), free_ms(NULL, cmd, 1),
+				(int **)1);
 		fds[i][0] = -1;
 		fds[i][1] = -1;
 		i++;
@@ -47,9 +57,9 @@ int **malloc_fds(int total_args, t_cmd *cmd)
 	return (fds);
 }
 
-void open_pipes(int **fds, int total_args)
+void	open_pipes(int **fds, int total_args)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	if (total_args - 1 > 0)
@@ -61,21 +71,14 @@ void open_pipes(int **fds, int total_args)
 	}
 }
 
-void close_all_pipes(int **fds, int total_args)
+void	close_all_pipes(int **fds, int total_args)
 {
-	int i;
-	int j;
+	int	i;
+	int	j;
 
 	i = 0;
 	if (total_args - 1 > 0)
 		total_args = total_args - 1;
-	// if (!total_args)
-	// {
-	// 	if (fds[0][1] >= 0)
-	// 		close(fds[0][1]);
-	// 	if (fds[0][0] >= 0)
-	// 		close(fds[0][0]);
-	// }
 	while (i < total_args)
 	{
 		j = 0;
@@ -87,15 +90,14 @@ void close_all_pipes(int **fds, int total_args)
 				fds[i][j] = -1;
 			}
 			j++;
-
 		}
 		i++;
 	}
 }
 
-int get_total_cmds(t_cmd *cmd)
+int	get_total_cmds(t_cmd *cmd)
 {
 	while (cmd->next)
 		cmd = cmd->next;
-	return cmd->i;
+	return (cmd->i);
 }

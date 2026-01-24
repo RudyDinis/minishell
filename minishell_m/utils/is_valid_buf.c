@@ -1,25 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strcmp.c                                        :+:      :+:    :+:   */
+/*   is_valid_buf.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bbouarab <bbouarab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2013/11/18 13:37:42 by kube              #+#    #+#             */
-/*   Updated: 2026/01/24 19:55:37 by bbouarab         ###   ########.fr       */
+/*   Updated: 2026/01/24 19:20:03 by bbouarab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "../minishell.h"
 
-int	ft_strcmp(char *s1, char *s2)
+int	is_valid_buf(char *buf)
 {
 	int	i;
 
 	i = 0;
-	if (!s1 || !s2)
-		return (1);
-	while ((s1[i] || s2[i]) && s1[i] == s2[i])
-		i++;
-	return (s1[i] - s2[i]);
+	while (buf[i])
+	{
+		if (!v(buf[i++]))
+			return (1);
+	}
+	return (0);
 }

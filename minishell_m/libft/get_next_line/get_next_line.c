@@ -6,7 +6,7 @@
 /*   By: bbouarab <bbouarab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 14:58:23 by bbouarab          #+#    #+#             */
-/*   Updated: 2026/01/24 16:39:46 by bbouarab         ###   ########.fr       */
+/*   Updated: 2026/01/24 19:58:19 by bbouarab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,6 +106,5 @@ char	*get_next_line(int fd, int reset)
 		new_line = ft_strdup_newline(stash, &stash, 1);
 		return (new_line);
 	}
-	new_line = ft_strdup_newline(line, &stash, 1);
-	return (new_line);
+	return (new_line = ft_strdup_newline(line, &stash, 1), new_line);
 }

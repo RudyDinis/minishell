@@ -6,12 +6,11 @@
 /*   By: bbouarab <bbouarab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/20 13:33:38 by rdinis            #+#    #+#             */
-/*   Updated: 2026/01/21 15:47:28 by bbouarab         ###   ########.fr       */
+/*   Updated: 2026/01/24 19:25:21 by bbouarab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-
 
 void	expand_one_var2_doc(char *val, char *env,
 	t_expand_vars_vars *vars, int quoted)

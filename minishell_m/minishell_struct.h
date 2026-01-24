@@ -6,7 +6,7 @@
 /*   By: bbouarab <bbouarab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2013/11/18 13:37:42 by kube              #+#    #+#             */
-/*   Updated: 2026/01/24 18:04:40 by bbouarab         ###   ########.fr       */
+/*   Updated: 2026/01/24 18:32:55 by bbouarab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,6 @@ typedef struct s_var
 typedef struct s_minishell
 {
 	int				last_cmd_return_value;
-	int				exit_status;
 	int				in_here_doc;
 	char			*gnl;
 	char			*pwd;

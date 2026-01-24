@@ -6,13 +6,11 @@
 /*   By: bbouarab <bbouarab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/19 13:49:27 by rdinis            #+#    #+#             */
-/*   Updated: 2026/01/23 15:27:41 by bbouarab         ###   ########.fr       */
+/*   Updated: 2026/01/24 19:53:50 by bbouarab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-
-
 
 char	*handle_squote(t_expand_vars_vars	*vars, char *param)
 {
@@ -43,10 +41,8 @@ char	*handle_squote(t_expand_vars_vars	*vars, char *param)
 char	*handle_dquote(t_expand_vars_vars *vars, t_minishell *data, char *param)
 {
 	vars->i++;
-
 	if (!ft_strcmp(param, "HERE_DOC"))
 		vars->res = char_join(vars->res, '"');
-
 	while (vars->s[vars->i] && vars->s[vars->i] != '"')
 	{
 		if (vars->s[vars->i] == '$'
@@ -57,10 +53,8 @@ char	*handle_dquote(t_expand_vars_vars *vars, t_minishell *data, char *param)
 	}
 	if (vars->s[vars->i] == '"')
 		vars->i++;
-
 	if (!ft_strcmp(param, "HERE_DOC"))
 		vars->res = char_join(vars->res, '"');
-
 	return (vars->res);
 }
 
@@ -85,11 +79,12 @@ void	expand_vars2(t_minishell *data, t_expand_vars_vars *vars, char *param)
 	}
 }
 
-int check_null_in_quotes(char *s)
+int	check_null_in_quotes(char *s)
 {
-	if (((s[0] == '\"' && s[1] && s[1] == '\"') || (s[0] == '\'' && s[1] && s[1] == '\'')) && !s[2])
+	if (((s[0] == '\"' && s[1] && s[1] == '\"')
+			|| (s[0] == '\'' && s[1] && s[1] == '\'')) && !s[2])
 		return (1);
-	return 0;
+	return (0);
 }
 
 char	**expand_vars_jsp(char *s, t_minishell *data, char *param)

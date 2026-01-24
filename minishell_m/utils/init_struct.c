@@ -1,8 +1,20 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   init_struct.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bbouarab <bbouarab@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2013/11/18 13:37:42 by kube              #+#    #+#             */
+/*   Updated: 2026/01/24 18:55:56 by bbouarab         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../minishell.h"
 
-t_opcounter init_counter(void)
+t_opcounter	init_counter(void)
 {
-	t_opcounter opcounter;
+	t_opcounter	opcounter;
 
 	opcounter.pipe = 0;
 	opcounter.redir_in = 0;
@@ -10,9 +22,9 @@ t_opcounter init_counter(void)
 	return (opcounter);
 }
 
-t_repere init_repere(void)
+t_repere	init_repere(void)
 {
-	t_repere repere;
+	t_repere	repere;
 
 	repere.in_pipe = 0;
 	repere.in_redir_in = 0;
@@ -24,39 +36,38 @@ t_repere init_repere(void)
 	return (repere);
 }
 
-t_token *create_list(char *argv)
+t_token	*create_list(char *argv)
 {
-	int i;
-	int token_nb;
-	t_token *head;
-	t_token *tete;
+	int		i;
+	int		token_nb;
+	t_token	*head;
+	t_token	*tete;
 
 	token_nb = find_number_of_token(argv);
 	if (!token_nb)
 		return (NULL);
 	i = 0;
 	if (token_nb)
-		head = ft_calloc(1, sizeof(t_token));;
+		head = ft_calloc(1, sizeof(t_token));
 	if (!head)
 		return (exit(1), NULL);
 	tete = head;
 	head->index = i++;
 	while (i < token_nb)
 	{
-		head->next =  ft_calloc(1, sizeof(t_token));;
+		head->next = ft_calloc(1, sizeof(t_token));
 		if (!head->next)
 			return (free_ms(tete, NULL, 1), NULL);
 		head->next->previous = head;
 		head = head->next;
 		head->index = i++;
 	}
-	find_type(argv, tete);
-	return (tete);
+	return (find_type(argv, tete), tete);
 }
 
-t_minishell *init_ms(char **envp)
+t_minishell	*init_ms(char **envp)
 {
-	t_minishell *minishell;
+	t_minishell	*minishell;
 
 	minishell = ft_calloc(1, sizeof(t_minishell));
 	if (!minishell)
@@ -70,13 +81,13 @@ t_minishell *init_ms(char **envp)
 	return (minishell);
 }
 
-t_cmd *init_cmd(t_minishell *minishell, t_token *token)
+t_cmd	*init_cmd(t_minishell *minishell, t_token *token)
 {
-	t_cmd *cmds;
-	t_cmd *head;
-	int i;
+	int		i;
+	t_cmd	*cmds;
+	t_cmd	*head;
 
-	cmds =  ft_calloc(1, sizeof(t_cmd));;
+	cmds = ft_calloc(1, sizeof(t_cmd));
 	if (!cmds)
 		free_ms(token, NULL, 1);
 	token->cmd = cmds;
@@ -86,7 +97,7 @@ t_cmd *init_cmd(t_minishell *minishell, t_token *token)
 	{
 		cmds->token = token;
 		cmds->minishell = minishell;
-		cmds->redir =  ft_calloc(1, sizeof(t_redir));;
+		cmds->redir = ft_calloc(1, sizeof(t_redir));
 		if (!cmds->redir)
 			free_ms(token, NULL, 1);
 		cmds->i = i;
@@ -94,7 +105,7 @@ t_cmd *init_cmd(t_minishell *minishell, t_token *token)
 			cmds->next = NULL;
 		else
 		{
-			cmds->next =  ft_calloc(1, sizeof(t_cmd));;
+			cmds->next = ft_calloc(1, sizeof(t_cmd));
 			if (!cmds->next)
 				free_ms(token, NULL, 1);
 		}

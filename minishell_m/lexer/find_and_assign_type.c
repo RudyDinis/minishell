@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   find_and_assign_type.c                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bbouarab <bbouarab@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2013/11/18 13:37:42 by kube              #+#    #+#             */
+/*   Updated: 2026/01/24 19:19:51 by bbouarab         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../minishell.h"
 
-void increment_repere_2(t_repere *repere, char *str)
+void	increment_repere_2(t_repere *repere, char *str)
 {
 	if (!ft_findstr(str, "IN_REDIR_IN"))
 	{
@@ -25,7 +37,7 @@ void increment_repere_2(t_repere *repere, char *str)
 	}
 }
 
-void increment_repere(t_repere *repere, char *str)
+void	increment_repere(t_repere *repere, char *str)
 {
 	if (!ft_findstr(str, "IN_WORD"))
 	{
@@ -44,33 +56,37 @@ void increment_repere(t_repere *repere, char *str)
 	increment_repere_2(repere, str);
 }
 
-int assign_type_special_edition(char *c, t_token *token, t_repere *repere)
+int	assign_type_special_edition(char *c, t_token *token, t_repere *repere)
 {
-	if (c[0] == '|' && !repere->in_pipe && !repere->in_d_quote && !repere->in_s_quote)
-		return token->line = "|", increment_repere(repere, "IN_PIPE"),
-					token->type = PIPE, 1;
-	if (c[0] == '>' && !repere->in_redir_out && !repere->in_d_quote && !repere->in_s_quote)
+	if (c[0] == '|' && !repere->in_pipe && !repere->in_d_quote
+		&& !repere->in_s_quote)
+		return (token->line = "|", increment_repere(repere, "IN_PIPE"),
+			token->type = PIPE, 1);
+	if (c[0] == '>' && !repere->in_redir_out
+		&& !repere->in_d_quote && !repere->in_s_quote)
 	{
 		increment_repere(repere, "IN_REDIR_OUT");
 		if (c[1] == '>')
-			token->type = APPEND, token->line = ">>";
+			token->type = APPEND;
 		else
-			token->type = REDIR_OUT, token->line = ">";
-		return 1;
+			token->type = REDIR_OUT;
+		return (1);
 	}
-	if (c[0] == '<' && !repere->in_redir_in && !repere->in_d_quote && !repere->in_s_quote)
+	if (c[0] == '<' && !repere->in_redir_in
+		&& !repere->in_d_quote && !repere->in_s_quote)
 	{
 		increment_repere(repere, "IN_REDIR_IN");
 		if (c[1] == '<')
-			token->type = HERE_DOC, token->line = "<<";
+			token->type = HERE_DOC;
 		else
-			token->type = REDIR_IN, token->line = "<";
-		return 1;
+			token->type = REDIR_IN;
+		return (1);
 	}
-	return 0;
+	return (0);
 }
+//TODO SI JAMAIS YA UN CRASH FAUT PENSER A RAJOUTER TOKEN->LINE = TYPE;
 
-int assign_type(char *c, t_token *token, t_repere *repere)
+int	assign_type(char *c, t_token *token, t_repere *repere)
 {
 	if (c[0] == '\'' && !repere->in_d_quote)
 	{
@@ -88,18 +104,19 @@ int assign_type(char *c, t_token *token, t_repere *repere)
 		else
 			repere->in_d_quote = 1;
 	}
-	if (c[0] != '|' && c[0] != '>' && c[0] != '<' && !is_blank(c[0]) && !repere->in_word)
+	if (c[0] != '|' && c[0] != '>' && c[0] != '<'
+		&& !v(c[0]) && !repere->in_word)
 		return (increment_repere(repere, "IN_WORD"), token->type = STR,
 			token->line = extract_word(&c[0]), 1);
-	if (is_blank(c[0]) && !repere->in_d_quote && !repere->in_s_quote)
+	if (v(c[0]) && !repere->in_d_quote && !repere->in_s_quote)
 		increment_repere(repere, "RESET");
 	return (assign_type_special_edition(c, token, repere));
 }
 
-void find_type(char *buf, t_token *token)
+void	find_type(char *buf, t_token *token)
 {
-	int i;
-	t_repere repere;
+	int			i;
+	t_repere	repere;
 
 	repere = init_repere();
 	i = 0;

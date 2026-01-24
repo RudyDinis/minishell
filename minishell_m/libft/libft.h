@@ -21,17 +21,18 @@
 # include <string.h>
 # include "get_next_line/get_next_line.h"
 
-typedef struct	s_list {
-	void	*img;
-	void	*mlx;
-	void	*window;
-	char	*addr;
-	void 	*content;
-	int		bits_per_pixel;
-	int		line_length;
-	int		endian;
-	int		color;
-	struct s_list *next;
+typedef struct s_list
+{
+	void			*img;
+	void			*mlx;
+	void			*window;
+	char			*addr;
+	void			*content;
+	int				bits_per_pixel;
+	int				line_length;
+	int				endian;
+	int				color;
+	struct s_list	*next;
 }				t_list;
 
 t_list	*ft_lstnew(void *content);

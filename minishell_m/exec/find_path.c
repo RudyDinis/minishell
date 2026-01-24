@@ -1,18 +1,30 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   find_path.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bbouarab <bbouarab@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2013/11/18 13:37:42 by kube              #+#    #+#             */
+/*   Updated: 2026/01/24 19:28:58 by bbouarab         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../minishell.h"
 
-char *find_cmd_directory(char *cmd, char **directories)
+char	*find_cmd_directory(char *cmd, char **directories)
 {
-	int i;
-	char *full_cmd;
+	int		i;
+	char	*full_cmd;
 
 	i = 0;
 	full_cmd = ft_strtriplejoin(directories[i], "/", cmd);
 	if (!full_cmd)
-		return NULL;
+		return (NULL);
 	while (directories[i])
 	{
 		if (access(full_cmd, F_OK) == 0)
-			return free(full_cmd), directories[i];
+			return (free(full_cmd), directories[i]);
 		i++;
 		free(full_cmd);
 		if (directories[i])
@@ -21,9 +33,9 @@ char *find_cmd_directory(char *cmd, char **directories)
 	return (NULL);
 }
 
-int is_absolute(char *cmd)
+int	is_absolute(char *cmd)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (cmd[i])
@@ -32,15 +44,15 @@ int is_absolute(char *cmd)
 			return (1);
 		i++;
 	}
-	return 0;
+	return (0);
 }
 
-char *find_path(char *cmd, t_cmd *cmds)
+char	*find_path(char *cmd, t_cmd *cmds)
 {
-	char *path;
-	char **directories;
-	char *found_directory;
-	char *full_path;
+	char	*path;
+	char	*found_directory;
+	char	*full_path;
+	char	**directories;
 
 	if (is_absolute(cmd))
 		return (cmds->is_absolute = 1, ft_strdup(cmd));
@@ -61,7 +73,7 @@ char *find_path(char *cmd, t_cmd *cmds)
 		full_path);
 }
 
-void apply_path(t_cmd *cmd)
+void	apply_path(t_cmd *cmd)
 {
 	while (cmd)
 	{

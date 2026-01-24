@@ -1,8 +1,20 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   formatting_and_redir.c                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bbouarab <bbouarab@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2013/11/18 13:37:42 by kube              #+#    #+#             */
+/*   Updated: 2026/01/24 19:59:28 by bbouarab         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../minishell.h"
 
-int number_of_cmds(t_token *token)
+int	number_of_cmds(t_token *token)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (token)
@@ -14,10 +26,9 @@ int number_of_cmds(t_token *token)
 	return (i + 1);
 }
 
-
-void get_redir_number(t_token *token, t_cmd *cmd)
+void	get_redir_number(t_token *token, t_cmd *cmd)
 {
-	int redir_number;
+	int	redir_number;
 
 	redir_number = 0;
 	while (token)
@@ -34,10 +45,10 @@ void get_redir_number(t_token *token, t_cmd *cmd)
 	}
 }
 
-char *strdup_and_free(char *line, t_minishell *minishell, char *param)
+char	*strdup_and_free(char *line, t_minishell *minishell, char *param)
 {
-	char **expanded;
-	char *redir;
+	char	**expanded;
+	char	*redir;
 
 	expanded = expand_vars(line, minishell, param);
 	redir = ft_strdup(expanded[0]);
@@ -45,10 +56,9 @@ char *strdup_and_free(char *line, t_minishell *minishell, char *param)
 	return (redir);
 }
 
-
-void get_redir_type(t_token *token, t_cmd *cmd, int redir_number)
+void	get_redir_type(t_token *token, t_cmd *cmd, int redir_number)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	if (!redir_number)
@@ -67,7 +77,8 @@ void get_redir_type(t_token *token, t_cmd *cmd, int redir_number)
 			if (token->type == HERE_DOC)
 				cmd->redir->target[i++] = ignore_quotes(token->next->line);
 			else
-				cmd->redir->target[i++] = strdup_and_free(token->next->line, cmd->minishell, "FILE");
+				cmd->redir->target[i++] = strdup_and_free(
+						token->next->line, cmd->minishell, "FILE");
 		}
 		token = token->next;
 	}
@@ -92,9 +103,9 @@ void	attributes_redir(t_token *token, t_cmd *cmd)
 	}
 }
 
-int check_var(t_cmd *cmd)
+int	check_var(t_cmd *cmd)
 {
-	int i;
+	int	i;
 
 	while (cmd)
 	{
@@ -102,30 +113,36 @@ int check_var(t_cmd *cmd)
 		while (cmd->args[i])
 		{
 			if (ft_strchr(cmd->args[i], '$'))
-				return 1;
+				return (1);
 			i++;
 		}
 		cmd = cmd->next;
 	}
-	return 0;
+	return (0);
 }
 
-int check_formatting(t_token *token, t_minishell *minishell)
+int	check_formatting(t_token *token, t_minishell *minishell)
 {
-	t_token *head;
 	t_cmd	*cmds;
+	t_token	*head;
 
 	head = token;
 	while (token)
 	{
 		if ((token->index == 0 || !token->next) && token->type == PIPE)
-			return (ft_printf_error("syntax error near unexpected token `|'\n"), free_ms(head, NULL, -5), 1);
+			return (ft_printf_error("syntax error near unexpected token `|'\n"),
+				free_ms(head, NULL, -5), 1);
 		if ((token->type == REDIR_IN || token->type == REDIR_OUT
-			|| token->type == APPEND || token->type == HERE_DOC) && (!token->next || token->next->type != STR))
-			return (ft_printf_error("syntax error near unexpected token `newline'\n"), free_ms(head, NULL, -5), 1);
+				|| token->type == APPEND || token->type == HERE_DOC)
+			&& (!token->next || token->next->type != STR))
+			return (ft_printf_error(
+					"syntax error near unexpected token `newline'\n"),
+				free_ms(head, NULL, -5), 1);
 		if (token->type == PIPE && token->next && ((token->next->type == PIPE)
-			|| (token->next->type == REDIR_OUT  || token->next->type == APPEND)))
-			return (ft_printf_error("syntax error near unexpected token `|'\n"), free_ms(head, NULL, -5), 1);
+				|| (token->next->type == REDIR_OUT
+					|| token->next->type == APPEND)))
+			return (ft_printf_error("syntax error near unexpected token `|'\n"),
+				free_ms(head, NULL, -5), 1);
 		token = token->next;
 	}
 	cmds = init_cmd(minishell, head);

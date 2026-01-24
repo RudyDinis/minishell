@@ -1,10 +1,22 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   extract.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bbouarab <bbouarab@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2013/11/18 13:37:42 by kube              #+#    #+#             */
+/*   Updated: 2026/01/24 19:20:25 by bbouarab         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../minishell.h"
 
-int get_quotes_size(char *buf, char c)
+int	get_quotes_size(char *buf, char c)
 {
-	int i;
-	int quote;
-	size_t j;
+	int		i;
+	int		quote;
+	size_t	j;
 
 	quote = 0;
 	i = 1;
@@ -17,18 +29,19 @@ int get_quotes_size(char *buf, char c)
 			i++;
 		}
 		if (quote && buf[i] == ' ')
-			break;
+			break ;
 		j++;
 		i++;
 	}
-	return j;
+	return (j);
 }
-char *extract_word_dquotes(char *buf)
+
+char	*extract_word_dquotes(char *buf)
 {
-	int i;
-	int quote;
-	size_t j;
-	char *line;
+	int		i;
+	int		quote;
+	char	*line;
+	size_t	j;
 
 	i = 1;
 	j = 0;
@@ -44,18 +57,18 @@ char *extract_word_dquotes(char *buf)
 			i++;
 		}
 		if (quote && buf[i] == ' ')
-			break;
+			break ;
 		line[j++] = buf[i++];
 	}
 	return (line[j] = 0, line);
 }
 
-char *extract_word_squotes(char *buf)
+char	*extract_word_squotes(char *buf)
 {
-	int i;
-	int quote;
-	size_t j;
-	char *line;
+	int		i;
+	int		quote;
+	char	*line;
+	size_t	j;
 
 	i = 1;
 	j = 0;
@@ -71,13 +84,13 @@ char *extract_word_squotes(char *buf)
 			i++;
 		}
 		if (quote && buf[i] == ' ')
-			break;
+			break ;
 		line[j++] = buf[i++];
 	}
 	return (line[j] = 0, line);
 }
 
-void extract_word_check_quotes(char buf, t_repere *repere)
+void	extract_word_check_quotes(char buf, t_repere *repere)
 {
 	if (buf == '\'' && !repere->in_d_quote)
 	{
@@ -95,29 +108,29 @@ void extract_word_check_quotes(char buf, t_repere *repere)
 	}
 }
 
-int extract_size(char *buf)
+int	extract_size(char *buf)
 {
-	t_repere repere;
-	int i;
+	int			i;
+	t_repere	repere;
 
 	i = 0;
 	repere = init_repere();
 	while (buf[i])
 	{
 		extract_word_check_quotes(buf[i], &repere);
-		if ((!repere.in_s_quote && !repere.in_d_quote) && (is_blank(buf[i])
-			|| buf[i] == '|' || buf[i] == '<' || buf[i] == '>'))
+		if ((!repere.in_s_quote && !repere.in_d_quote) && (v(buf[i])
+				|| buf[i] == '|' || buf[i] == '<' || buf[i] == '>'))
 			break ;
 		i++;
 	}
 	return (i);
 }
 
-char *extract_word(char *buf)
+char	*extract_word(char *buf)
 {
-	int i;
-	int size;
-	char *line;
+	int		i;
+	int		size;
+	char	*line;
 
 	size = extract_size(buf);
 	i = 0;
