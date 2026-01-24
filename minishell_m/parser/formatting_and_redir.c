@@ -135,6 +135,7 @@ int check_formatting(t_token *token, char **envp, t_minishell *minishell)
 	attributes_redir(head, cmds);
 	append_args(cmds, head);
 	expander(cmds);
+	minishell->cmd = cmds;
 	launcher(cmds, head);
 	return 0;
 }

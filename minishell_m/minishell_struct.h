@@ -45,6 +45,7 @@ typedef struct	s_minishell
 	int		g_stop;
 	t_env	*env;
 	t_var	*var;
+	struct s_cmd	*cmd;
 }	t_minishell;
 
 typedef struct	s_token
