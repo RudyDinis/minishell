@@ -101,6 +101,7 @@ typedef struct s_cmd
 	int				return_value;
 	int				**fds;
 	long			i;
+	bool			expanded;
 	bool			cmd_found;
 	bool			is_absolute;
 	pid_t			pid;
