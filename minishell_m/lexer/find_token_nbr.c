@@ -6,7 +6,7 @@
 /*   By: bbouarab <bbouarab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2013/11/18 13:37:42 by kube              #+#    #+#             */
-/*   Updated: 2026/01/25 00:02:01 by bbouarab         ###   ########.fr       */
+/*   Updated: 2026/01/25 00:03:58 by bbouarab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,5 @@ int	find_number_of_token(char *s)
 			return (0);
 		i++;
 	}
-	printf("VALEUR DE TOKEN = %d\n", token);
 	return (check_quotes_error(token, r));
 }

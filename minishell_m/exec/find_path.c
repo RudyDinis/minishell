@@ -6,7 +6,7 @@
 /*   By: bbouarab <bbouarab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2013/11/18 13:37:42 by kube              #+#    #+#             */
-/*   Updated: 2026/01/24 23:29:12 by bbouarab         ###   ########.fr       */
+/*   Updated: 2026/01/25 00:08:33 by bbouarab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,6 @@ char	*find_path(char *cmd, t_cmd *cmds)
 	if (is_absolute(cmd))
 		return (cmds->is_absolute = 1, ft_strdup(cmd));
 	path = get_path_from_env(cmds->minishell->env);
-	//path = getenv("PATH")
 	if (!path)
 		return (cmds->cmd_found = 0, cmd);
 	directories = ft_split(path, ":");
