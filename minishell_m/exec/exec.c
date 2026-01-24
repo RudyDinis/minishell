@@ -33,7 +33,7 @@ void recreate_args_without_empty_quotes(t_cmd *cmd)
 	cmd->cmd = new_args[0];
 	cmd->args = new_args;
 }
-void check_access_and_rights(t_cmd *cmd, int **fds)
+void check_access_and_rights(t_cmd *cmd)
 {
 	char *merge;
 
@@ -148,7 +148,7 @@ void executor(t_cmd *cmd, int **fds, int total_args)
 			open_redir(cmd, fds);
 			check_built_int_child(cmd);
 			apply_path(cmd);
-			check_access_and_rights(cmd, fds);
+			check_access_and_rights(cmd);
 			recreate_args_without_empty_quotes(cmd);
 			//ft_printf_error("PATH %s\n", cmd->path);
 			if (execve(cmd->path, cmd->args, cmd->minishell->envp) < 0)
@@ -200,27 +200,11 @@ void attribute_fds(t_cmd *cmd, int **fds)
 	}
 }
 
-void print_args(t_cmd *cmd)
+void launcher(t_cmd *cmd)
 {
-	int i;
-	while (cmd)
-	{
-		i = 1;
-		while (cmd->args[i])
-			printf("ARGS 1 = %s\n", cmd->args[i++]);
-		cmd = cmd->next;
-	}
-}
-
-
-
-void launcher(t_cmd *cmd, t_token *token)
-{
-	int id;
 	int **fds;
 	int total_args;
 
-	//print_args(cmd);
 	open_here_doc(cmd);
 	if (g_stop)
 	{

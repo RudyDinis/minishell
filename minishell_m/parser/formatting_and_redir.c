@@ -74,13 +74,11 @@ void get_redir_type(t_token *token, t_cmd *cmd, int redir_number)
 	cmd->redir->target[i] = NULL;
 }
 
-void attributes_redir(t_token *token, t_cmd *cmd)
+void	attributes_redir(t_token *token, t_cmd *cmd)
 {
-	t_token *start_of_cmd;
-	int i;
+	t_token	*start_of_cmd;
 
 	start_of_cmd = token;
-	i = 0;
 	while (token && cmd)
 	{
 		if (token->type == PIPE || !token->next)
@@ -112,7 +110,7 @@ int check_var(t_cmd *cmd)
 	return 0;
 }
 
-int check_formatting(t_token *token, char **envp, t_minishell *minishell)
+int check_formatting(t_token *token, t_minishell *minishell)
 {
 	t_token *head;
 	t_cmd	*cmds;
@@ -130,12 +128,12 @@ int check_formatting(t_token *token, char **envp, t_minishell *minishell)
 			return (ft_printf_error("syntax error near unexpected token `|'\n"), free_ms(head, NULL, -5), 1);
 		token = token->next;
 	}
-	cmds = init_cmd(minishell, head, envp);
+	cmds = init_cmd(minishell, head);
 	get_redir_number(head, cmds);
 	attributes_redir(head, cmds);
 	append_args(cmds, head);
 	expander(cmds);
 	minishell->cmd = cmds;
-	launcher(cmds, head);
-	return 0;
+	launcher(cmds);
+	return (0);
 }

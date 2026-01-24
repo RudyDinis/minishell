@@ -35,7 +35,7 @@ void	init_signals_child(void)
 	signal(SIGQUIT, SIG_DFL);
 }
 
-void	init_signals(t_minishell *data)
+void	init_signals(void)
 {
 	struct sigaction	sa;
 

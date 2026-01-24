@@ -15,26 +15,20 @@ int is_valid_buf(char *buf)
 	return 0;
 }
 
-int test(void)
-{
-	printf("test");
-	return 0;
-}
-
-void	while_read(char **envp, t_minishell *minishell)
+void	while_read(t_minishell *minishell)
 {
 	char	*line;
-	char	*prompt;
-	t_token *token;
 	int		exit_value;
+	t_token *token;
+
 	token = NULL;
 	while (1)
 	{
-		init_signals(minishell);
+		init_signals();
 		write_line();
 		g_stop = 0;
 		line = readline("\001\033[0;32m\002> \001\033[0m\002");
-		minishell->prompt = line;
+		minishell->line = line;
 		if (g_stop == 1)
 		{
 			g_stop = 0;
@@ -54,7 +48,7 @@ void	while_read(char **envp, t_minishell *minishell)
 		if (*line && is_valid_buf(line))
 		{
 			token = create_list(line);
-			if (!token || check_formatting(token, envp, minishell))
+			if (!token || check_formatting(token, minishell))
 			{
 				free(line);
 				continue ;
@@ -84,13 +78,13 @@ t_env	*copy_env(char **envp)
 	return (env);
 }
 
-void shell_lvl(char **envp)
+void	shell_lvl(char **envp)
 {
-	int i;
-	int j;
-	long lvl;
-	char *level;
-	char new_shlvl[256];
+	int		i;
+	int		j;
+	long	lvl;
+	char	*level;
+	char	new_shlvl[256];
 
 	i = 0;
 	j = 0;
@@ -106,7 +100,7 @@ void shell_lvl(char **envp)
 	lvl = ft_atoi(&envp[i][j]) + 1;
 	if (lvl >= 1000)
 	{
-		ft_printf_error("minishell: warning: shell level (%l) too high, resetting to 1\n", lvl);
+		ft_printf_error("warning: shell level (%l) too high, resetting to 1\n", lvl);
 		lvl = 1;
 	}
 	level = ft_itoa(lvl);
@@ -115,18 +109,18 @@ void shell_lvl(char **envp)
 
 int	main(int ac, char **av, char **envp)
 {
-	t_minishell *minishell;
+	t_minishell	*minishell;
 
+	(void)ac;
+	(void)av;
 	if (!(isatty(STDIN_FILENO) && isatty(STDOUT_FILENO)))
-		return 0;
+		return (0);
 	print_title();
 	shell_lvl(envp);
 	minishell = init_ms(envp);
 	if (!minishell)
 		exit(1);
-	(void)ac;
-	(void)av;
-	while_read(envp, minishell);
+	while_read(minishell);
 	rl_clear_history();
 	return (0);
 }
@@ -134,4 +128,3 @@ int	main(int ac, char **av, char **envp)
 	//TODO HERE DOC LEAKS
 	//TODO REDIR DANS REDIR
 	// TODO TRANSFORMER TOUS LES INTS EN LONG POUR EVITER LES OVERFLOW
-

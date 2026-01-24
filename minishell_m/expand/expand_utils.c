@@ -6,7 +6,7 @@
 /*   By: bbouarab <bbouarab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/19 13:32:36 by rdinis            #+#    #+#             */
-/*   Updated: 2026/01/21 13:42:42 by bbouarab         ###   ########.fr       */
+/*   Updated: 2026/01/24 18:15:12 by bbouarab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@ t_var	*new_var_node(char *key, char *value)
 	node->next = NULL;
 	return (node);
 }
-
 
 void	add_var(t_var **var, char *key, char *value)
 {
@@ -61,6 +60,7 @@ char	*get_env_value(char *name, t_minishell *data)
 			return (tmp_env->value);
 		tmp_env = tmp_env->next;
 	}
+	return (NULL);
 }
 
 char	*get_var_value(char *name, t_minishell *data)
@@ -74,4 +74,5 @@ char	*get_var_value(char *name, t_minishell *data)
 			return (tmp_var->value);
 		tmp_var = tmp_var->next;
 	}
+	return (NULL);
 }

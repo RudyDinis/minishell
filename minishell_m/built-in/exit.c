@@ -6,7 +6,7 @@
 /*   By: bbouarab <bbouarab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/14 17:27:10 by rdinis            #+#    #+#             */
-/*   Updated: 2026/01/23 16:46:05 by bbouarab         ###   ########.fr       */
+/*   Updated: 2026/01/24 18:17:12 by bbouarab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ static int	is_space(char c)
 	return (0);
 }
 
-long	ft_atol(char *str, t_cmd *cmd)
+long	ft_atol(char *str)
 {
 	int		i;
 	long	result;
@@ -41,7 +41,8 @@ long	ft_atol(char *str, t_cmd *cmd)
 	{
 		result = result * 10 + (str[i] - '0');
 		if (result > 2147483647)
-			return (ft_printf_error("exit: %s: numeric argument required\n", str), 2147483648);
+			return (ft_printf_error("exit: %s: numeric argument required\n",
+					str), 2147483648);
 		i++;
 	}
 	return (result * is_negative);
@@ -85,12 +86,12 @@ void	exit_shell(t_cmd *cmd, char **argv)
 			return (ft_printf_error("exit: %s: numeric argument required\n", argv[1]), free_ms(cmd->token, NULL, 2));
 		if (argv[2])
 			return (ft_printf_error("exit: too many arguments\n"), (void)1);
-		if (ft_atol(argv[1], cmd) == 2147483648)
+		if (ft_atol(argv[1]) == 2147483648)
 			return (free_ms(cmd->token, NULL, 2));
-		if (ft_atol(argv[1], cmd) > 255 || ft_atol(argv[1], cmd) < 0)
-			exit = ft_atol(argv[1], cmd) % 256;
+		if (ft_atol(argv[1]) > 255 || ft_atol(argv[1]) < 0)
+			exit = ft_atol(argv[1]) % 256;
 		else
-			exit = ft_atol(argv[1], cmd);
+			exit = ft_atol(argv[1]);
 	}
 	free_ms(cmd->token, NULL, exit);
 }

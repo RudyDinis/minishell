@@ -80,7 +80,6 @@ void get_here_doc_expand(t_token *token, t_cmd *cmd)
 
 void here_doc_expand(t_cmd *cmd, char *lim, int i)
 {
-	int fd;
 	char *file;
 	char *nbr;
 	char *expanded_line;
@@ -119,7 +118,6 @@ void here_doc_expand(t_cmd *cmd, char *lim, int i)
 void here_doc(t_cmd *cmd, char *lim, int i)
 {
 	char *gnl;
-	int fd;
 	char *file;
 	char *nbr;
 

@@ -1,6 +1,6 @@
 NAME = minishell
-CC = gcc
-CFLAGS = -g
+CC = cc
+CFLAGS = -Wall -Wextra -Werror
 AR = ar rcs
 RM = rm -rf
 OBJ_DIR = obj

@@ -6,7 +6,7 @@
 /*   By: bbouarab <bbouarab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/12 13:28:59 by rdinis            #+#    #+#             */
-/*   Updated: 2026/01/21 13:44:41 by bbouarab         ###   ########.fr       */
+/*   Updated: 2026/01/24 18:16:22 by bbouarab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,6 @@ void	add_env(t_env **env, char *line)
 	t_env	*node;
 	t_env	*tmp;
 
-
 	eq = ft_strchr(line, '=');
 	if (!eq)
 		return ;
@@ -105,4 +104,5 @@ int	export(char **argv, t_env *env)
 		}
 		i++;
 	}
+	return (0);
 }

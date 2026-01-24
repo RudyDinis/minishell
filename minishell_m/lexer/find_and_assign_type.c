@@ -99,7 +99,6 @@ int assign_type(char *c, t_token *token, t_repere *repere)
 void find_type(char *buf, t_token *token)
 {
 	int i;
-	int j;
 	t_repere repere;
 
 	repere = init_repere();

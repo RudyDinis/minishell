@@ -9,7 +9,7 @@ void malloc_args(t_cmd *cmd, int i)
 	// cmd->cmd = cmd->args[0];
 }
 
-int get_number_args(t_cmd *cmd, t_token *token)
+void get_number_args(t_cmd *cmd, t_token *token)
 {
 	int i;
 

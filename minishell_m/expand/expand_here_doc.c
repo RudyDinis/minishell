@@ -6,7 +6,7 @@
 /*   By: bbouarab <bbouarab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/19 11:31:01 by rdinis            #+#    #+#             */
-/*   Updated: 2026/01/23 11:42:14 by bbouarab         ###   ########.fr       */
+/*   Updated: 2026/01/24 18:15:43 by bbouarab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ char	*handle_dquote_doc(t_expand_vars_vars *vars,
 
 
 char	*handle_squote_doc_doc(t_expand_vars_vars *vars,
-	t_minishell *data, char *param)
+	t_minishell *data)
 {
 	vars->i++;
 	vars->res = char_join(vars->res, '\'');
@@ -88,7 +88,7 @@ void	expand_vars2_doc(t_minishell *data,
 	t_expand_vars_vars *vars, char *param)
 {
 	if (vars->s[vars->i] == '\'' && !ft_strcmp(param, "HERE_DOC"))
-		handle_squote_doc_doc(vars, data, param);
+		handle_squote_doc_doc(vars, data);
 	else if (vars->s[vars->i] == '\'')
 		vars->res = handle_squote_doc(vars->s, &vars->i, vars->res, param);
 	else if (vars->s[vars->i] == '"')

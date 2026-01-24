@@ -70,7 +70,7 @@ t_minishell *init_ms(char **envp)
 	return (minishell);
 }
 
-t_cmd *init_cmd(t_minishell *minishell, t_token *token, char **envp)
+t_cmd *init_cmd(t_minishell *minishell, t_token *token)
 {
 	t_cmd *cmds;
 	t_cmd *head;
