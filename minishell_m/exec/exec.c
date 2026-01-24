@@ -70,7 +70,16 @@ void wait_and_get_return_value(t_cmd *cmd)
 			break;
 		cmd = cmd->next;
 	}
-	value_str = ft_itoa(WEXITSTATUS(value));
+	if (WIFSIGNALED(value))
+	{
+		if (WCOREDUMP(value))
+		{
+			ft_printf_error("Quit                       (core dumped) %s\n", cmd->cmd);
+			value_str = ft_itoa(131);
+		}
+	}
+	else
+		value_str = ft_itoa(WEXITSTATUS(value));
 	add_var(&cmd->minishell->var, "?", value_str);
 	free(value_str);
 }
