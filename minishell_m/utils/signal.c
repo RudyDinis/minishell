@@ -6,7 +6,7 @@
 /*   By: rdinis <rdinis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/12 13:28:06 by rdinis            #+#    #+#             */
-/*   Updated: 2026/01/24 13:41:32 by rdinis           ###   ########.fr       */
+/*   Updated: 2026/01/24 17:26:36 by rdinis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,16 +44,10 @@ void	sigint_handler(int sig)
 void	sigquit_handler(int sig)
 {
 	(void)sig;
-	if (minishell && minishell->cmd)
-	{
-		if (minishell->cmd->pid == 0)
-			write(1, "Quit (core dumped)\n", 19);
-	}
 	rl_on_new_line();
 	rl_replace_line("", 0);
 	rl_redisplay();
 }
-
 
 void	init_signals_parent_exec(void)
 {
