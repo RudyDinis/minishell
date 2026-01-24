@@ -6,7 +6,7 @@
 /*   By: bbouarab <bbouarab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2013/11/18 13:37:42 by kube              #+#    #+#             */
-/*   Updated: 2026/01/24 22:38:15 by bbouarab         ###   ########.fr       */
+/*   Updated: 2026/01/25 00:02:01 by bbouarab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,9 +33,10 @@ int	find_number_of_token(char *s)
 			if_redir_out(&s[i], &r, &token);
 		if (s[i] == '<' && !r.in_redir_in && !r.in_s_quote && !r.in_d_quote)
 			if_redir_in(&s[i], &r, &token);
-		if (!if_and_operator(&s[i], &r) && r.error)
+		if (!if_and_operator(&s[i], &r) || r.error)
 			return (0);
 		i++;
 	}
+	printf("VALEUR DE TOKEN = %d\n", token);
 	return (check_quotes_error(token, r));
 }

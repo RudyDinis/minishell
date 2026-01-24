@@ -6,7 +6,7 @@
 /*   By: bbouarab <bbouarab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2013/11/18 13:37:42 by kube              #+#    #+#             */
-/*   Updated: 2026/01/24 23:36:05 by bbouarab         ###   ########.fr       */
+/*   Updated: 2026/01/24 23:52:07 by bbouarab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,10 @@ int	assign_type_special_edition(char *c, t_token *token, t_repere *repere)
 		if (c[1] && c[1] == '>')
 			token->type = APPEND;
 		else
+		{
+			printf("%p\n", token);
 			token->type = REDIR_OUT;
+		}
 		return (1);
 	}
 	if (c[0] == '<' && !repere->in_redir_in
@@ -122,7 +125,7 @@ void	find_type(char *buf, t_token *token)
 	i = 0;
 	while (buf[i])
 	{
-		if (assign_type(&buf[i], token, &repere))
+		if (assign_type(&buf[i], token, &repere) == 1)
 			token = token->next;
 		i++;
 	}
