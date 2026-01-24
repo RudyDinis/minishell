@@ -6,7 +6,7 @@
 /*   By: bbouarab <bbouarab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2013/11/18 13:37:42 by kube              #+#    #+#             */
-/*   Updated: 2026/01/24 19:46:20 by bbouarab         ###   ########.fr       */
+/*   Updated: 2026/01/24 22:32:51 by bbouarab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,5 @@ void	cd(char **argv, t_minishell *data)
 		data->last_cmd_return_value = 0;
 	}
 	else
-	{
-		data->last_cmd_return_value = 1;
-		perror(argv[1]);
-	}
+		return (data->last_cmd_return_value = 1, perror(argv[1]));
 }

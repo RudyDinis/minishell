@@ -6,7 +6,7 @@
 /*   By: bbouarab <bbouarab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/20 13:33:38 by rdinis            #+#    #+#             */
-/*   Updated: 2026/01/24 19:25:21 by bbouarab         ###   ########.fr       */
+/*   Updated: 2026/01/24 22:31:35 by bbouarab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ void	expand_one_var2_doc(char *val, char *env,
 				vars->res = ft_strjoin_free(vars->res, " ");
 			j++;
 		}
-		free_tab(split);
+		free_everything((void **)split);
 	}
 	else
 		vars->res = ft_strjoin_free(vars->res, v);

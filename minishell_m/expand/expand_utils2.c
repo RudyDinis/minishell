@@ -6,7 +6,7 @@
 /*   By: bbouarab <bbouarab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/19 13:32:04 by rdinis            #+#    #+#             */
-/*   Updated: 2026/01/21 15:48:34 by bbouarab         ###   ########.fr       */
+/*   Updated: 2026/01/24 22:31:47 by bbouarab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,16 +19,6 @@ char	*char_join(char *s, char c)
 	tmp[0] = c;
 	tmp[1] = 0;
 	return (ft_strjoin_free(s, tmp));
-}
-
-void	free_tab(char **tab)
-{
-	int	i;
-
-	i = 0;
-	while (tab && tab[i])
-		free(tab[i++]);
-	free(tab);
 }
 
 void	expand_one_var3(int *j, char **split, t_expand_vars_vars *vars)
@@ -64,7 +54,7 @@ void	expand_one_var2(char *val, char *env,
 		{
 			expand_one_var3(&j, split, vars);
 		}
-		free_tab(split);
+		free_everything((void **)split);
 	}
 	else
 		vars->res = ft_strjoin_free(vars->res, v);

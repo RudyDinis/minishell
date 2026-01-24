@@ -6,7 +6,7 @@
 /*   By: bbouarab <bbouarab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2013/11/18 13:37:42 by kube              #+#    #+#             */
-/*   Updated: 2026/01/24 18:55:56 by bbouarab         ###   ########.fr       */
+/*   Updated: 2026/01/24 23:22:40 by bbouarab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,6 @@ t_minishell	*init_ms(char **envp)
 
 t_cmd	*init_cmd(t_minishell *minishell, t_token *token)
 {
-	int		i;
 	t_cmd	*cmds;
 	t_cmd	*head;
 
@@ -91,8 +90,7 @@ t_cmd	*init_cmd(t_minishell *minishell, t_token *token)
 	if (!cmds)
 		free_ms(token, NULL, 1);
 	token->cmd = cmds;
-	head = cmds;
-	i = 0;
+	int (i) = 0;
 	while (i < number_of_cmds(token))
 	{
 		cmds->token = token;
@@ -100,17 +98,14 @@ t_cmd	*init_cmd(t_minishell *minishell, t_token *token)
 		cmds->redir = ft_calloc(1, sizeof(t_redir));
 		if (!cmds->redir)
 			free_ms(token, NULL, 1);
-		cmds->i = i;
-		if (i + 1 == number_of_cmds(token))
-			cmds->next = NULL;
-		else
+		if (i + 1 != number_of_cmds(token))
 		{
 			cmds->next = ft_calloc(1, sizeof(t_cmd));
 			if (!cmds->next)
 				free_ms(token, NULL, 1);
 		}
+		cmds->i = i++;
 		cmds = cmds->next;
-		i++;
 	}
-	return (head);
+	return (head = token->cmd, head);
 }

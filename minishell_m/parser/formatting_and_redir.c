@@ -6,25 +6,11 @@
 /*   By: bbouarab <bbouarab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2013/11/18 13:37:42 by kube              #+#    #+#             */
-/*   Updated: 2026/01/24 19:59:28 by bbouarab         ###   ########.fr       */
+/*   Updated: 2026/01/24 22:29:59 by bbouarab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-
-int	number_of_cmds(t_token *token)
-{
-	int	i;
-
-	i = 0;
-	while (token)
-	{
-		if (token->type == PIPE)
-			i++;
-		token = token->next;
-	}
-	return (i + 1);
-}
 
 void	get_redir_number(t_token *token, t_cmd *cmd)
 {
@@ -43,17 +29,6 @@ void	get_redir_number(t_token *token, t_cmd *cmd)
 		}
 		token = token->next;
 	}
-}
-
-char	*strdup_and_free(char *line, t_minishell *minishell, char *param)
-{
-	char	**expanded;
-	char	*redir;
-
-	expanded = expand_vars(line, minishell, param);
-	redir = ft_strdup(expanded[0]);
-	free_everything((void **)expanded);
-	return (redir);
 }
 
 void	get_redir_type(t_token *token, t_cmd *cmd, int redir_number)
@@ -103,22 +78,32 @@ void	attributes_redir(t_token *token, t_cmd *cmd)
 	}
 }
 
-int	check_var(t_cmd *cmd)
-{
-	int	i;
+// int	check_var(t_cmd *cmd)
+// {
+// 	int	i;
 
-	while (cmd)
-	{
-		i = 0;
-		while (cmd->args[i])
-		{
-			if (ft_strchr(cmd->args[i], '$'))
-				return (1);
-			i++;
-		}
-		cmd = cmd->next;
-	}
-	return (0);
+// 	while (cmd)
+// 	{
+// 		i = 0;
+// 		while (cmd->args[i])
+// 		{
+// 			if (ft_strchr(cmd->args[i], '$'))
+// 				return (1);
+// 			i++;
+// 		}
+// 		cmd = cmd->next;
+// 	}
+// 	return (0);
+// }
+
+void	exec_next(t_token *head, t_minishell *minishell, t_cmd *cmds)
+{
+	get_redir_number(head, cmds);
+	attributes_redir(head, cmds);
+	append_args(cmds, head);
+	expander(cmds);
+	minishell->cmd = cmds;
+	launcher(cmds);
 }
 
 int	check_formatting(t_token *token, t_minishell *minishell)
@@ -146,11 +131,6 @@ int	check_formatting(t_token *token, t_minishell *minishell)
 		token = token->next;
 	}
 	cmds = init_cmd(minishell, head);
-	get_redir_number(head, cmds);
-	attributes_redir(head, cmds);
-	append_args(cmds, head);
-	expander(cmds);
-	minishell->cmd = cmds;
-	launcher(cmds);
+	exec_next(head, minishell, cmds);
 	return (0);
 }

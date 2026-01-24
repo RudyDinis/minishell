@@ -6,7 +6,7 @@
 /*   By: bbouarab <bbouarab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2013/11/18 13:37:42 by kube              #+#    #+#             */
-/*   Updated: 2026/01/24 20:00:58 by bbouarab         ###   ########.fr       */
+/*   Updated: 2026/01/24 23:20:07 by bbouarab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,47 +57,46 @@ int	**malloc_fds(int total_args, t_cmd *cmd)
 	return (fds);
 }
 
-void	open_pipes(int **fds, int total_args)
-{
-	int	i;
-
-	i = 0;
-	if (total_args - 1 > 0)
-		total_args = total_args - 1;
-	while (i < (total_args))
-	{
-		pipe(fds[i]);
-		i++;
-	}
-}
-
-void	close_all_pipes(int **fds, int total_args)
-{
-	int	i;
-	int	j;
-
-	i = 0;
-	if (total_args - 1 > 0)
-		total_args = total_args - 1;
-	while (i < total_args)
-	{
-		j = 0;
-		while (j < 2)
-		{
-			if (fds[i][j] >= 0)
-			{
-				close(fds[i][j]);
-				fds[i][j] = -1;
-			}
-			j++;
-		}
-		i++;
-	}
-}
-
 int	get_total_cmds(t_cmd *cmd)
 {
 	while (cmd->next)
 		cmd = cmd->next;
 	return (cmd->i);
+}
+
+int	get_new_args_size(t_cmd *cmd)
+{
+	int	i;
+
+	i = 0;
+	while (cmd->args[i])
+		i++;
+	return (i);
+}
+
+void	check_access_and_rights(t_cmd *cmd)
+{
+	char	*merge;
+
+	if (ft_strcmp("\"\"", cmd->cmd) == 0)
+		return (write(2, ": command not found\n", 20),
+			free_ms(cmd->token, NULL, 127));
+	if (!cmd->path)
+		free_ms(cmd->token, NULL, 127);
+	if (cmd->is_absolute == 0)
+	{
+		if (access(cmd->path, F_OK) < 0)
+			return (merge = ft_strjoin(cmd->path, ": command not found\n"),
+				ft_printf_error("%s", merge), free(merge),
+				free_ms(cmd->token, NULL, 127));
+		if (access(cmd->path, X_OK) < 0)
+			return (perror(cmd->path), free_ms(cmd->token, NULL, 126));
+	}
+	if (cmd->is_absolute == 1)
+	{
+		if (access(cmd->path, F_OK) < 0)
+			return (perror(cmd->path), free_ms(cmd->token, NULL, 127));
+		if (access(cmd->path, X_OK) < 0)
+			return (perror(cmd->path), free_ms(cmd->token, NULL, 126));
+	}
 }

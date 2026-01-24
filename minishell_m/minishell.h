@@ -6,7 +6,7 @@
 /*   By: bbouarab <bbouarab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2013/11/18 13:37:42 by kube              #+#    #+#             */
-/*   Updated: 2026/01/24 19:19:36 by bbouarab         ###   ########.fr       */
+/*   Updated: 2026/01/24 23:29:26 by bbouarab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,14 +47,31 @@ int			is_valid_buf(char *buf);
 
 /*EXEC*/
 int			**malloc_fds(int total_args, t_cmd *cmd);
+int			get_new_args_size(t_cmd *cmd);
+int			check_built_in_parent(t_cmd *cmd);
+void		check_access_and_rights(t_cmd *cmd);
 void		tree_of_closing(int **fds, int current_process, int total_args);
-void		here_doc(t_cmd *cmd, char *lim, int i);
 void		malloc_redir(t_cmd *cmd);
+void		pipe_redirection_2(t_cmd *cmd, int **fds, int in, int out);
+void		pipe_redirection(t_cmd *cmd, int **fds, int in, int out);
 void		open_pipes(int **fds, int total_args);
 void		close_all_pipes(int **fds, int total_args);
 void		open_redir(t_cmd *cmd, int **fds);
 void		apply_path(t_cmd *cmd);
 void		launcher(t_cmd *cmd);
+void		check_built_in_child(t_cmd *cmd);
+void		recreate_args_without_empty_quotes(t_cmd *cmd);
+char		*get_path_from_env(t_env *env);
+
+/*HERE_DOC*/
+int			get_here_doc_nbr(t_token *token);
+int			should_expand_here_doc(char *file);
+void		here_doc(t_cmd *cmd, char *lim, int i);
+void		open_here_doc(t_cmd *cmd);
+void		get_here_doc_expand(t_token *token, t_cmd *cmd);
+void		here_doc_expand(t_cmd *cmd, char *lim, int i);
+void		here_doc_expand_2(t_cmd *cmd, char *lim, int i);
+char		*ignore_quotes(char *str);
 
 /*FREE UTILS*/
 void		free_ms(t_token *token, t_cmd *cmd, int n);
@@ -67,10 +84,16 @@ int			v(char c);
 int			check_quotes_error(int token, t_repere repere);
 int			assign_type(char *c, t_token *token, t_repere *repere);
 char		*extract_word(char *buf);
+void		find_type(char *buf, t_token *token);
+	/*IF UTILS*/
+int			if_and_operator(char *buf, t_repere *repere);
 void		if_space(t_repere *repere);
 void		if_s_quotes(t_repere *repere);
 void		if_d_quotes(t_repere *repere);
-void		find_type(char *buf, t_token *token);
+void		if_word(t_repere *repere, int *token);
+void		if_pipe(char *buf, t_repere *repere, int *token);
+void		if_redir_in(char *buf, t_repere *repere, int *token);
+void		if_redir_out(char *buf, t_repere *repere, int *token);
 
 /*PARSER UTILS*/
 int			check_formatting(t_token *token, t_minishell *minishell);
@@ -87,9 +110,6 @@ char		*ft_strcpy(char *dest, char *src);
 /*EXPANDER*/
 int			check_null_in_quotes(char *s);
 void		expander(t_cmd *cmd);
-void		get_here_doc_expand(t_token *token, t_cmd *cmd);
-void		here_doc_expand(t_cmd *cmd, char *lim, int i);
-void		free_tab(char **tab);
 void		debug_print(const char *s);
 char		*ignore_quotes(char *str);
 char		**expand_vars(char *s, t_minishell *data, char *param);

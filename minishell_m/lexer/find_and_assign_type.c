@@ -6,7 +6,7 @@
 /*   By: bbouarab <bbouarab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2013/11/18 13:37:42 by kube              #+#    #+#             */
-/*   Updated: 2026/01/24 19:19:51 by bbouarab         ###   ########.fr       */
+/*   Updated: 2026/01/24 23:36:05 by bbouarab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ int	assign_type_special_edition(char *c, t_token *token, t_repere *repere)
 		&& !repere->in_d_quote && !repere->in_s_quote)
 	{
 		increment_repere(repere, "IN_REDIR_OUT");
-		if (c[1] == '>')
+		if (c[1] && c[1] == '>')
 			token->type = APPEND;
 		else
 			token->type = REDIR_OUT;
@@ -76,7 +76,7 @@ int	assign_type_special_edition(char *c, t_token *token, t_repere *repere)
 		&& !repere->in_d_quote && !repere->in_s_quote)
 	{
 		increment_repere(repere, "IN_REDIR_IN");
-		if (c[1] == '<')
+		if (c[1] && c[1] == '<')
 			token->type = HERE_DOC;
 		else
 			token->type = REDIR_IN;

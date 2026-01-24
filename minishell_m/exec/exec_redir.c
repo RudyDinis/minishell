@@ -6,11 +6,22 @@
 /*   By: bbouarab <bbouarab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2013/11/18 13:37:42 by kube              #+#    #+#             */
-/*   Updated: 2026/01/24 20:00:49 by bbouarab         ###   ########.fr       */
+/*   Updated: 2026/01/24 23:28:57 by bbouarab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+
+char	*get_path_from_env(t_env *env)
+{
+	while (env)
+	{
+		if (!ft_findstr("PATH", env->key))
+			return (env->value);
+		env = env->next;
+	}
+	return (NULL);
+}
 
 void	redir_out(t_cmd *cmd, char *file, int i, int *out)
 {
@@ -60,40 +71,6 @@ void	redir_in(t_cmd *cmd, char *file, int i, int *in)
 			return (perror("dup2"), free_ms(cmd->token, NULL, 1));
 		close(cmd->redir->fd[i]);
 		cmd->redir->fd[i] = -1;
-	}
-}
-
-void	pipe_redirection(t_cmd *cmd, int **fds, int in, int out)
-{
-	if (cmd->i == 0 && out == 0)
-	{
-		if (cmd->next)
-		{
-			if (dup2(fds[0][1], 1) < 0)
-				return (perror("dup2"), free_ms(cmd->token, NULL, 1));
-		}
-	}
-	if (cmd->i == 0)
-	{
-		close(fds[0][1]);
-		fds[0][1] = -1;
-	}
-	if (cmd->i != 0)
-	{
-		if (in == 0)
-		{
-			if (dup2(fds[cmd->i - 1][0], 0) < 0)
-				return (perror("dup2"), free_ms(cmd->token, NULL, 1));
-		}
-		close(fds[cmd->i - 1][0]);
-		fds[cmd->i - 1][0] = -1;
-		if (out == 0 && cmd->i < (get_total_cmds(cmd)))
-		{
-			if (dup2(fds[cmd->i][1], 1) < 0)
-				return (perror("dup2"), free_ms(cmd->token, NULL, 1));
-			close(fds[cmd->i][1]);
-			fds[cmd->i][1] = -1;
-		}
 	}
 }
 

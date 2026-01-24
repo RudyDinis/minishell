@@ -6,89 +6,11 @@
 /*   By: bbouarab <bbouarab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2013/11/18 13:37:42 by kube              #+#    #+#             */
-/*   Updated: 2026/01/24 19:20:25 by bbouarab         ###   ########.fr       */
+/*   Updated: 2026/01/24 22:39:16 by bbouarab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-
-int	get_quotes_size(char *buf, char c)
-{
-	int		i;
-	int		quote;
-	size_t	j;
-
-	quote = 0;
-	i = 1;
-	j = 0;
-	while (buf[i])
-	{
-		if (buf[i] == c)
-		{
-			quote++;
-			i++;
-		}
-		if (quote && buf[i] == ' ')
-			break ;
-		j++;
-		i++;
-	}
-	return (j);
-}
-
-char	*extract_word_dquotes(char *buf)
-{
-	int		i;
-	int		quote;
-	char	*line;
-	size_t	j;
-
-	i = 1;
-	j = 0;
-	quote = 0;
-	line = malloc(get_quotes_size(buf, '\"') + 1);
-	if (!line)
-		return (NULL);
-	while (buf[i])
-	{
-		if (buf[i] == '\"')
-		{
-			quote++;
-			i++;
-		}
-		if (quote && buf[i] == ' ')
-			break ;
-		line[j++] = buf[i++];
-	}
-	return (line[j] = 0, line);
-}
-
-char	*extract_word_squotes(char *buf)
-{
-	int		i;
-	int		quote;
-	char	*line;
-	size_t	j;
-
-	i = 1;
-	j = 0;
-	quote = 0;
-	line = malloc(get_quotes_size(buf, '\'') + 1);
-	if (!line)
-		return (NULL);
-	while (buf[i])
-	{
-		if (buf[i] == '\'')
-		{
-			quote++;
-			i++;
-		}
-		if (quote && buf[i] == ' ')
-			break ;
-		line[j++] = buf[i++];
-	}
-	return (line[j] = 0, line);
-}
 
 void	extract_word_check_quotes(char buf, t_repere *repere)
 {

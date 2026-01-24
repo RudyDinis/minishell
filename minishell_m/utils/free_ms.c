@@ -6,7 +6,7 @@
 /*   By: bbouarab <bbouarab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2013/11/18 13:37:42 by kube              #+#    #+#             */
-/*   Updated: 2026/01/24 19:09:48 by bbouarab         ###   ########.fr       */
+/*   Updated: 2026/01/24 22:36:37 by bbouarab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,14 +111,12 @@ void	free_ms(t_token *token, t_cmd *cmd, int n)
 {
 	if (cmd && cmd->fds)
 	{
-		if (n != -5)
-			close_all_pipes(cmd->fds, get_total_cmds(cmd) + 1);
+		close_all_pipes(cmd->fds, get_total_cmds(cmd) + 1);
 		free_everything_int(cmd->fds, get_total_cmds(cmd) + 1);
 	}
 	if (token && token->cmd && token->cmd->fds)
 	{
-		if (n != -5)
-			close_all_pipes(token->cmd->fds, get_total_cmds(token->cmd) + 1);
+		close_all_pipes(token->cmd->fds, get_total_cmds(token->cmd) + 1);
 		free_everything_int(token->cmd->fds, get_total_cmds(token->cmd) + 1);
 	}
 	if (!token)

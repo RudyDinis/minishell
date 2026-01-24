@@ -6,10 +6,10 @@ RM = rm -rf
 OBJ_DIR = obj
 
 SRC = main.c \
-		utils/init_struct.c utils/free_ms.c utils/visual.c utils/signal.c utils/ft_strcat.c utils/ft_strcpy.c utils/is_valid_buf.c \
-		lexer/find_and_assign_type.c lexer/find_token_nbr.c lexer/find_token_nbr_utils.c lexer/extract.c \
+		utils/init_struct.c utils/free_ms.c utils/visual.c utils/signal.c utils/general_utils.c \
+		lexer/find_and_assign_type.c lexer/find_token_nbr.c lexer/find_token_nbr_utils.c lexer/token_if_utils.c lexer/extract.c \
 		parser/formatting_and_redir.c parser/add_commands.c \
-		exec/exec.c exec/closing_processes.c exec/exec_redir.c exec/exec_utils.c exec/find_path.c exec/here_doc.c \
+		exec/exec.c exec/exec_built_in.c exec/closing_processes.c exec/exec_redir.c exec/exec_utils.c exec/find_path.c exec/here_doc.c exec/here_doc2.c exec/pipes.c \
 		expand/expander.c expand/expand_utils.c expand/expand_utils2.c expand/expand_utils3.c expand/expand_utils4.c expand/expand_here_doc.c expand/ft_strjoin_free.c\
 		built-in/cd.c built-in/echo.c built-in/env.c built-in/export.c built-in/exit.c built-in/unset.c built-in/pwd.c
 
