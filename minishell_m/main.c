@@ -34,6 +34,7 @@ void	while_read(char **envp, t_minishell *minishell)
 		write_line();
 		g_stop = 0;
 		line = readline("\001\033[0;32m\002> \001\033[0m\002");
+		minishell->prompt = line;
 		if (g_stop == 1)
 		{
 			g_stop = 0;

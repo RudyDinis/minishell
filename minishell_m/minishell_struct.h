@@ -42,8 +42,8 @@ typedef struct	s_minishell
 	int		in_here_doc;
 	char	*gnl;
 	char	*pwd;
+	char	*line;
 	char	**envp;
-	int		g_stop;
 	t_env	*env;
 	t_var	*var;
 	struct s_cmd	*cmd;
