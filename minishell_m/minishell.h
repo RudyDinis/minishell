@@ -20,7 +20,7 @@
 
 #include "minishell_struct.h"
 
-extern t_minishell *minishell;
+extern int g_stop;
 
 /*STRUCTURE INITIALISATION*/
 t_cmd		*init_cmd(t_minishell *minishell, t_token *token, char **envp);

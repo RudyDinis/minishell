@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   signal.c                                           :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bbouarab <bbouarab@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/01/12 13:28:06 by rdinis            #+#    #+#             */
-/*   Updated: 2026/01/21 16:02:42 by bbouarab         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 
 /* ************************************************************************** */
 /*                                                                            */
@@ -27,14 +15,8 @@
 
 void	sigint_handler(int sig)
 {
-	char *value;
-
 	(void)sig;
-	if (minishell->in_here_doc)
-		minishell->g_stop = 1;
-	value = ft_strdup("130");
-	add_var(&minishell->var, "?", value);
-	free(value);
+	g_stop = 1;
 	write(1, "\n", 1);
 	rl_on_new_line();
 	rl_replace_line("", 0);

@@ -9,6 +9,7 @@
 #include <signal.h>
 #include <readline/history.h>
 # include <stdbool.h>
+#include <sys/ioctl.h>
 
 typedef enum	s_type
 {

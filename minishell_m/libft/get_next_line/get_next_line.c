@@ -6,7 +6,7 @@
 /*   By: bbouarab <bbouarab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 14:58:23 by bbouarab          #+#    #+#             */
-/*   Updated: 2026/01/19 16:24:29 by bbouarab         ###   ########.fr       */
+/*   Updated: 2026/01/24 16:39:46 by bbouarab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ char	*get_next_char(int fd)
 	ret = read(fd, (void *)buf, BUFFER_SIZE);
 	if (ret <= 0)
 	{
-		if (minishell->g_stop)
+		if (g_stop)
 		{
 			free(buf);
 			return (NULL);

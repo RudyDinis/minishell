@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-t_minishell *minishell;
+int g_stop;
 
 int is_valid_buf(char *buf)
 {
@@ -15,19 +15,35 @@ int is_valid_buf(char *buf)
 	return 0;
 }
 
+int test(void)
+{
+	printf("test");
+	return 0;
+}
+
 void	while_read(char **envp, t_minishell *minishell)
 {
 	char	*line;
 	char	*prompt;
 	t_token *token;
 	int		exit_value;
-
 	token = NULL;
 	while (1)
 	{
 		init_signals(minishell);
 		write_line();
+		g_stop = 0;
 		line = readline("\001\033[0;32m\002> \001\033[0m\002");
+		if (g_stop == 1)
+		{
+			g_stop = 0;
+			add_var(&minishell->var, "?", "130");
+		}
+		if (g_stop == 2)
+		{
+			g_stop = 0;
+			add_var(&minishell->var, "?", "131");
+		}
 		if (!line)
 		{
 				write(1, "exit\n", 5);
@@ -98,6 +114,8 @@ void shell_lvl(char **envp)
 
 int	main(int ac, char **av, char **envp)
 {
+	t_minishell *minishell;
+
 	if (!(isatty(STDIN_FILENO) && isatty(STDOUT_FILENO)))
 		return 0;
 	print_title();

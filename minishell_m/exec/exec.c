@@ -216,9 +216,9 @@ void launcher(t_cmd *cmd, t_token *token)
 
 	//print_args(cmd);
 	open_here_doc(cmd);
-	if (cmd->minishell->g_stop)
+	if (g_stop)
 	{
-		cmd->minishell->g_stop = 0;
+		g_stop = 0;
 		return ;
 	}
 	total_args = get_total_cmds(cmd) + 1;
