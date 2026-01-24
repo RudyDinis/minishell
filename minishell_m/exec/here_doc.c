@@ -90,14 +90,14 @@ void here_doc_expand(t_cmd *cmd, char *lim, int i)
 	file = ft_strjoin("/var/tmp/temp", nbr);
 	cmd->minishell->in_here_doc = 1;
 	cmd->redir->fd[i] = open(file, O_RDWR | O_TRUNC | O_CREAT, 0644);
-	while (cmd->minishell->in_here_doc && ft_findstr(lim, expanded_line))
+	while (cmd->minishell->in_here_doc && ft_findstr(lim, cmd->minishell->gnl))
 	{
 		if (cmd->minishell->gnl)
 			free(cmd->minishell->gnl);
 		if (expanded_line)
 			free(expanded_line);
 		cmd->minishell->gnl = get_next_line(0, 0);
-		if (cmd->minishell->gnl)
+		if (cmd->minishell->gnl && ft_findstr(lim, cmd->minishell->gnl))
 		{
 			expanded_line = strdup_and_free(cmd->minishell->gnl, minishell);
 			write(cmd->redir->fd[i], expanded_line, ft_strlen(expanded_line));
