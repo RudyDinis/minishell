@@ -78,7 +78,7 @@ typedef struct	s_opcounter
 
 typedef struct	s_redir
 {
-	int		redir_number;
+	long	redir_number;
 	int		*fd;
 	int		*here_doc_expand;
 	char	**target;

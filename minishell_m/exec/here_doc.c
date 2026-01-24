@@ -99,7 +99,7 @@ void here_doc_expand(t_cmd *cmd, char *lim, int i)
 		cmd->minishell->gnl = get_next_line(0, 0);
 		if (cmd->minishell->gnl && ft_findstr(lim, cmd->minishell->gnl))
 		{
-			expanded_line = strdup_and_free(cmd->minishell->gnl, minishell);
+			expanded_line = strdup_and_free(cmd->minishell->gnl, minishell, "HERE_DOC");
 			write(cmd->redir->fd[i], expanded_line, ft_strlen(expanded_line));
 		}
 		if (!cmd->minishell->gnl || !expanded_line)

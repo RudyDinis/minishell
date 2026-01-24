@@ -34,12 +34,12 @@ void get_redir_number(t_token *token, t_cmd *cmd)
 	}
 }
 
-char *strdup_and_free(char *line, t_minishell *minishell)
+char *strdup_and_free(char *line, t_minishell *minishell, char *param)
 {
 	char **expanded;
 	char *redir;
 
-	expanded = expand_vars(line, minishell, "FILE");
+	expanded = expand_vars(line, minishell, param);
 	redir = ft_strdup(expanded[0]);
 	free_everything((void **)expanded);
 	return (redir);
@@ -67,7 +67,7 @@ void get_redir_type(t_token *token, t_cmd *cmd, int redir_number)
 			if (token->type == HERE_DOC)
 				cmd->redir->target[i++] = ignore_quotes(token->next->line);
 			else
-				cmd->redir->target[i++] = strdup_and_free(token->next->line, cmd->minishell);
+				cmd->redir->target[i++] = strdup_and_free(token->next->line, cmd->minishell, "FILE");
 		}
 		token = token->next;
 	}

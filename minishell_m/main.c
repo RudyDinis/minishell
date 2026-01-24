@@ -67,26 +67,52 @@ t_env	*copy_env(char **envp)
 	return (env);
 }
 
+void shell_lvl(char **envp)
+{
+	int i;
+	int j;
+	long lvl;
+	char *level;
+	char new_shlvl[256];
+
+	i = 0;
+	j = 0;
+	ft_strcpy(new_shlvl, "SHLVL=");
+	while (envp[i] && !ft_strnstr(envp[i], "SHLVL", 5))
+		i++;
+	if (!envp[i])
+		return ;
+	while (envp[i][j] && !ft_isdigit(envp[i][j]))
+		j++;
+	if (!envp[i][j])
+		return ;
+	lvl = ft_atoi(&envp[i][j]) + 1;
+	if (lvl >= 1000)
+	{
+		ft_printf_error("minishell: warning: shell level (%l) too high, resetting to 1\n", lvl);
+		lvl = 1;
+	}
+	level = ft_itoa(lvl);
+	return (ft_strcat(new_shlvl, level), ft_strcpy(envp[i], new_shlvl), free(level));
+}
+
 int	main(int ac, char **av, char **envp)
 {
-	char		*cwd;
-
 	if (!(isatty(STDIN_FILENO) && isatty(STDOUT_FILENO)))
 		return 0;
+	print_title();
+	shell_lvl(envp);
 	minishell = init_ms(envp);
 	if (!minishell)
-	exit(1);
+		exit(1);
 	(void)ac;
 	(void)av;
-	print_title();
 	while_read(envp, minishell);
 	rl_clear_history();
 	return (0);
 }
 
 	//TODO HERE DOC LEAKS
-	//TODO MINISHELL DANS MINISHELL DEVRAIT AVOIR DES ENV
 	//TODO REDIR DANS REDIR
-	//TODO IMPLEMENTER SHLVL + 1;
 	// TODO TRANSFORMER TOUS LES INTS EN LONG POUR EVITER LES OVERFLOW
 

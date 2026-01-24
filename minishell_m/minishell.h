@@ -102,7 +102,7 @@ void	exit_shell(t_cmd *cmd, char **argv);
 int check_null_in_quotes(char *s);
 
 
-char *strdup_and_free(char *line, t_minishell *minishell);
+char *strdup_and_free(char *line, t_minishell *minishell, char *param);
 
 
 
