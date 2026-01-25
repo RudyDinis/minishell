@@ -1,40 +1,45 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cd.c                                               :+:      :+:    :+:   */
+/*   export2.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bbouarab <bbouarab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2013/11/18 13:37:42 by kube              #+#    #+#             */
-/*   Updated: 2026/01/25 16:11:01 by bbouarab         ###   ########.fr       */
+/*   Created: 2026/01/12 13:28:59 by rdinis            #+#    #+#             */
+/*   Updated: 2026/01/25 17:16:13 by bbouarab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void	cd(char **argv, t_minishell *data)
+int	is_valid_identifier(char *key)
 {
-	int	res;
+	int	i;
 
-	if (!argv[1])
+	if (!key || (!ft_isalpha(key[0]) && key[0] != '_'))
+		return (0);
+	i = 1;
+	while (key[i])
 	{
-		data->last_cmd_return_value = 1;
-		return ;
+		if (!ft_isalnum(key[i]) && key[i] != '_')
+			return (0);
+		i++;
 	}
-	if (argv[2])
+	return (1);
+}
+
+void	print_env(t_env *env)
+{
+	t_env	*tmp;
+
+	tmp = env;
+	while (tmp)
 	{
-		ft_printf_error("cd: too many arguments\n");
-		data->last_cmd_return_value = 2;
-		return ;
+		printf("export %s", tmp->key);
+		if (ft_strlen(tmp->value))
+			printf("=\"%s\"\n", tmp->value);
+		else
+			printf("\n");
+		tmp = tmp->next;
 	}
-	res = chdir(argv[1]);
-	if (res == 0)
-	{
-		if (data->pwd)
-			free(data->pwd);
-		data->pwd = getcwd(NULL, 0);
-		data->last_cmd_return_value = 0;
-	}
-	else
-		return (data->last_cmd_return_value = 1, perror(argv[1]));
 }

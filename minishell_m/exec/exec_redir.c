@@ -6,7 +6,7 @@
 /*   By: bbouarab <bbouarab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2013/11/18 13:37:42 by kube              #+#    #+#             */
-/*   Updated: 2026/01/24 23:28:57 by bbouarab         ###   ########.fr       */
+/*   Updated: 2026/01/25 16:38:51 by bbouarab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void	redir_out(t_cmd *cmd, char *file, int i, int *out)
 	(*out)++;
 	cmd->redir->fd[i] = open(file, O_WRONLY | O_TRUNC | O_CREAT, 0644);
 	if (access(file, W_OK) < 0 && access(file, F_OK) == 0)
-		return (perror(file), free_ms(cmd->token, NULL, 126));
+		return (perror(file), free_ms(cmd->token, NULL, 1));
 	else if (cmd->redir->fd[i] < 0)
 		return (perror(file), free_ms(cmd->token, NULL, 127));
 	else
@@ -46,9 +46,9 @@ void	append(t_cmd *cmd, char *file, int i, int *out)
 	(*out)++;
 	cmd->redir->fd[i] = open(file, O_WRONLY | O_APPEND | O_CREAT, 0644);
 	if (access(file, W_OK) < 0 && access(file, F_OK) == 0)
-		return (perror(file), free_ms(NULL, cmd, 126));
+		return (perror(file), free_ms(NULL, cmd, 1));
 	else if (cmd->redir->fd[i] < 0)
-		return (perror(file), free_ms(NULL, cmd, 127));
+		return (perror(file), free_ms(NULL, cmd, 1));
 	{
 		if (dup2(cmd->redir->fd[i], 1) < 0)
 			return (perror("dup2"), free_ms(NULL, cmd, 1));
@@ -62,7 +62,7 @@ void	redir_in(t_cmd *cmd, char *file, int i, int *in)
 	(*in)++;
 	cmd->redir->fd[i] = open(file, O_RDONLY);
 	if ((access(file, R_OK) < 0 && access(file, F_OK) == 0))
-		return (perror(file), free_ms(cmd->token, NULL, 126));
+		return (perror(file), free_ms(cmd->token, NULL, 1));
 	else if (cmd->redir->fd[i] < 0)
 		return (perror(file), free_ms(cmd->token, NULL, 1));
 	else

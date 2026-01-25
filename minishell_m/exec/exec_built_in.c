@@ -6,11 +6,23 @@
 /*   By: bbouarab <bbouarab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2013/11/18 13:37:42 by kube              #+#    #+#             */
-/*   Updated: 2026/01/24 22:14:44 by bbouarab         ###   ########.fr       */
+/*   Updated: 2026/01/25 17:13:29 by bbouarab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+
+int	is_a_directory(t_cmd *cmd)
+{
+	struct stat	st;
+
+	if (stat(cmd->path, &st) == 0 && S_ISDIR(st.st_mode))
+	{
+		errno = EISDIR;
+		return (1);
+	}
+	return (0);
+}
 
 void	recreate_args_without_empty_quotes(t_cmd *cmd)
 {
@@ -49,7 +61,7 @@ int	check_built_in_parent(t_cmd *cmd)
 				exit_shell(cmd, cmd->args), 1);
 		if (ft_strcmp(cmd->cmd, "export") == 0)
 			return (recreate_args_without_empty_quotes(cmd),
-				export(cmd->args, cmd->minishell->env), 1);
+				export(cmd->args, cmd->minishell->env, cmd->minishell), 1);
 		if (ft_strcmp(cmd->cmd, "unset") == 0)
 			return (recreate_args_without_empty_quotes(cmd),
 				unset(cmd->minishell, cmd->args[1]), 1);
@@ -73,7 +85,8 @@ void	check_built_in_child(t_cmd *cmd)
 			exit_shell(cmd, cmd->args));
 	if (ft_strcmp(cmd->cmd, "export") == 0)
 		return (recreate_args_without_empty_quotes(cmd),
-			export(cmd->args, cmd->minishell->env), free_ms(NULL, cmd, 0));
+			export(cmd->args, cmd->minishell->env, cmd->minishell),
+			free_ms(NULL, cmd, 0));
 	if (ft_strcmp(cmd->cmd, "pwd") == 0)
 		return (recreate_args_without_empty_quotes(cmd),
 			pwd(), free_ms(NULL, cmd, 0));

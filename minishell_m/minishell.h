@@ -6,7 +6,7 @@
 /*   By: bbouarab <bbouarab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2013/11/18 13:37:42 by kube              #+#    #+#             */
-/*   Updated: 2026/01/25 12:35:47 by bbouarab         ###   ########.fr       */
+/*   Updated: 2026/01/25 17:13:37 by bbouarab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ int			is_valid_buf(char *buf);
 int			**malloc_fds(int total_args, t_cmd *cmd);
 int			get_new_args_size(t_cmd *cmd);
 int			check_built_in_parent(t_cmd *cmd);
+int			is_a_directory(t_cmd *cmd);
 void		check_access_and_rights(t_cmd *cmd);
 void		tree_of_closing(int **fds, int current_process, int total_args);
 void		malloc_redir(t_cmd *cmd);
@@ -126,13 +127,14 @@ char		*ft_strjoin_free(char *s1, char *s2);
 char		*strdup_and_free(char *line, t_minishell *minishell, char *param);
 
 /*BUILT-IN*/
-int			export(char **argv, t_env *env);
+int			export(char **argv, t_env *env, t_minishell *minishell);
 void		echo(char **argv);
 void		pwd(void);
 void		cd(char **argv, t_minishell *data);
 void		unset(t_minishell *data, char *key);
 void		env(t_minishell *data);
 void		exit_shell(t_cmd *cmd, char **argv);
+int			is_valid_identifier(char *key);
 
 /*SIGNALS*/
 void		init_signals(void);

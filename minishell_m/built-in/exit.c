@@ -6,7 +6,7 @@
 /*   By: bbouarab <bbouarab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/14 17:27:10 by rdinis            #+#    #+#             */
-/*   Updated: 2026/01/24 19:45:47 by bbouarab         ###   ########.fr       */
+/*   Updated: 2026/01/25 16:30:46 by bbouarab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ long	ft_atol(char *str)
 	is_negative = 1;
 	if (!str[i])
 		return (-1);
-	while (str[i] && is_space(str[i]))
+	while (str[i] && (is_space(str[i]) || str[i] == '+'))
 		i++;
 	if (str[i] == '-')
 	{
@@ -84,11 +84,14 @@ void	exit_shell(t_cmd *cmd, char **argv)
 	{
 		if (!check_valid_num(argv[1]))
 			return (ft_printf_error("exit: %s: numeric argument required\n",
-					argv[1]), free_ms(cmd->token, NULL, 2));
+					argv[1]), cmd->minishell->last_cmd_return_value = 2,
+				free_ms(cmd->token, NULL, 2));
 		if (argv[2])
-			return (ft_printf_error("exit: too many arguments\n"), (void)1);
+			return (ft_printf_error("exit: too many arguments\n"),
+				cmd->minishell->last_cmd_return_value = 2, (void)1);
 		if (ft_atol(argv[1]) == 2147483648)
-			return (free_ms(cmd->token, NULL, 2));
+			return (cmd->minishell->last_cmd_return_value = 2,
+				free_ms(cmd->token, NULL, 2));
 		if (ft_atol(argv[1]) > 255 || ft_atol(argv[1]) < 0)
 			exit = ft_atol(argv[1]) % 256;
 		else

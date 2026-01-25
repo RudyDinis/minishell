@@ -6,7 +6,7 @@
 /*   By: bbouarab <bbouarab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2013/11/18 13:37:42 by kube              #+#    #+#             */
-/*   Updated: 2026/01/25 12:37:42 by bbouarab         ###   ########.fr       */
+/*   Updated: 2026/01/25 17:18:32 by bbouarab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,16 +14,17 @@
 
 int	g_stop;
 
-void	check_stop_and_exit(t_minishell *minishell, char *line)
+void	check_stop_and_exit(t_minishell *minishell)
 {
 	int	exit_value;
 
+	minishell->line = readline("\001\033[0;32m\002> \001\033[0m\002");
 	if (g_stop == 1)
 	{
 		g_stop = 0;
 		add_var(&minishell->var, "?", "130");
 	}
-	if (!line)
+	if (!minishell->line)
 	{
 		write(1, "exit\n", 5);
 		exit_value = ft_atoi(minishell->var->value);
@@ -41,13 +42,13 @@ void	while_read(t_minishell *minishell)
 		init_signals();
 		write_line();
 		g_stop = 0;
-		minishell->line = readline("\001\033[0;32m\002> \001\033[0m\002");
-		check_stop_and_exit(minishell, minishell->line);
+		check_stop_and_exit(minishell);
 		if (*minishell->line && is_valid_buf(minishell->line))
 		{
 			token = create_list(minishell->line);
 			if (!token || check_formatting(token, minishell))
 			{
+				add_history(minishell->line);
 				free(minishell->line);
 				add_var(&minishell->var, "?", "2");
 				continue ;
@@ -121,5 +122,3 @@ int	main(int ac, char **av, char **envp)
 	rl_clear_history();
 	return (0);
 }
-
-// TODO BIEN FAIRE EN SORTE QUE LES BUILT IN INTEGRE LA BONNE RETURN VALUE

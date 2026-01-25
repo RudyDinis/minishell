@@ -6,7 +6,7 @@
 /*   By: bbouarab <bbouarab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2013/11/18 13:37:42 by kube              #+#    #+#             */
-/*   Updated: 2026/01/24 23:20:07 by bbouarab         ###   ########.fr       */
+/*   Updated: 2026/01/25 17:13:18 by bbouarab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,10 +82,10 @@ void	check_access_and_rights(t_cmd *cmd)
 		return (write(2, ": command not found\n", 20),
 			free_ms(cmd->token, NULL, 127));
 	if (!cmd->path)
-		free_ms(cmd->token, NULL, 127);
+		free_ms(cmd->token, NULL, 0);
 	if (cmd->is_absolute == 0)
 	{
-		if (access(cmd->path, F_OK) < 0)
+		if (access(cmd->path, F_OK) < 0 || !ft_strchr(cmd->path, '/'))
 			return (merge = ft_strjoin(cmd->path, ": command not found\n"),
 				ft_printf_error("%s", merge), free(merge),
 				free_ms(cmd->token, NULL, 127));
@@ -96,7 +96,7 @@ void	check_access_and_rights(t_cmd *cmd)
 	{
 		if (access(cmd->path, F_OK) < 0)
 			return (perror(cmd->path), free_ms(cmd->token, NULL, 127));
-		if (access(cmd->path, X_OK) < 0)
+		if (access(cmd->path, X_OK) < 0 || is_a_directory(cmd))
 			return (perror(cmd->path), free_ms(cmd->token, NULL, 126));
 	}
 }

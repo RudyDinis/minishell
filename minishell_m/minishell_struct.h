@@ -6,7 +6,7 @@
 /*   By: bbouarab <bbouarab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2013/11/18 13:37:42 by kube              #+#    #+#             */
-/*   Updated: 2026/01/24 18:32:55 by bbouarab         ###   ########.fr       */
+/*   Updated: 2026/01/25 16:49:40 by bbouarab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@
 # include <readline/history.h>
 # include <stdbool.h>
 # include <sys/ioctl.h>
+# include <sys/types.h>
+# include <sys/stat.h>
 
 typedef enum s_type
 {

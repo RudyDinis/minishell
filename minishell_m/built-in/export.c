@@ -6,7 +6,7 @@
 /*   By: bbouarab <bbouarab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/12 13:28:59 by rdinis            #+#    #+#             */
-/*   Updated: 2026/01/24 18:16:22 by bbouarab         ###   ########.fr       */
+/*   Updated: 2026/01/25 17:16:20 by bbouarab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,22 +23,6 @@ t_env	*new_node(char *key, char *value)
 	node->value = value;
 	node->next = NULL;
 	return (node);
-}
-
-void	print_env(t_env *env)
-{
-	t_env	*tmp;
-
-	tmp = env;
-	while (tmp)
-	{
-		printf("export %s", tmp->key);
-		if (ft_strlen(tmp->value))
-			printf("=\"%s\"\n", tmp->value);
-		else
-			printf("\n");
-		tmp = tmp->next;
-	}
 }
 
 int	env_exist(t_env *tmp, char *key, char *value)
@@ -58,7 +42,7 @@ int	env_exist(t_env *tmp, char *key, char *value)
 
 void	add_env(t_env **env, char *line)
 {
-	char	*eq ;
+	char	*eq;
 	char	*key;
 	char	*value;
 	t_env	*node;
@@ -84,25 +68,49 @@ void	add_env(t_env **env, char *line)
 	tmp->next = node;
 }
 
-int	export(char **argv, t_env *env)
+int	export2(char *arg, t_env **env)
 {
-	int		i;
+	char	*eq;
+	char	*key;
 	char	*res;
 
+	eq = ft_strchr(arg, '=');
+	if (eq)
+		key = ft_substr(arg, 0, eq - arg);
+	else
+		key = ft_strdup(arg);
+	if (!is_valid_identifier(key))
+	{
+		ft_printf_error(
+			"minishell: export: `%s': not a valid identifier\n", arg);
+		return (free(key), 1);
+	}
+	free(key);
+	if (eq)
+		add_env(env, arg);
+	else
+	{
+		res = ft_strjoin(arg, "=");
+		add_env(env, res);
+		free(res);
+	}
+	return (0);
+}
+
+int	export(char **argv, t_env *env, t_minishell *minishell)
+{
+	int	i;
+	int	status;
+
 	i = 1;
+	status = 0;
 	if (!argv[1])
 		return (print_env(env), 0);
 	while (argv[i])
 	{
-		if (ft_strchr(argv[i], '='))
-			add_env(&env, argv[i]);
-		else
-		{
-			res = ft_strjoin(argv[i], "=");
-			add_env(&env, res);
-			free(res);
-		}
+		if (export2(argv[i], &env))
+			return (minishell->last_cmd_return_value = 1, status);
 		i++;
 	}
-	return (0);
+	return (minishell->last_cmd_return_value = 0, status);
 }

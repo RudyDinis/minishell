@@ -6,7 +6,7 @@
 /*   By: bbouarab <bbouarab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2013/11/18 13:37:42 by kube              #+#    #+#             */
-/*   Updated: 2026/01/25 12:25:28 by bbouarab         ###   ########.fr       */
+/*   Updated: 2026/01/25 16:59:23 by bbouarab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,9 +105,7 @@ int	check_formatting(t_token *token, t_minishell *minishell)
 			return (ft_printf_error(
 					"syntax error near unexpected token `newline'\n"),
 				free_ms(head, NULL, -5), 1);
-		if (token->type == PIPE && token->next && ((token->next->type == PIPE)
-				|| (token->next->type == REDIR_OUT
-					|| token->next->type == APPEND)))
+		if (token->type == PIPE && token->next && ((token->next->type == PIPE)))
 			return (ft_printf_error("syntax error near unexpected token `|'\n"),
 				free_ms(head, NULL, -5), 1);
 		token = token->next;
