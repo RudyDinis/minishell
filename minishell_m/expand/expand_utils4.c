@@ -6,7 +6,7 @@
 /*   By: bbouarab <bbouarab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/20 13:33:38 by rdinis            #+#    #+#             */
-/*   Updated: 2026/01/24 22:31:35 by bbouarab         ###   ########.fr       */
+/*   Updated: 2026/01/25 17:23:26 by bbouarab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,8 +53,12 @@ char	*expand_one_var_doc(t_expand_vars_vars *vars,
 	(vars->i)++;
 	start = vars->i;
 	while (ft_isalnum(vars->s[vars->i]) || vars->s[vars->i] == '_'
-		|| vars->s[vars->i] == '?')
+		|| (vars->s[vars->i] == '?' && vars->i == start))
+	{
 		vars->i++;
+		if (vars->s[vars->i - 1] == '?')
+			break ;
+	}
 	name = ft_substr(vars->s, start, vars->i - start);
 	val = get_var_value(name, data);
 	env = get_env_value(name, data);
