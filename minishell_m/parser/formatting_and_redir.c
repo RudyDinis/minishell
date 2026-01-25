@@ -6,7 +6,7 @@
 /*   By: bbouarab <bbouarab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2013/11/18 13:37:42 by kube              #+#    #+#             */
-/*   Updated: 2026/01/24 22:29:59 by bbouarab         ###   ########.fr       */
+/*   Updated: 2026/01/25 12:25:28 by bbouarab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,24 +77,6 @@ void	attributes_redir(t_token *token, t_cmd *cmd)
 		token = token->next;
 	}
 }
-
-// int	check_var(t_cmd *cmd)
-// {
-// 	int	i;
-
-// 	while (cmd)
-// 	{
-// 		i = 0;
-// 		while (cmd->args[i])
-// 		{
-// 			if (ft_strchr(cmd->args[i], '$'))
-// 				return (1);
-// 			i++;
-// 		}
-// 		cmd = cmd->next;
-// 	}
-// 	return (0);
-// }
 
 void	exec_next(t_token *head, t_minishell *minishell, t_cmd *cmds)
 {
