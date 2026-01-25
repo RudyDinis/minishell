@@ -72,8 +72,12 @@ char	*expand_one_var(t_expand_vars_vars *vars, t_minishell *data, int quoted)
 	vars->i++;
 	start = vars->i;
 	while (ft_isalnum(vars->s[vars->i]) || vars->s[vars->i] == '_'
-		|| vars->s[vars->i] == '?')
+		|| (vars->s[vars->i] == '?' && vars->i == start))
+	{
 		vars->i++;
+		if (vars->s[vars->i - 1] == '?')
+			break;
+	}
 	name = ft_substr(vars->s, start, vars->i - start);
 	val = get_var_value(name, data);
 	env = get_env_value(name, data);
