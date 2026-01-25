@@ -11,7 +11,7 @@ SRC = main.c \
 		parser/formatting_and_redir.c parser/add_commands.c \
 		exec/exec.c exec/closing_processes.c exec/exec_redir.c exec/exec_utils.c exec/find_path.c exec/here_doc.c \
 		expand/expander.c expand/expand_utils.c expand/expand_utils2.c expand/expand_utils3.c expand/expand_utils4.c expand/expand_here_doc.c expand/ft_strjoin_free.c\
-		built-in/cd.c built-in/echo.c built-in/env.c built-in/export.c built-in/exit.c built-in/unset.c built-in/pwd.c
+		built-in/cd.c built-in/echo.c built-in/env.c built-in/export.c built-in/export2.c built-in/exit.c built-in/unset.c built-in/pwd.c
 
 OBJ = $(SRC:%.c=$(OBJ_DIR)/%.o)
 HEADER = minishell.h minishell_struct.h
