@@ -6,7 +6,7 @@
 /*   By: bbouarab <bbouarab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2013/11/18 13:37:42 by kube              #+#    #+#             */
-/*   Updated: 2026/01/25 12:35:08 by bbouarab         ###   ########.fr       */
+/*   Updated: 2026/01/25 12:37:42 by bbouarab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ void	while_read(t_minishell *minishell)
 		check_stop_and_exit(minishell, minishell->line);
 		if (*minishell->line && is_valid_buf(minishell->line))
 		{
-			token = create_list(minishell->line, minishell);
+			token = create_list(minishell->line);
 			if (!token || check_formatting(token, minishell))
 			{
 				free(minishell->line);
