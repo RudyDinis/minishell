@@ -6,7 +6,7 @@
 /*   By: bbouarab <bbouarab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2013/11/18 13:37:42 by kube              #+#    #+#             */
-/*   Updated: 2026/01/25 16:49:40 by bbouarab         ###   ########.fr       */
+/*   Updated: 2026/01/26 15:21:28 by bbouarab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ typedef struct s_minishell
 	int				last_cmd_return_value;
 	int				in_here_doc;
 	char			*gnl;
-	char			*pwd;
+	int				pwd_err;
 	char			*line;
 	char			**envp;
 	t_env			*env;

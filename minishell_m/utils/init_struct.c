@@ -6,7 +6,7 @@
 /*   By: bbouarab <bbouarab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2013/11/18 13:37:42 by kube              #+#    #+#             */
-/*   Updated: 2026/01/25 12:35:43 by bbouarab         ###   ########.fr       */
+/*   Updated: 2026/01/26 15:27:02 by bbouarab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,8 +47,7 @@ t_token	*create_list(char *argv)
 	if (!token_nb)
 		return (NULL);
 	i = 0;
-	if (token_nb)
-		head = ft_calloc(1, sizeof(t_token));
+	head = ft_calloc(1, sizeof(t_token));
 	if (!head)
 		return (exit(1), NULL);
 	tete = head;
@@ -73,7 +72,6 @@ t_minishell	*init_ms(char **envp)
 	if (!minishell)
 		return (NULL);
 	minishell->envp = envp;
-	minishell->pwd = getcwd(NULL, 0);
 	add_var(&minishell->var, "?", "0");
 	if (!minishell->var)
 		return (free_minishell(minishell), exit(1), NULL);

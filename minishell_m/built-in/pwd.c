@@ -6,7 +6,7 @@
 /*   By: bbouarab <bbouarab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/12 13:32:57 by rdinis            #+#    #+#             */
-/*   Updated: 2026/01/17 15:52:10 by bbouarab         ###   ########.fr       */
+/*   Updated: 2026/01/26 14:55:35 by bbouarab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	pwd(void)
 
 	cwd = getcwd(NULL, 0);
 	if (!cwd)
-		return ;
+		return (ft_printf_error(PWDERR1 ERR2 ERR3), (void )1);
 	printf("%s\n", cwd);
 	free(cwd);
 }

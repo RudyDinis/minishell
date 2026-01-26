@@ -6,7 +6,7 @@
 /*   By: bbouarab <bbouarab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2013/11/18 13:37:42 by kube              #+#    #+#             */
-/*   Updated: 2026/01/25 17:13:37 by bbouarab         ###   ########.fr       */
+/*   Updated: 2026/01/26 15:42:03 by bbouarab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,12 @@
 # define BOLD_BLUE	"\033[1;34m"
 # define BOLD_WHITE	"\033[1;37m"
 # define RESET		"\033[0m"
+# define CDERR1		"chdir: error retrieving current directory: "
+# define PWDERR1	"pwd: error retrieving current directory: "
+# define ERR2		"getcwd: cannot access parent directories: "
+# define ERR3		"No such file or directory\n"
+# define CDERR4		"Current directory is now: /home\n"
+
 
 # include "minishell_struct.h"
 
@@ -42,7 +48,7 @@ t_minishell	*init_ms(char **envp);
 
 /*MAIN*/
 void		print_title(void);
-void		write_line(void);
+void		write_line(t_minishell *minishell);
 int			is_valid_buf(char *buf);
 
 /*EXEC*/

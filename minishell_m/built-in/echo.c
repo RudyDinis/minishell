@@ -6,7 +6,7 @@
 /*   By: bbouarab <bbouarab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2013/11/18 13:37:42 by kube              #+#    #+#             */
-/*   Updated: 2026/01/24 19:46:13 by bbouarab         ###   ########.fr       */
+/*   Updated: 2026/01/26 13:59:29 by bbouarab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	echo(char **argv)
 
 	i = 1;
 	newline = 1;
-	while (argv[i] && argv[i][0] == '-')
+	while (argv[i] && argv[i][0] == '-' && argv[i][1] && argv[i][1] == 'n')
 	{
 		j = 1;
 		while (argv[i][j] == 'n')

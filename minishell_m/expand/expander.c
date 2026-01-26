@@ -6,7 +6,7 @@
 /*   By: bbouarab <bbouarab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2013/11/18 13:37:42 by kube              #+#    #+#             */
-/*   Updated: 2026/01/24 19:25:02 by bbouarab         ###   ########.fr       */
+/*   Updated: 2026/01/26 13:45:28 by bbouarab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,21 +17,24 @@ int	expand_args_size(t_cmd *cmd)
 	int		i;
 	int		j;
 	int		k;
-	char	**expanded_args;
+	char	**expanded;
 
 	i = 0;
 	j = 0;
 	while (cmd->args[i])
 	{
 		k = 0;
-		expanded_args = expand_vars(cmd->args[i], cmd->minishell, "EMSE");
-		while (expanded_args[k])
+		if (!ft_findstr(cmd->cmd, "export"))
+			expanded = expand_vars(cmd->args[i], cmd->minishell, "HERE_DOC");
+		else
+			expanded = expand_vars(cmd->args[i], cmd->minishell, "ELSE");
+		while (expanded[k])
 		{
 			k++;
 			j++;
 		}
 		i++;
-		free_everything((void **)expanded_args);
+		free_everything((void **)expanded);
 	}
 	return (j);
 }
@@ -52,13 +55,12 @@ char	**expand_args(t_cmd *cmd)
 	while (cmd->args[i])
 	{
 		j = 0;
-		tmp_expanded = expand_vars(cmd->args[i], cmd->minishell, "EMSE");
+		if (!ft_findstr(cmd->cmd, "export"))
+			tmp_expanded = expand_vars(cmd->args[i], cmd->minishell, "HERE_DOC");
+		else
+			tmp_expanded = expand_vars(cmd->args[i], cmd->minishell, "ELSE");
 		while (tmp_expanded[j])
-		{
-			expanded[k] = ft_strdup(tmp_expanded[j]);
-			k++;
-			j++;
-		}
+			expanded[k++] = ft_strdup(tmp_expanded[j++]);
 		i++;
 		free_everything((void **)tmp_expanded);
 	}

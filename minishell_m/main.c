@@ -6,7 +6,7 @@
 /*   By: bbouarab <bbouarab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2013/11/18 13:37:42 by kube              #+#    #+#             */
-/*   Updated: 2026/01/25 17:25:10 by bbouarab         ###   ########.fr       */
+/*   Updated: 2026/01/26 14:12:10 by bbouarab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,8 +40,7 @@ void	while_read(t_minishell *minishell)
 	while (1)
 	{
 		init_signals();
-		write_line();
-		g_stop = 0;
+		write_line(minishell);
 		check_stop_and_exit(minishell);
 		if (*minishell->line && is_valid_buf(minishell->line))
 		{

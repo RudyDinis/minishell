@@ -6,7 +6,7 @@
 /*   By: bbouarab <bbouarab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2013/11/18 13:37:42 by kube              #+#    #+#             */
-/*   Updated: 2026/01/25 00:07:12 by bbouarab         ###   ########.fr       */
+/*   Updated: 2026/01/26 14:00:03 by bbouarab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,10 +26,11 @@ void	wait_and_get_return_value(t_cmd *cmd)
 	if (WIFSIGNALED(cmd->minishell->last_cmd_return_value)
 		&& WCOREDUMP(cmd->minishell->last_cmd_return_value))
 	{
-		ft_printf_error("Quit                       (core dumped) %s\n",
-			cmd->minishell->line);
+		ft_printf_error("Quit (core dumped)\n");
 		value_str = ft_itoa(131);
 	}
+	else if (WTERMSIG(cmd->minishell->last_cmd_return_value) == SIGINT)
+		value_str = ft_itoa(130);
 	else
 		value_str = ft_itoa(WEXITSTATUS(cmd->minishell->last_cmd_return_value));
 	add_var(&cmd->minishell->var, "?", value_str);

@@ -6,7 +6,7 @@
 /*   By: bbouarab <bbouarab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/14 17:27:10 by rdinis            #+#    #+#             */
-/*   Updated: 2026/01/25 16:30:46 by bbouarab         ###   ########.fr       */
+/*   Updated: 2026/01/26 14:01:26 by bbouarab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@ void	exit_shell(t_cmd *cmd, char **argv)
 				free_ms(cmd->token, NULL, 2));
 		if (argv[2])
 			return (ft_printf_error("exit: too many arguments\n"),
-				cmd->minishell->last_cmd_return_value = 2, (void)1);
+				cmd->minishell->last_cmd_return_value = 1, (void)1);
 		if (ft_atol(argv[1]) == 2147483648)
 			return (cmd->minishell->last_cmd_return_value = 2,
 				free_ms(cmd->token, NULL, 2));

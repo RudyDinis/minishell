@@ -6,7 +6,7 @@
 /*   By: bbouarab <bbouarab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2013/11/18 13:37:42 by kube              #+#    #+#             */
-/*   Updated: 2026/01/24 22:36:37 by bbouarab         ###   ########.fr       */
+/*   Updated: 2026/01/26 15:26:28 by bbouarab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,8 +100,6 @@ void	free_minishell(t_minishell *data)
 		free(data->var);
 		data->var = tmp_var;
 	}
-	if (data->pwd)
-		free(data->pwd);
 	if (data->line)
 		free(data->line);
 	free(data);
