@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand_utils2.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bbouarab <bbouarab@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rdinis <rdinis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/19 13:32:04 by rdinis            #+#    #+#             */
-/*   Updated: 2026/01/21 15:48:34 by bbouarab         ###   ########.fr       */
+/*   Updated: 2026/01/26 18:05:57 by rdinis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,6 +99,8 @@ char	**expand_vars(char *s, t_minishell *data, char *param)
 {
 	if (!strcmp(param, "HERE_DOC") || !strcmp(param, "FILE"))
 		return (expand_vars_doc(s, data, param));
+	if (!strcmp(param, "EXPORT"))
+		return (expand_vars_export(s, data, param));
 	else
 		return (expand_vars_jsp(s, data, param));
 }

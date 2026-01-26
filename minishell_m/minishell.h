@@ -85,6 +85,7 @@ char		**expand_vars_jsp(char *s, t_minishell *data, char *param);
 char		*expand_one_var(t_expand_vars_vars *vars, t_minishell *data, int quoted);
 void 		debug_print(const char *s);
 char		*ft_strjoin_free(char *s1, char *s2);
+char		**expand_vars_export(char *s, t_minishell *data, char *param);
 
 
 

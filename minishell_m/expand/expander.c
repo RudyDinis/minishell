@@ -13,7 +13,7 @@ int	expand_args_size(t_cmd *cmd)
 	{
 		k = 0;
 		if (!ft_findstr(cmd->cmd, "export"))
-			expanded = expand_vars(cmd->args[i], cmd->minishell, "HERE_DOC");
+			expanded = expand_vars(cmd->args[i], cmd->minishell, "EXPORT");
 		else
 			expanded = expand_vars(cmd->args[i], cmd->minishell, "ELSE");
 		while (expanded[k])
@@ -44,7 +44,7 @@ char	**expand_args(t_cmd *cmd)
 	{
 		j = 0;
 		if (!ft_findstr(cmd->cmd, "export"))
-			tmp_expanded = expand_vars(cmd->args[i], cmd->minishell, "HERE_DOC");
+			tmp_expanded = expand_vars(cmd->args[i], cmd->minishell, "EXPORT");
 		else
 			tmp_expanded = expand_vars(cmd->args[i], cmd->minishell, "ELSE");
 		while (tmp_expanded[j])
