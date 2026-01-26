@@ -3,69 +3,39 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bbouarab <bbouarab@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rdinis <rdinis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/12 13:28:59 by rdinis            #+#    #+#             */
-/*   Updated: 2026/01/21 13:44:41 by bbouarab         ###   ########.fr       */
+/*   Updated: 2026/01/26 17:35:12 by rdinis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-t_env *new_node(char *key, char *value)
+char	*find_and_replace(t_env **env, char *arg)
 {
-	t_env *node;
+	char	*res;
+	int		i;
+	int		j;
 
-	node = malloc(sizeof(t_env));
-	if (!node)
-		return (NULL);
-	node->key = key;
-	node->value = value;
-	node->next = NULL;
-	return (node);
-}
-
-int env_exist(t_env *tmp, char *key, char *value)
-{
-	while (tmp)
+	res = malloc(sizeof(char) * (ft_strlen(arg) + 1));
+	i = 0;
+	j = 0;
+	while (arg[i])
 	{
-		if (ft_strcmp(tmp->key, key) == 0)
+		if (arg[i] == '"')
+			i++;
+		else
 		{
-			free(tmp->value);
-			tmp->value = ft_strdup(value);
-			return (1);
+			res[j] = arg[i];
+			i++;
+			j++;
 		}
-		tmp = tmp->next;
 	}
-	return (0);
-}
-
-void add_env(t_env **env, char *line)
-{
-	char *eq;
-	char *key;
-	char *value;
-	t_env *node;
-	t_env *tmp;
-
-	eq = ft_strchr(line, '=');
-	if (!eq)
-		return;
-	key = ft_substr(line, 0, eq - line);
-	value = ft_strdup(eq + 1);
-	tmp = *env;
-	if (env_exist(tmp, key, value))
-		return (free(key), free(value));
-	node = new_node(key, value);
-	if (!*env)
-	{
-		*env = node;
-		return;
-	}
-	tmp = *env;
-	while (tmp->next)
-		tmp = tmp->next;
-	tmp->next = node;
+	res[j] = '\0';
+	printf ("%s\n", res);
+	add_env(env, res);
+	free(res);
 }
 
 int	export2(char *arg, t_env **env)
@@ -87,7 +57,7 @@ int	export2(char *arg, t_env **env)
 	}
 	free(key);
 	if (eq)
-		add_env(env, arg);
+		find_and_replace(env, arg);
 	else
 	{
 		res = ft_strjoin(arg, "=");

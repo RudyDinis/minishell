@@ -1,64 +1,64 @@
 #include "../minishell.h"
 
-int expand_args_size(t_cmd *cmd)
+int	expand_args_size(t_cmd *cmd)
 {
-	char **expanded_args;
-	int i;
-	int j;
-	int k;
+	int		i;
+	int		j;
+	int		k;
+	char	**expanded;
 
 	i = 0;
 	j = 0;
 	while (cmd->args[i])
 	{
 		k = 0;
-		expanded_args = expand_vars(cmd->args[i], cmd->minishell, "EMSE");
-		while (expanded_args[k])
+		if (!ft_findstr(cmd->cmd, "export"))
+			expanded = expand_vars(cmd->args[i], cmd->minishell, "HERE_DOC");
+		else
+			expanded = expand_vars(cmd->args[i], cmd->minishell, "ELSE");
+		while (expanded[k])
 		{
 			k++;
 			j++;
 		}
 		i++;
-		free_everything((void **)expanded_args);
+		free_everything((void **)expanded);
 	}
-	return j;
+	return (j);
 }
 
-char **expand_args(t_cmd *cmd)
+char	**expand_args(t_cmd *cmd)
 {
-	char **expanded_args;
-	char **tmp_expanded;
-	int i;
-	int j;
-	int k;
+	int		i;
+	int		j;
+	int		k;
+	char	**expanded;
+	char	**tmp_expanded;
 
 	i = 0;
 	k = 0;
-	expanded_args = malloc((expand_args_size(cmd) + 1) * sizeof(char *));
-	if (!expanded_args)
+	expanded = malloc((expand_args_size(cmd) + 1) * sizeof(char *));
+	if (!expanded)
 		free_ms(NULL, cmd, 1);
-	expanded_args[expand_args_size(cmd)] = NULL;
 	while (cmd->args[i])
 	{
 		j = 0;
-		tmp_expanded = expand_vars(cmd->args[i], cmd->minishell, "EMSE");
+		if (!ft_findstr(cmd->cmd, "export"))
+			tmp_expanded = expand_vars(cmd->args[i], cmd->minishell, "HERE_DOC");
+		else
+			tmp_expanded = expand_vars(cmd->args[i], cmd->minishell, "ELSE");
 		while (tmp_expanded[j])
-		{
-			expanded_args[k] = ft_strdup(tmp_expanded[j]);
-			k++;
-			j++;
-		}
+			expanded[k++] = ft_strdup(tmp_expanded[j++]);
 		i++;
 		free_everything((void **)tmp_expanded);
 	}
-	free_everything((void **)cmd->args);
-	return (expanded_args);
+	return (expanded[k] = NULL, free_everything((void **)cmd->args), expanded);
 }
-void expander(t_cmd *cmd)
+
+void	expander(t_cmd *cmd)
 {
 	while (cmd)
 	{
-		//free_everything((void **)cmd->args);
 		cmd->args = expand_args(cmd);
 		cmd->cmd = cmd->args[0];
 		cmd = cmd->next;

@@ -106,6 +106,8 @@ void	exit_shell(t_cmd *cmd, char **argv);
 
 
 
+t_env	*new_node(char *key, char *value);
+int		env_exist(t_env *tmp, char *key, char *value);
 
 int		is_valid_identifier(char *key);
 t_env	*copy_env(char **envp);
